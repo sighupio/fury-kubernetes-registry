@@ -1,0 +1,45 @@
+---
+# Source: harbor/templates/portal/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "release-name-harbor-portal"
+  labels:
+    heritage: Tiller
+    release: release-name
+    chart: harbor
+    app: "harbor"
+    component: portal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      release: release-name
+      app: "harbor"
+      component: portal
+  template:
+    metadata:
+      labels:
+        release: release-name
+        app: "harbor"
+        component: portal
+      annotations:
+    spec:
+      containers:
+        - name: portal
+          image: goharbor/harbor-portal:v1.10.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 1
+            periodSeconds: 10
+          ports:
+            - containerPort: 8080

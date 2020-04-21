@@ -1,0 +1,93 @@
+---
+# Source: harbor/templates/clair/clair-dpl.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-harbor-clair
+  labels:
+    app: "harbor"
+    component: clair
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "harbor"
+      component: clair
+  template:
+    metadata:
+      labels:
+        app: "harbor"
+        component: clair
+      annotations:
+        checksum/secret: d06e1c14b755fcce7e961329a8434e112ca378fe1d58ccda5f212147a7191389
+    spec:
+      securityContext:
+        fsGroup: 10000
+      containers:
+        - name: clair
+          image: goharbor/clair-photon:v2.1.1-v1.10.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 6061
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 6061
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          args: ["-log-level", "info"]
+          env:
+            - name: HTTP_PROXY
+              value: ""
+            - name: HTTPS_PROXY
+              value: ""
+            - name: NO_PROXY
+              value: "release-name-harbor-core,release-name-harbor-jobservice,release-name-harbor-database,release-name-harbor-chartmuseum,release-name-harbor-clair,release-name-harbor-notary-server,release-name-harbor-notary-signer,release-name-harbor-registry,release-name-harbor-portal,127.0.0.1,localhost,.local,.internal"
+          ports:
+            - containerPort: 6060
+          volumeMounts:
+            - name: config
+              mountPath: /etc/clair/config.yaml
+              subPath: config.yaml
+        - name: adapter
+          image: goharbor/clair-adapter-photon:v1.0.1-v1.10.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /probe/healthy
+              port: 8080
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /probe/ready
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          env:
+            - name: SCANNER_CLAIR_URL
+              # To avoid a pod cannot reach itself via service IP when the clusters disable hairpin
+              value: "http://127.0.0.1:6060"
+            - name: SCANNER_STORE_REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secret-clair
+                  key: redis
+            - name: SCANNER_CLAIR_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secret-clair
+                  key: database
+            - name: SCANNER_LOG_LEVEL
+              value: "info"
+          ports:
+            - containerPort: 8080
+      volumes:
+        - name: config
+          secret:
+            secretName: secret-clair

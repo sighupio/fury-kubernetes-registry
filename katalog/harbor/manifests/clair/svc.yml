@@ -1,0 +1,20 @@
+---
+# Source: harbor/templates/clair/clair-svc.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: "release-name-harbor-clair"
+  labels:
+    heritage: Tiller
+    release: release-name
+    chart: harbor
+    app: "harbor"
+spec:
+  ports:
+    - name: adapter
+      port: 8080
+  selector:
+    release: release-name
+    app: "harbor"
+    component: clair

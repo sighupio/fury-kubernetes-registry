@@ -1,0 +1,64 @@
+---
+# Source: harbor/templates/core/core-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: harbor-harbor-core
+  labels:
+    heritage: Helm
+    release: harbor
+    chart: harbor
+    app: "harbor"
+data:
+  app.conf: |+
+    appname = Harbor
+    runmode = dev
+    enablegzip = true
+
+    [dev]
+    httpport = 8080
+    EnableXSRF = true
+    XSRFKey = rss8ZpPphkCHDHpOqI9dJf6bpYdPhvCxg7T0U6j5
+    XSRFExpire = 3600
+  DATABASE_TYPE: "postgresql"
+  POSTGRESQL_HOST: "harbor-harbor-database"
+  POSTGRESQL_PORT: "5432"
+  POSTGRESQL_USERNAME: "postgres"
+  POSTGRESQL_DATABASE: "registry"
+  POSTGRESQL_SSLMODE: "disable"
+  POSTGRESQL_MAX_IDLE_CONNS: "50"
+  POSTGRESQL_MAX_OPEN_CONNS: "100"
+  EXT_ENDPOINT: "https://core.harbor.domain"
+  CORE_URL: "http://harbor-harbor-core"
+  JOBSERVICE_URL: "http://harbor-harbor-jobservice"
+  REGISTRY_URL: "http://harbor-harbor-registry:5000"
+  TOKEN_SERVICE_URL: "http://harbor-harbor-core/service/token"
+  WITH_NOTARY: "true"
+  NOTARY_URL: "http://harbor-harbor-notary-server:4443"
+  CFG_EXPIRATION: "5"
+  ADMIRAL_URL: "NA"
+  WITH_CLAIR: "true"
+  CLAIR_DB_HOST: "harbor-harbor-database"
+  CLAIR_DB_PORT: "5432"
+  CLAIR_DB_USERNAME: "postgres"
+  CLAIR_DB: "postgres"
+  CLAIR_DB_SSLMODE: "disable"
+  CLAIR_URL: "http://harbor-harbor-clair:6060"
+  CLAIR_ADAPTER_URL: "http://harbor-harbor-clair:8080"
+  REGISTRY_STORAGE_PROVIDER_NAME: "filesystem"
+  WITH_CHARTMUSEUM: "true"
+  CHART_REPOSITORY_URL: "http://harbor-harbor-chartmuseum"
+  LOG_LEVEL: "info"
+  CONFIG_PATH: "/etc/core/app.conf"
+  SYNC_REGISTRY: "false"
+  CHART_CACHE_DRIVER: "redis"
+  _REDIS_URL: "harbor-harbor-redis:6379,100,"
+  _REDIS_URL_REG: "redis://harbor-harbor-redis:6379/2"
+  PORTAL_URL: "http://harbor-harbor-portal"
+  REGISTRYCTL_URL: "http://harbor-harbor-registry:8080"
+  CLAIR_HEALTH_CHECK_SERVER_URL: "http://harbor-harbor-clair:6061"
+  HTTP_PROXY: ""
+  HTTPS_PROXY: ""
+  NO_PROXY: "harbor-harbor-core,harbor-harbor-jobservice,harbor-harbor-database,harbor-harbor-chartmuseum,harbor-harbor-clair,harbor-harbor-notary-server,harbor-harbor-notary-signer,harbor-harbor-registry,harbor-harbor-portal,127.0.0.1,localhost,.local,.internal"
+---
+

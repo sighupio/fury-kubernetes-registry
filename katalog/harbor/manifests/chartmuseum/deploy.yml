@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "chartmuseum"
+  labels:
+    app: "harbor"
+    component: chartmuseum
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: "harbor"
+      component: chartmuseum
+  template:
+    metadata:
+      labels:
+        app: "harbor"
+        component: chartmuseum
+    spec:
+      securityContext:
+        fsGroup: 10000
+      containers:
+        - name: chartmuseum
+          image: goharbor/chartmuseum-photon:v0.9.0-v1.10.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9999
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 9999
+            initialDelaySeconds: 1
+            periodSeconds: 10
+          envFrom:
+            - configMapRef:
+                name: cm-chartmuseum
+            - secretRef:
+                name: secret-chartmuseum
+          env:
+            - name: BASIC_AUTH_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: secret-harbor-core
+                  key: secret
+          ports:
+            - containerPort: 9999
+          volumeMounts:
+            - name: chartmuseum-data
+              mountPath: /chart_storage
+      volumes:
+        - name: chartmuseum-data
+          persistentVolumeClaim:
+            claimName: pvc-chartmuseum

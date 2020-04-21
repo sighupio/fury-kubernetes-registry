@@ -1,0 +1,37 @@
+---
+# Source: harbor/templates/notary/notary-svc.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-harbor-notary-server
+  labels:
+    heritage: Tiller
+    release: release-name
+    chart: harbor
+    app: "harbor"
+spec:
+  ports:
+    - port: 4443
+  selector:
+    release: release-name
+    app: "harbor"
+    component: notary-server
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-harbor-notary-signer
+  labels:
+    heritage: Tiller
+    release: release-name
+    chart: harbor
+    app: "harbor"
+spec:
+  ports:
+    - port: 7899
+  selector:
+    release: release-name
+    app: "harbor"
+    component: notary-signer

@@ -1,0 +1,87 @@
+---
+# Source: harbor/templates/core/core-dpl.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core
+  labels:
+    app: harbor
+    component: core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: harbor
+      component: core
+  template:
+    metadata:
+      labels:
+        app: harbor
+        component: core
+    spec:
+      securityContext:
+        fsGroup: 10000
+      containers:
+        - name: core
+          image: goharbor/harbor-core:v1.10.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /api/ping
+              port: 8080
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/ping
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          envFrom:
+            - configMapRef:
+                name: cm-core
+            - secretRef:
+                name: secret-core
+          env:
+            - name: CORE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: secret-core
+                  key: secret
+            - name: JOBSERVICE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: secret-core
+                  key: secret
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: config
+              mountPath: /etc/core/app.conf
+              subPath: app.conf
+            - name: secret-key
+              mountPath: /etc/core/key
+              subPath: key
+            - name: token-service-private-key
+              mountPath: /etc/core/private_key.pem
+              subPath: tls.key
+            - name: psc
+              mountPath: /etc/core/token
+      volumes:
+        - name: config
+          configMap:
+            name: cm-core
+            items:
+              - key: app.conf
+                path: app.conf
+        - name: secret-key
+          secret:
+            secretName: secret-core
+            items:
+              - key: secretKey
+                path: key
+        - name: token-service-private-key
+          secret:
+            secretName: secret-core
+        - name: psc
+          emptyDir: {}
