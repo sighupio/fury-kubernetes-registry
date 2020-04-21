@@ -1,0 +1,22 @@
+---
+protocol: "http"
+port: 8080
+worker_pool:
+  workers: 10
+  backend: "redis"
+  redis_pool:
+    redis_url: "redis:6379"
+    namespace: "jobservice_ns"
+job_loggers:
+  - name: "FILE"
+    level: INFO
+    settings: # Customized settings of logger
+      base_dir: "/var/log/jobs"
+    sweeper:
+      duration: 14 #days
+      settings: # Customized settings of sweeper
+        work_dir: "/var/log/jobs"
+#Loggers for the job service
+loggers:
+  - name: "STD_OUTPUT"
+    level: INFO

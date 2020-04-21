@@ -4,30 +4,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: release-name-harbor-nginx
+  name: nginx
   labels:
-    heritage: Tiller
-    release: release-name
-    chart: harbor
-    app: "harbor"
+    app: harbor
     component: nginx
 spec:
   replicas: 1
   selector:
     matchLabels:
-      release: release-name
-      app: "harbor"
+      app: harbor
       component: nginx
   template:
     metadata:
       labels:
-        heritage: Tiller
-        release: release-name
-        chart: harbor
-        app: "harbor"
+        app: harbor
         component: nginx
-      annotations:
-        checksum/configmap: 2e4a15b5d43e4142c394ac8c077c73de78df72ab3f6a78b833255c9e172ffc7b
     spec:
       securityContext:
         fsGroup: 10000
@@ -60,4 +51,4 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: release-name-harbor-nginx
+            name: cm-nginx

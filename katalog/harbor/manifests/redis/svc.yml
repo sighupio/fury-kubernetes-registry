@@ -3,16 +3,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: release-name-harbor-redis
+  name: redis
   labels:
-    heritage: Tiller
-    release: release-name
-    chart: harbor
-    app: "harbor"
+    app: harbor
 spec:
   ports:
     - port: 6379
   selector:
-    release: release-name
-    app: "harbor"
+    app: harbor
     component: redis

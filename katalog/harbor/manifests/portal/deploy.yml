@@ -3,27 +3,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "release-name-harbor-portal"
+  name: portal
   labels:
-    heritage: Tiller
-    release: release-name
-    chart: harbor
-    app: "harbor"
+    app: harbor
     component: portal
 spec:
   replicas: 1
   selector:
     matchLabels:
-      release: release-name
-      app: "harbor"
+      app: harbor
       component: portal
   template:
     metadata:
       labels:
-        release: release-name
-        app: "harbor"
+        app: harbor
         component: portal
-      annotations:
     spec:
       containers:
         - name: portal

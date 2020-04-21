@@ -3,12 +3,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "release-name-harbor-jobservice"
+  name: jobservice
   labels:
-    heritage: Tiller
-    release: release-name
-    chart: harbor
-    app: "harbor"
+    app: harbor
     component: jobservice
 spec:
   replicas: 1
@@ -16,21 +13,13 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      release: release-name
       app: "harbor"
       component: jobservice
   template:
     metadata:
       labels:
-        heritage: Tiller
-        release: release-name
-        chart: harbor
-        app: "harbor"
+        app: harbor
         component: jobservice
-      annotations:
-        checksum/configmap: 87602c56ef45fbcc0d4afe2780df4a749d472c170512f3b4a4a5a046fd24bd07
-        checksum/secret: 77913b4c57f7c447f73b58966ec9a7956e13e71b86649be32949ff3c50d2da0c
-        checksum/secret-core: b62d149520316ef679257cbc11cb0b6372622be5bc554b56f90fbd125a111e6d
     spec:
       securityContext:
         fsGroup: 10000
@@ -54,17 +43,17 @@ spec:
             - name: CORE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: release-name-harbor-core
+                  name: secret-core
                   key: secret
             - name: JOBSERVICE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: "release-name-harbor-jobservice"
+                  name: secret-jobservice
                   key: secret
             - name: CORE_URL
-              value: "http://release-name-harbor-core"
+              value: http://release-name-harbor-core
             - name: REGISTRY_CONTROLLER_URL
-              value: "http://release-name-harbor-registry:8080"
+              value: http://release-name-harbor-registry:8080
             - name: LOG_LEVEL
               value: debug
             - name: HTTP_PROXY
@@ -72,7 +61,7 @@ spec:
             - name: HTTPS_PROXY
               value: ""
             - name: NO_PROXY
-              value: "release-name-harbor-core,release-name-harbor-jobservice,release-name-harbor-database,release-name-harbor-chartmuseum,release-name-harbor-clair,release-name-harbor-notary-server,release-name-harbor-notary-signer,release-name-harbor-registry,release-name-harbor-portal,127.0.0.1,localhost,.local,.internal"
+              value: release-name-harbor-core,release-name-harbor-jobservice,release-name-harbor-database,release-name-harbor-chartmuseum,release-name-harbor-clair,release-name-harbor-notary-server,release-name-harbor-notary-signer,release-name-harbor-registry,release-name-harbor-portal,127.0.0.1,localhost,.local,.internal
           ports:
             - containerPort: 8080
           volumeMounts:
@@ -85,7 +74,7 @@ spec:
       volumes:
         - name: jobservice-config
           configMap:
-            name: "release-name-harbor-jobservice"
+            name: cm-jobservice
         - name: job-logs
           persistentVolumeClaim:
-            claimName: release-name-harbor-jobservice
+            claimName: jobservice

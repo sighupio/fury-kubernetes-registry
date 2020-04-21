@@ -2,11 +2,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: release-name-harbor-registry
-  annotations:
-    helm.sh/resource-policy: keep
+  name: registry
   labels:
-    app: "harbor"
+    app: harbor
     component: registry
 spec:
   accessModes:

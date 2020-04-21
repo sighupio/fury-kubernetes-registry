@@ -5,5 +5,16 @@ kind: Kustomization
 resources:
   - deploy.yml
   - pvc.yml
-  - secrets.yml
   - svc.yml
+
+configMapGenerator:
+  - name: cm-registry
+    files:
+      - config/config.yml
+      - config/ctl-config.yml
+
+secretGenerator:
+  - name: secret-registry
+    literals:
+      - REGISTRY_HTTP_SECRET=Z6HTqCsLzHMmgr9W
+      - REGISTRY_REDIS_PASSWORD=""

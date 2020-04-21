@@ -1,0 +1,54 @@
+---
+version: 0.1
+log:
+  level: info
+  fields:
+    service: registry
+storage:
+  filesystem:
+    rootdirectory: /storage
+  cache:
+    layerinfo: redis
+  maintenance:
+    uploadpurging:
+      enabled: false
+  delete:
+    enabled: true
+  redirect:
+    disable: true
+redis:
+  addr: "redis:6379"
+  db: 2
+http:
+  relativeurls: true
+  addr: :5000
+  # set via environment variable
+  # secret: placeholder
+  debug:
+    addr: localhost:5001
+auth:
+  token:
+    issuer: harbor-token-issuer
+    realm: "https://core.harbor.domain/service/token"
+    rootcertbundle: /etc/registry/root.crt
+    service: registry
+validation:
+  disabled: true
+notifications:
+  endpoints:
+    - name: harbor
+      disabled: false
+      url: http://release-name-harbor-core/service/notifications
+      timeout: 3000ms
+      threshold: 5
+      backoff: 1s
+      ignoredmediatypes:
+        - application/vnd.docker.image.rootfs.diff.tar.gzip
+        - application/vnd.docker.image.rootfs.foreign.diff.tar.gzip
+        - application/vnd.oci.image.layer.v1.tar
+        - application/vnd.oci.image.layer.v1.tar+gzip
+        - application/vnd.oci.image.layer.v1.tar+zstd
+        - application/vnd.oci.image.layer.nondistributable.v1.tar
+        - application/vnd.oci.image.layer.nondistributable.v1.tar+gzip
+        - application/vnd.oci.image.layer.nondistributable.v1.tar+zstd
+        - application/octet-stream

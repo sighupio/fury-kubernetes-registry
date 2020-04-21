@@ -2,9 +2,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "release-name-harbor-registry"
+  name: registry
   labels:
-    app: "harbor"
+    app: harbor
     component: registry
 spec:
   replicas: 1
@@ -12,18 +12,13 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: "harbor"
+      app: harbor
       component: registry
   template:
     metadata:
       labels:
-        app: "harbor"
+        app: harbor
         component: registry
-      annotations:
-        checksum/configmap: e9adb5be4af6dca42a16de9a2ff26d6d5de7e456aa4a5a786e67817dc0a1b40c
-        checksum/secret: d6f82de4b50d980b8ccc2ff8350a0592d853c70400db6e17af38d3b60e0ada27
-        checksum/secret-jobservice: 190edf52f26c686dbcc306c93e7e333bbd34f0ac63fcf3d16f4945000f5977d8
-        checksum/secret-core: cee4dd9f0dfc62251cfcf53bdc87da5e16c3b9d430b878aed7d96a3ba760f26c
     spec:
       securityContext:
         fsGroup: 10000
@@ -46,7 +41,7 @@ spec:
           args: ["serve", "/etc/registry/config.yml"]
           envFrom:
             - secretRef:
-                name: "release-name-harbor-registry"
+                name: secret-registry
           ports:
             - containerPort: 5000
             - containerPort: 5001
@@ -78,17 +73,17 @@ spec:
           args: ["serve", "/etc/registry/config.yml"]
           envFrom:
             - secretRef:
-                name: "release-name-harbor-registry"
+                name: secret-registry
           env:
             - name: CORE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: release-name-harbor-core
+                  name: secret-core
                   key: secret
             - name: JOBSERVICE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: release-name-harbor-jobservice
+                  name: secret-jobservice
                   key: secret
           ports:
             - containerPort: 8080
@@ -108,7 +103,7 @@ spec:
             secretName: release-name-harbor-core
         - name: registry-config
           configMap:
-            name: "release-name-harbor-registry"
+            name: cm-registry
         - name: registry-data
           persistentVolumeClaim:
-            claimName: release-name-harbor-registry
+            claimName: registry

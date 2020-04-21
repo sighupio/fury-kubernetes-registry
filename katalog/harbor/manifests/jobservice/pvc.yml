@@ -4,14 +4,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: release-name-harbor-jobservice
-  annotations:
-    helm.sh/resource-policy: keep
+  name: jobservice
   labels:
-    heritage: Tiller
-    release: release-name
-    chart: harbor
-    app: "harbor"
+    app: harbor
     component: jobservice
 spec:
   accessModes:

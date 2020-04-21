@@ -4,5 +4,13 @@ kind: Kustomization
 
 resources:
   - deploy.yml
-  - secrets.yml
   - svc.yml
+
+secretGenerator:
+  - name: secret-notary-server
+    files:
+      - certs/ca.crt
+      - certs/tls.crt
+      - certs/tls.key
+      - config/server.json
+      - config/signer.json

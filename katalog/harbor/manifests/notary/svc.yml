@@ -4,34 +4,26 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: release-name-harbor-notary-server
+  name: notary-server
   labels:
-    heritage: Tiller
-    release: release-name
-    chart: harbor
-    app: "harbor"
+    app: harbor
 spec:
   ports:
     - port: 4443
   selector:
-    release: release-name
-    app: "harbor"
+    app: harbor
     component: notary-server
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: release-name-harbor-notary-signer
+  name: notary-signer
   labels:
-    heritage: Tiller
-    release: release-name
-    chart: harbor
-    app: "harbor"
+    app: harbor
 spec:
   ports:
     - port: 7899
   selector:
-    release: release-name
-    app: "harbor"
+    app: harbor
     component: notary-signer

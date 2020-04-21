@@ -3,28 +3,21 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: release-name-harbor-redis
+  name: redis
   labels:
-    heritage: Tiller
-    release: release-name
-    chart: harbor
-    app: "harbor"
+    app: harbor
     component: redis
 spec:
   replicas: 1
-  serviceName: release-name-harbor-redis
+  serviceName: redis
   selector:
     matchLabels:
-      release: release-name
-      app: "harbor"
+      app: harbor
       component: redis
   template:
     metadata:
       labels:
-        heritage: Tiller
-        release: release-name
-        chart: harbor
-        app: "harbor"
+        app: harbor
         component: redis
     spec:
       securityContext:
@@ -46,15 +39,11 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/lib/redis
-              subPath:
   volumeClaimTemplates:
     - metadata:
         name: data
         labels:
-          heritage: Tiller
-          release: release-name
-          chart: harbor
-          app: "harbor"
+          app: harbor
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:

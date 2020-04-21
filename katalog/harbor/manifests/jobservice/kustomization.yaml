@@ -4,7 +4,15 @@ kind: Kustomization
 
 resources:
   - deploy.yml
-  - cm.yml
   - pvc.yml
   - svc.yml
-  - secrets.yml
+
+configMapGenerator:
+  - name: cm-jobservice
+    files:
+      - config/config.yml
+
+secretGenerator:
+  - name: secret-jobservice
+    literals:
+      - secret=Gx6IsNtY4NdWoK0u
