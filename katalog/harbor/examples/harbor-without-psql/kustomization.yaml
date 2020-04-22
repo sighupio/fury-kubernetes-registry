@@ -7,7 +7,7 @@ resources:
   - ns.yml
 
 bases:
-  - ../manifests/distributions/harbor-without-psql
+  - ../../manifests/distributions/harbor-without-psql
 
 configMapGenerator:
   - name: cm-core
