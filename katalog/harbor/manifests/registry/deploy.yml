@@ -48,7 +48,6 @@ spec:
           volumeMounts:
             - name: registry-data
               mountPath: /storage
-              subPath:
             - name: registry-root-certificate
               mountPath: /etc/registry/root.crt
               subPath: tls.crt
@@ -90,7 +89,6 @@ spec:
           volumeMounts:
             - name: registry-data
               mountPath: /storage
-              subPath:
             - name: registry-config
               mountPath: /etc/registry/config.yml
               subPath: config.yml
