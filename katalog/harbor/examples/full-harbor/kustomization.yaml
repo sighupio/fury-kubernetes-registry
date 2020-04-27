@@ -18,8 +18,13 @@ configMapGenerator:
     behavior: merge
     files:
       - config/nginx/nginx.conf
+  - name: cm-jobservice
+    behavior: merge
+    literals:
+      - CORE_URL=http://core
+      - REGISTRY_CONTROLLER_URL=http://registry
   - name: cm-registry
-    behavior: replace
+    behavior: merge
     files:
       - config/registry/config.yml
 
