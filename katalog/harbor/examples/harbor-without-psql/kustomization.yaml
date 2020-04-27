@@ -5,7 +5,6 @@ namespace: harbor
 
 resources:
   - ns.yml
-
 bases:
   - ../../manifests/distributions/harbor-without-psql
 
@@ -16,10 +15,6 @@ configMapGenerator:
       - EXT_ENDPOINT=https://my.harbor.domain
       - POSTGRESQL_HOST=external.psql.host
       - CLAIR_DB_HOST=external.psql.host
-  - name: cm-nginx
-    behavior: merge
-    files:
-      - config/nginx/nginx.conf
   - name: cm-jobservice
     behavior: merge
     literals:
@@ -92,3 +87,9 @@ patchesJson6902:
       kind: PersistentVolumeClaim
       name: registry
     path: patch/registry.yml
+  - target:
+      group: extensions
+      version: v1beta1
+      kind: Ingress
+      name: harbor-ingress
+    path: patch/ingress.yml

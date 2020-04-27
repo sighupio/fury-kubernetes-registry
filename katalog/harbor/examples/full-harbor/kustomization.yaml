@@ -14,10 +14,6 @@ configMapGenerator:
     behavior: merge
     literals:
       - EXT_ENDPOINT=https://my.harbor.domain
-  - name: cm-nginx
-    behavior: merge
-    files:
-      - config/nginx/nginx.conf
   - name: cm-jobservice
     behavior: merge
     literals:
@@ -53,7 +49,7 @@ secretGenerator:
   - name: secret-jobservice
     behavior: merge
     literals:
-      - secret=TEST
+      - secret=P447FhxLeLwjDMYU
   - name: secret-notary-server
     behavior: merge
     files:
@@ -100,3 +96,9 @@ patchesJson6902:
       kind: PersistentVolumeClaim
       name: registry
     path: patch/registry.yml
+  - target:
+      group: extensions
+      version: v1beta1
+      kind: Ingress
+      name: harbor-ingress
+    path: patch/ingress.yml
