@@ -1,5 +1,5 @@
 expose:
-  type: clusterIp
+  type: ingress
   tls:
     enabled: false
   clusterIP:
