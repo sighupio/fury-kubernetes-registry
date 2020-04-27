@@ -38,7 +38,7 @@ notifications:
   endpoints:
     - name: harbor
       disabled: false
-      url: http://release-name-harbor-core/service/notifications
+      url: http://core/service/notifications
       timeout: 3000ms
       threshold: 5
       backoff: 1s

@@ -9,7 +9,7 @@ metadata:
 spec:
   replicas: 1
   strategy:
-    type: RollingUpdate
+    type: Recreate
   selector:
     matchLabels:
       app: "harbor"
@@ -47,7 +47,7 @@ spec:
             - name: BASIC_AUTH_PASS
               valueFrom:
                 secretKeyRef:
-                  name: secret-harbor-core
+                  name: secret-core
                   key: secret
           ports:
             - containerPort: 9999

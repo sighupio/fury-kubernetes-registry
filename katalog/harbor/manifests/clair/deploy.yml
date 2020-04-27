@@ -4,23 +4,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: release-name-harbor-clair
+  name: clair
   labels:
-    app: "harbor"
+    app: harbor
     component: clair
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "harbor"
+      app: harbor
       component: clair
   template:
     metadata:
       labels:
-        app: "harbor"
+        app: harbor
         component: clair
-      annotations:
-        checksum/secret: d06e1c14b755fcce7e961329a8434e112ca378fe1d58ccda5f212147a7191389
     spec:
       securityContext:
         fsGroup: 10000

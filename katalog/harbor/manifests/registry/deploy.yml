@@ -98,7 +98,7 @@ spec:
       volumes:
         - name: registry-root-certificate
           secret:
-            secretName: release-name-harbor-core
+            secretName: secret-core
         - name: registry-config
           configMap:
             name: cm-registry

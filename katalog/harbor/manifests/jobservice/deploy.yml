@@ -13,7 +13,7 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: "harbor"
+      app: harbor
       component: jobservice
   template:
     metadata:
@@ -51,9 +51,16 @@ spec:
                   name: secret-jobservice
                   key: secret
             - name: CORE_URL
-              value: http://release-name-harbor-core
+              valueFrom:
+                configMapKeyRef:
+                  name: cm-jobservice
+                  key: CORE_URL
+
             - name: REGISTRY_CONTROLLER_URL
-              value: http://release-name-harbor-registry:8080
+              valueFrom:
+                configMapKeyRef:
+                  name: cm-jobservice
+                  key: REGISTRY_CONTROLLER_URL
             - name: LOG_LEVEL
               value: debug
             - name: HTTP_PROXY
@@ -61,7 +68,7 @@ spec:
             - name: HTTPS_PROXY
               value: ""
             - name: NO_PROXY
-              value: release-name-harbor-core,release-name-harbor-jobservice,release-name-harbor-database,release-name-harbor-chartmuseum,release-name-harbor-clair,release-name-harbor-notary-server,release-name-harbor-notary-signer,release-name-harbor-registry,release-name-harbor-portal,127.0.0.1,localhost,.local,.internal
+              value: core,jobservice,database,chartmuseum,clair,notary-server,notary-signer,registry,portal,127.0.0.1,localhost,.local,.internal
           ports:
             - containerPort: 8080
           volumeMounts:
@@ -70,7 +77,6 @@ spec:
               subPath: config.yml
             - name: job-logs
               mountPath: /var/log/jobs
-              subPath:
       volumes:
         - name: jobservice-config
           configMap:

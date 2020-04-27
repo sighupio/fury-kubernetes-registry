@@ -9,7 +9,7 @@ resources:
 secretGenerator:
   - name: secret-clair
     files:
-      - secrets/config.yml
+      - secrets/config.yaml
     literals:
       - redis=redis://redis:6379
       - database=postgres://postgres:changeit@database:5432/postgres?sslmode=disable

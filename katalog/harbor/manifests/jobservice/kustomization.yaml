@@ -9,6 +9,9 @@ resources:
 
 configMapGenerator:
   - name: cm-jobservice
+    literals:
+      - CORE_URL=http://release-name-harbor-core
+      - REGISTRY_CONTROLLER_URL=http://release-name-harbor-registry
     files:
       - config/config.yml
 
