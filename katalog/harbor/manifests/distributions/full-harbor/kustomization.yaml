@@ -7,9 +7,12 @@ bases:
   - ../../clair
   - ../../core
   - ../../notary
-  - ../../nginx
+  # - ../../nginx
   - ../../database
   - ../../jobservice
   - ../../portal
   - ../../redis
   - ../../registry
+
+resources:
+  - ingress.yml

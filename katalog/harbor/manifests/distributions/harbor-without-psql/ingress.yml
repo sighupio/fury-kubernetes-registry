@@ -1,0 +1,48 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: harbor-ingress
+  labels:
+    app: harbor
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: "0"
+    ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: portal
+              servicePort: 80
+          - path: /api/
+            backend:
+              serviceName: core
+              servicePort: 80
+          - path: /service/
+            backend:
+              serviceName: core
+              servicePort: 80
+          - path: /v2/
+            backend:
+              serviceName: core
+              servicePort: 80
+          - path: /chartrepo/
+            backend:
+              serviceName: core
+              servicePort: 80
+          - path: /c/
+            backend:
+              serviceName: core
+              servicePort: 80
+      host: core.harbor.domain
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: notary-server
+              servicePort: 4443
+      host: notary.harbor.domain

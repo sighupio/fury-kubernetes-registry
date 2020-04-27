@@ -4,12 +4,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: release-name-harbor-nginx
+  name: cm-nginx
   labels:
-    heritage: Tiller
-    release: release-name
-    chart: harbor
-    app: "harbor"
+    app: harbor
 data:
   nginx.conf: |+
     worker_processes auto;
