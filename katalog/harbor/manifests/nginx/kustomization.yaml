@@ -4,6 +4,7 @@ kind: Kustomization
 
 resources:
   - deploy.yml
+  - svc.yml
 
 configMapGenerator:
   - name: cm-nginx

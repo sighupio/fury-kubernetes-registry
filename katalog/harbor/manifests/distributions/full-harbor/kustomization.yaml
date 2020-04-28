@@ -7,7 +7,7 @@ bases:
   - ../../clair
   - ../../core
   - ../../notary
-  # - ../../nginx
+  - ../../nginx
   - ../../database
   - ../../jobservice
   - ../../portal
