@@ -29,7 +29,7 @@ http:
 auth:
   token:
     issuer: harbor-token-issuer
-    realm: "https://core.myharbor.3.249.41.79.nip.io/service/token"
+    realm: "https://core.myharbor.34.244.76.103.nip.io/service/token"
     rootcertbundle: /etc/registry/root.crt
     service: harbor-registry
 validation:

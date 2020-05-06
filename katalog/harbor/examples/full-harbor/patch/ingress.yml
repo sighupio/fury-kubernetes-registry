@@ -17,19 +17,19 @@
 
 - op: replace
   path: /spec/rules/0/host
-  value: core.myharbor.3.249.41.79.nip.io
+  value: core.myharbor.34.244.76.103.nip.io
 
 - op: replace
   path: /spec/rules/1/host
-  value: notary.myharbor.3.249.41.79.nip.io
+  value: notary.myharbor.34.244.76.103.nip.io
 
 - op: replace
   path: /spec/tls/0/hosts/0
-  value: core.myharbor.3.249.41.79.nip.io
+  value: core.myharbor.34.244.76.103.nip.io
 
 - op: replace
   path: /spec/tls/0/hosts/1
-  value: notary.myharbor.3.249.41.79.nip.io
+  value: notary.myharbor.34.244.76.103.nip.io
 
 - op: replace
   path: "/metadata/annotations/cert-manager.io~1cluster-issuer"

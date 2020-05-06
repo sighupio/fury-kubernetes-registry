@@ -28,5 +28,10 @@ $ kustomize build | kubectl apply -f -
 ```
 
 ```bash
+$ cd ${repo_path}
+$ kustomize build katalog/harbor/examples/full-harbor/ | kubectl apply -f -
+```
+
+```bash
 $ make destroy
 ```
