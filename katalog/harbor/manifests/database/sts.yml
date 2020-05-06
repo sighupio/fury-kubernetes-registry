@@ -1,5 +1,4 @@
 ---
-# Source: harbor/templates/database/database-ss.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -23,24 +22,24 @@ spec:
       initContainers:
         - name: change-permission-of-directory
           image: busybox:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           command: ["/bin/sh"]
           args: ["-c", "chown -R 999:999 /var/lib/postgresql/data"]
           volumeMounts:
-            - name: database-data
+            - name: database
               mountPath: /var/lib/postgresql/data
               subPath:
         - name: remove-lost-found
-          image: goharbor/harbor-db:v1.10.1
-          imagePullPolicy: IfNotPresent
+          image: goharbor/harbor-db
+          imagePullPolicy: Always
           command: ["rm", "-Rf", "/var/lib/postgresql/data/lost+found"]
           volumeMounts:
-            - name: database-data
+            - name: database
               mountPath: /var/lib/postgresql/data
       containers:
         - name: database
-          image: goharbor/harbor-db:v1.10.1
-          imagePullPolicy: IfNotPresent
+          image: goharbor/harbor-db
+          imagePullPolicy: Always
           livenessProbe:
             exec:
               command:
@@ -55,15 +54,16 @@ spec:
             periodSeconds: 10
           envFrom:
             - secretRef:
-                name: secret-database
+                name: database
           volumeMounts:
-            - name: database-data
+            - name: database
               mountPath: /var/lib/postgresql/data
   volumeClaimTemplates:
     - metadata:
-        name: database-data
+        name: database
         labels:
           app: harbor
+          component: database
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:

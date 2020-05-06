@@ -1,6 +1,4 @@
 ---
-# Source: harbor/templates/clair/clair-dpl.yaml
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,8 +22,8 @@ spec:
         fsGroup: 10000
       containers:
         - name: clair
-          image: goharbor/clair-photon:v2.1.1-v1.10.1
-          imagePullPolicy: IfNotPresent
+          image: goharbor/clair-photon
+          imagePullPolicy: Always
           livenessProbe:
             httpGet:
               path: /health
@@ -38,14 +36,10 @@ spec:
               port: 6061
             initialDelaySeconds: 30
             periodSeconds: 10
-          args: ["-log-level", "info"]
-          env:
-            - name: HTTP_PROXY
-              value: ""
-            - name: HTTPS_PROXY
-              value: ""
-            - name: NO_PROXY
-              value: "release-name-harbor-core,release-name-harbor-jobservice,release-name-harbor-database,release-name-harbor-chartmuseum,release-name-harbor-clair,release-name-harbor-notary-server,release-name-harbor-notary-signer,release-name-harbor-registry,release-name-harbor-portal,127.0.0.1,localhost,.local,.internal"
+          args: ["-log-level", "$(SCANNER_LOG_LEVEL)"]
+          envFrom:
+            - configMapRef:
+                name: clair
           ports:
             - containerPort: 6060
           volumeMounts:
@@ -53,8 +47,8 @@ spec:
               mountPath: /etc/clair/config.yaml
               subPath: config.yaml
         - name: adapter
-          image: goharbor/clair-adapter-photon:v1.0.1-v1.10.1
-          imagePullPolicy: IfNotPresent
+          image: goharbor/clair-adapter-photon
+          imagePullPolicy: Always
           livenessProbe:
             httpGet:
               path: /probe/healthy
@@ -67,25 +61,14 @@ spec:
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
-          env:
-            - name: SCANNER_CLAIR_URL
-              # To avoid a pod cannot reach itself via service IP when the clusters disable hairpin
-              value: "http://127.0.0.1:6060"
-            - name: SCANNER_STORE_REDIS_URL
-              valueFrom:
-                secretKeyRef:
-                  name: secret-clair
-                  key: redis
-            - name: SCANNER_CLAIR_DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: secret-clair
-                  key: database
-            - name: SCANNER_LOG_LEVEL
-              value: "info"
+          envFrom:
+            - configMapRef:
+                name: clair
+            - secretRef:
+                name: clair
           ports:
             - containerPort: 8080
       volumes:
         - name: config
           secret:
-            secretName: secret-clair
+            secretName: clair

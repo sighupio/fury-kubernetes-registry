@@ -5,6 +5,7 @@ metadata:
   name: registry
   labels:
     app: harbor
+    component: registry
 spec:
   ports:
     - name: registry

@@ -4,18 +4,25 @@ kind: Kustomization
 
 resources:
   - deploy.yml
-  - pvc.yml
   - svc.yml
 
+images:
+  - name: goharbor/harbor-jobservice
+    newTag: v1.10.1
+
 configMapGenerator:
-  - name: cm-jobservice
-    literals:
-      - CORE_URL=http://release-name-harbor-core
-      - REGISTRY_CONTROLLER_URL=http://release-name-harbor-registry
+  - name: jobservice
     files:
-      - config/config.yml
+      - config.yml=config/config.yml
+    literals:
+      - CORE_URL=http://core
+      - REGISTRY_CONTROLLER_URL=http://registry
+      - LOG_LEVEL=debug
+      - HTTP_PROXY=
+      - HTTPS_PROXY=
+      - NO_PROXY=core,jobservice,database,chartmuseum,clair,notary-server,notary-signer,registry,portal,127.0.0.1,localhost,.local,.internal
 
 secretGenerator:
-  - name: secret-jobservice
+  - name: jobservice
     literals:
       - secret=Gx6IsNtY4NdWoK0u

@@ -1,0 +1,10 @@
+# namespace: cert-manager
+
+commonLabels:
+  app: webhook
+  app.kubernetes.io/name: webhook
+
+resources:
+- deploy.yml
+- rbac.yml
+- webhookvalidatingconfig.yml

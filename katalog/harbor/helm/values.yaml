@@ -1,7 +1,7 @@
 expose:
-  type: nodePort
+  type: ingress
   tls:
-    enabled: false
+    enabled: true
   clusterIP:
     name: harbor
     ports:
@@ -22,7 +22,7 @@ expose:
 # the IP address of k8s node
 #
 # If Harbor is deployed behind the proxy, set it as the URL of proxy
-externalURL: https://core.harbor.domain
+externalURL: https://core.myharbor.34.244.114.42.nip.io
 
 persistence:
   enabled: true
@@ -65,7 +65,7 @@ persistence:
     # https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect
     # for the detail.
     disableredirect: true
-    type: s3
+    type: filesystem
     filesystem:
       rootdirectory: /storage
       #maxthreads: 100

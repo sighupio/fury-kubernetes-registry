@@ -25,7 +25,7 @@ spec:
       containers:
         - name: redis
           image: goharbor/redis-photon:v1.10.1
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           livenessProbe:
             tcpSocket:
               port: 6379
@@ -44,6 +44,7 @@ spec:
         name: data
         labels:
           app: harbor
+          component: redis
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:

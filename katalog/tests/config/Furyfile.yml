@@ -1,0 +1,6 @@
+versions:
+  ingress: v1.6.1
+
+bases:
+  - name: ingress/cert-manager
+  - name: ingress/nginx

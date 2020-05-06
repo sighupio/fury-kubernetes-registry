@@ -7,14 +7,20 @@ resources:
   - pvc.yml
   - svc.yml
 
+images:
+  - name: goharbor/registry-photon
+    newTag: v2.7.1-patch-2819-2553-v1.10.1
+  - name: goharbor/harbor-registryctl
+    newTag: v1.10.1
+
 configMapGenerator:
-  - name: cm-registry
+  - name: registry
     files:
-      - config/config.yml
-      - config/ctl-config.yml
+      - config.yml=config/config.yml
+      - ctl-config.yml=config/ctl-config.yml
 
 secretGenerator:
-  - name: secret-registry
+  - name: registry
     literals:
       - REGISTRY_HTTP_SECRET=Z6HTqCsLzHMmgr9W
       - REGISTRY_REDIS_PASSWORD=""

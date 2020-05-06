@@ -6,10 +6,24 @@ resources:
   - deploy.yml
   - svc.yml
 
-secretGenerator:
-  - name: secret-clair
-    files:
-      - secrets/config.yaml
+images:
+  - name: goharbor/clair-photon
+    newTag: v2.1.1-v1.10.1
+  - name: goharbor/clair-adapter-photon
+    newTag: v1.0.1-v1.10.1
+
+configMapGenerator:
+  - name: clair
     literals:
-      - redis=redis://redis:6379
-      - database=postgres://postgres:changeit@database:5432/postgres?sslmode=disable
+      - HTTP_PROXY=""
+      - HTTPS_PROXY=""
+      - NO_PROXY="core,jobservice,database,chartmuseum,clair,notary-server,notary-signer,registry,portal,127.0.0.1,localhost,.local,.internal"
+      - SCANNER_CLAIR_URL=http://127.0.0.1:6060"
+      - SCANNER_LOG_LEVEL=info"
+secretGenerator:
+  - name: clair
+    files:
+      - config.yaml=secrets/config.yaml
+    literals:
+      - SCANNER_STORE_REDIS_URL=redis://redis:6379
+      - SCANNER_CLAIR_DATABASE_URL=postgres://postgres:changeit@database:5432/postgres?sslmode=disable

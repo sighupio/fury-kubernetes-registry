@@ -3,13 +3,18 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  - pki.yml
   - deploy.yml
   - svc.yml
 
+images:
+  - name: goharbor/harbor-core
+    newTag: v1.10.1
+
 configMapGenerator:
-  - name: cm-core
+  - name: core
     files:
-      - config/app.conf
+      - app.conf=config/app.conf
     literals:
       - DATABASE_TYPE=postgresql
       - POSTGRESQL_HOST=database
@@ -41,10 +46,10 @@ configMapGenerator:
       - CHART_REPOSITORY_URL=http://chartmuseum
       - LOG_LEVEL=info
       - CONFIG_PATH=/etc/core/app.conf
-      - SYNC_REGISTRY=false
+      - SYNC_REGISTRY=true
       - CHART_CACHE_DRIVER=redis
       - _REDIS_URL=redis:6379
-      - _REDIS_URL_REG=redis://redis:6379
+      - _REDIS_URL_REG=redis://redis:6379/2
       - PORTAL_URL=http://portal
       - REGISTRYCTL_URL=http://registry:8080
       - CLAIR_HEALTH_CHECK_SERVER_URL=http://clair:6061
@@ -53,10 +58,7 @@ configMapGenerator:
       - NO_PROXY=core,jobservice,database,chartmuseum,clair,notary-server,notary-signer,registry,portal,127.0.0.1,localhost,.local,.internal
 
 secretGenerator:
-  - name: secret-core
-    files:
-      - secret/tls.crt
-      - secret/tls.key
+  - name: core
     literals:
       - secretKey=not-a-secure-key
       - secret=P447FhxLeLwjDMYU

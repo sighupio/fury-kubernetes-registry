@@ -1,6 +1,4 @@
 ---
-# Source: harbor/templates/clair/clair-svc.yaml
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,6 +9,10 @@ spec:
   ports:
     - name: adapter
       port: 8080
+    - name: clair
+      port: 6060
+    - name: clair-health
+      port: 6061
   selector:
     app: harbor
     component: clair

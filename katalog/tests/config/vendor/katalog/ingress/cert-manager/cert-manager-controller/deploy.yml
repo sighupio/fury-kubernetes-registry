@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cert-manager
+  labels: {}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {}
+  template:
+    metadata:
+      labels: {}
+      annotations:
+        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9402'
+    spec:
+      serviceAccountName: cert-manager
+      containers:
+      - name: cert-manager
+        image: "quay.io/jetstack/cert-manager-controller:v0.14.1"
+        imagePullPolicy: IfNotPresent
+        args:
+        - --v=2
+        - --cluster-resource-namespace=$(POD_NAMESPACE)
+        - --leader-election-namespace=$(POD_NAMESPACE)
+        - --webhook-namespace=$(POD_NAMESPACE)
+        - --webhook-ca-secret=cert-manager-webhook-ca
+        - --webhook-serving-secret=cert-manager-webhook-tls
+        - --webhook-dns-names=cert-manager-webhook,cert-manager-webhook.$(POD_NAMESPACE),cert-manager-webhook.$(POD_NAMESPACE).svc
+        - --default-issuer-kind=ClusterIssuer
+        - --default-issuer-name=letsencrypt-prod
+        ports:
+        - name: metrics
+          containerPort: 9402
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources:
+          requests:
+            cpu: 50m
+            memory: 50Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cert-manager
+  labels: {}
+spec:
+  ports:
+  - name: metrics
+    port: 9402
+    targetPort: metrics
+  selector: {}

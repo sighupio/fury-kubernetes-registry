@@ -31,7 +31,7 @@ auth:
     issuer: harbor-token-issuer
     realm: "https://core.harbor.domain/service/token"
     rootcertbundle: /etc/registry/root.crt
-    service: registry
+    service: harbor-registry
 validation:
   disabled: true
 notifications:

@@ -1,0 +1,29 @@
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: core-root
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: core-root-ca
+spec:
+  secretName: core-root-ca
+  isCA: true
+  issuerRef:
+    name: core-root
+    kind: Issuer
+  commonName: "core"
+  dnsNames:
+    - core
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: core-root-ca
+spec:
+  ca:
+    secretName: core-root-ca

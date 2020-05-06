@@ -1,5 +1,4 @@
 ---
-# Source: harbor/templates/jobservice/jobservice-dpl.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,8 +24,8 @@ spec:
         fsGroup: 10000
       containers:
         - name: jobservice
-          image: goharbor/harbor-jobservice:v1.10.1
-          imagePullPolicy: IfNotPresent
+          image: goharbor/harbor-jobservice
+          imagePullPolicy: Always
           livenessProbe:
             httpGet:
               path: /api/v1/stats
@@ -39,48 +38,29 @@ spec:
               port: 8080
             initialDelaySeconds: 20
             periodSeconds: 10
+          envFrom:
+            - configMapRef:
+                name: jobservice
+            - secretRef:
+                name: jobservice
           env:
             - name: CORE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: secret-core
+                  name: core
                   key: secret
             - name: JOBSERVICE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: secret-jobservice
+                  name: jobservice
                   key: secret
-            - name: CORE_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: cm-jobservice
-                  key: CORE_URL
-
-            - name: REGISTRY_CONTROLLER_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: cm-jobservice
-                  key: REGISTRY_CONTROLLER_URL
-            - name: LOG_LEVEL
-              value: debug
-            - name: HTTP_PROXY
-              value: ""
-            - name: HTTPS_PROXY
-              value: ""
-            - name: NO_PROXY
-              value: core,jobservice,database,chartmuseum,clair,notary-server,notary-signer,registry,portal,127.0.0.1,localhost,.local,.internal
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: jobservice-config
+            - name: config
               mountPath: /etc/jobservice/config.yml
               subPath: config.yml
-            - name: job-logs
-              mountPath: /var/log/jobs
       volumes:
-        - name: jobservice-config
+        - name: config
           configMap:
-            name: cm-jobservice
-        - name: job-logs
-          persistentVolumeClaim:
-            claimName: jobservice
+            name: jobservice

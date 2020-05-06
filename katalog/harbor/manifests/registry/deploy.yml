@@ -25,7 +25,7 @@ spec:
       containers:
         - name: registry
           image: goharbor/registry-photon:v2.7.1-patch-2819-2553-v1.10.1
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           livenessProbe:
             httpGet:
               path: /
@@ -41,12 +41,12 @@ spec:
           args: ["serve", "/etc/registry/config.yml"]
           envFrom:
             - secretRef:
-                name: secret-registry
+                name: registry
           ports:
             - containerPort: 5000
             - containerPort: 5001
           volumeMounts:
-            - name: registry-data
+            - name: data
               mountPath: /storage
             - name: registry-root-certificate
               mountPath: /etc/registry/root.crt
@@ -55,8 +55,8 @@ spec:
               mountPath: /etc/registry/config.yml
               subPath: config.yml
         - name: registryctl
-          image: goharbor/harbor-registryctl:v1.10.1
-          imagePullPolicy: IfNotPresent
+          image: goharbor/harbor-registryctl
+          imagePullPolicy: Always
           livenessProbe:
             httpGet:
               path: /api/health
@@ -72,22 +72,22 @@ spec:
           args: ["serve", "/etc/registry/config.yml"]
           envFrom:
             - secretRef:
-                name: secret-registry
+                name: registry
           env:
             - name: CORE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: secret-core
+                  name: core
                   key: secret
             - name: JOBSERVICE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: secret-jobservice
+                  name: jobservice
                   key: secret
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: registry-data
+            - name: data
               mountPath: /storage
             - name: registry-config
               mountPath: /etc/registry/config.yml
@@ -98,10 +98,10 @@ spec:
       volumes:
         - name: registry-root-certificate
           secret:
-            secretName: secret-core
+            secretName: core-root-ca
         - name: registry-config
           configMap:
-            name: cm-registry
-        - name: registry-data
+            name: registry
+        - name: data
           persistentVolumeClaim:
             claimName: registry

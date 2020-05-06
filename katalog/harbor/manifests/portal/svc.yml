@@ -6,6 +6,7 @@ metadata:
   name: portal
   labels:
     app: harbor
+    component: portal
 spec:
   ports:
     - port: 80

@@ -22,8 +22,8 @@ spec:
         fsGroup: 10000
       containers:
         - name: core
-          image: goharbor/harbor-core:v1.10.1
-          imagePullPolicy: IfNotPresent
+          image: goharbor/harbor-core
+          imagePullPolicy: Always
           livenessProbe:
             httpGet:
               path: /api/ping
@@ -38,19 +38,19 @@ spec:
             periodSeconds: 10
           envFrom:
             - configMapRef:
-                name: cm-core
+                name: core
             - secretRef:
-                name: secret-core
+                name: core
           env:
             - name: CORE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: secret-core
+                  name: core
                   key: secret
             - name: JOBSERVICE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: secret-core
+                  name: jobservice
                   key: secret
           ports:
             - containerPort: 8080
@@ -69,18 +69,18 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: cm-core
+            name: core
             items:
               - key: app.conf
                 path: app.conf
         - name: secret-key
           secret:
-            secretName: secret-core
+            secretName: core
             items:
               - key: secretKey
                 path: key
         - name: token-service-private-key
           secret:
-            secretName: secret-core
+            secretName: core-root-ca
         - name: psc
           emptyDir: {}
