@@ -20,7 +20,7 @@
         "type": "token",
         "options": {
             "realm": "https://core.harbor.domain/service/token",
-            "service": "notary",
+            "service": "harbor-notary",
             "issuer": "harbor-token-issuer",
             "rootcertbundle": "/root.crt"
         }
