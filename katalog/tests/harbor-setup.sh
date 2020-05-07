@@ -56,9 +56,9 @@ load "lib/helper"
     katalog/harbor/examples/full-harbor/patch/ingress.yml
     katalog/harbor/examples/full-harbor/secrets/notary/server.json
     """
-    for file in ${files_to_change};
+    for file in ${files_to_change}
     do
-        sed -i '' 's/%YOUR_DOMAIN%/'"${INSTANCE_IP}"'.nip.io/g' ${file}
+        sed -i'' -e 's/%YOUR_DOMAIN%/'"${INSTANCE_IP}"'.nip.io/g' ${file}
     done
 }
 
