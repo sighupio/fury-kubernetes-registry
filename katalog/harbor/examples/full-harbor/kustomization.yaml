@@ -36,7 +36,7 @@ configMapGenerator:
       - POSTGRESQL_USERNAME=postgres
       - POSTGRESQL_DATABASE=registry
       - POSTGRESQL_SSLMODE=disable
-      - EXT_ENDPOINT=https://core.myharbor.34.244.76.103.nip.io
+      - EXT_ENDPOINT=https://harbor.%YOUR_DOMAIN%
       - CLAIR_DB_HOST=database
       - CLAIR_DB_PORT=5432
       - CLAIR_DB_USERNAME=postgres
