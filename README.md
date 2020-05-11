@@ -1,55 +1,39 @@
-# fury-kubernetes-registry
+# Fury Kubernetes Registry
 
-## Improvements
+This repository contains all components necessary to deploy a container registry on top of Kubernetes.
 
-- External DB
-- External Cache 
-- Object Storage for:
-  - Registry
-  - ChartMuseum
-- Object Storage:
-  - Local (minio)
-  - External (cloud)
+## Registry Packages
 
-## Developer notes
+The following packages are included in Fury Kubernetes Registry katalog.
 
-```bash
-$ export repo_path=$(pwd)
-$ echo ${repo_path}
-/Users/angelbarrerasanchez-sighup/work/sighup/fury-kubernetes-registry
-$ cd /Users/angelbarrerasanchez-sighup/work/sighup/e2e-testing/cloud
-$ LOCAL_KIND_CONFIG_PATH=${repo_path}/katalog/tests/config/kind-harbor-config CLUSTER_VERSION=1.16.4 make init custom-cluster-116
+- [harbor](katalog/harbor): Harbor is an open source container image registry that secures images with role-based
+access control, scans images for vulnerabilities, and signs images as trusted. Version: **1.10.2**
 
-```
+## Requirements
 
-Remember to deploy cert-manager and nginx
+All packages in this repository have following dependencies, for package
+specific dependencies please visit the single package's documentation:
 
-```bash
-$ cd ${repo_path}/katalog/tests/config
-$ furyctl vendor -H
-$ kustomize build | kubectl apply -f -
-```
+- [Kubernetes](https://kubernetes.io) >= `v1.14.0`
+- [Furyctl](https://github.com/sighupio/furyctl) package manager to download
+  Fury packages >= [`v0.2.2`](https://github.com/sighupio/furyctl/releases/tag/v0.2.2)
+- [Kustomize](https://github.com/kubernetes-sigs/kustomize) = `v3.3.0`
 
-```bash
-$ cd ${repo_path}
-$ kustomize build katalog/harbor/examples/full-harbor/ | kubectl apply -f -
-```
+## Compatibility
 
-```bash
-$ make destroy
-```
+| Module Version / Kubernetes Version |       1.14.X       |       1.15.X       |       1.16.X       |
+| ----------------------------------- | :----------------: | :----------------: | :----------------: |
+| v1.0.0                              | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
-Helm
+- :white_check_mark: Compatible
+- :warning: Has issues
+- :x: Incompatible
 
-```bash
-apt-get update && apt-get install -y curl ca-certificates git
-curl -LOs https://get.helm.sh/helm-v2.16.7-linux-amd64.tar.gz
-tar -zxvf helm-v2.16.7-linux-amd64.tar.gz
-mv linux-amd64/helm /usr/local/bin/
-rm -rf helm-v2.16.7-linux-amd64.tar.gz
-helm init --client-only
-helm plugin install https://github.com/chartmuseum/helm-push
-helm fetch stable/nginx-ingress --version 1.36.2
-helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor.3.249.106.50.nip.io/chartrepo/library
-helm push --username=admin --password=Harbor12345 nginx-ingress-1.36.2.tgz harbor-test
-```
+## Examples
+
+To see examples on how to customize Fury Kubernetes Registry packages please
+go to [examples](examples) directory.
+
+## License
+
+For license details please see [LICENSE](LICENSE)
