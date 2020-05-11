@@ -17,7 +17,7 @@ steps:
     settings:
       action: custom-cluster-116
       pipeline_id: cluster-116
-      local_kind_config_path: katalog/tests/config/kind-harbor-config
+      local_kind_config_path: katalog/tests/harbor/config/kind-config
       cluster_version: '1.16.4'
       instance_path: /shared
       aws_default_region:
@@ -43,7 +43,7 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-setup.sh
+      - bats -t katalog/tests/harbor/setup.sh
     when:
       ref:
         include:
@@ -67,7 +67,7 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-clair.sh
+      - bats -t katalog/tests/harbor/clair.sh
     when:
       ref:
         include:
@@ -83,7 +83,7 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-chartmuseum.sh
+      - bats -t katalog/tests/harbor/chartmuseum.sh
     when:
       ref:
         include:
@@ -99,7 +99,7 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-replication.sh
+      - bats -t katalog/tests/harbor/replication.sh
     when:
       ref:
         include:
@@ -123,8 +123,8 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-registry.sh
-      - bats -t katalog/tests/harbor-registry-notary.sh
+      - bats -t katalog/tests/harbor/registry.sh
+      - bats -t katalog/tests/harbor/registry-notary.sh
     when:
       ref:
         include:
@@ -175,7 +175,7 @@ steps:
     settings:
       action: custom-cluster-115
       pipeline_id: cluster-115
-      local_kind_config_path: katalog/tests/config/kind-harbor-config
+      local_kind_config_path: katalog/tests/harbor/config/kind-config
       cluster_version: '1.15.7'
       instance_path: /shared
       aws_default_region:
@@ -201,7 +201,7 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-setup.sh
+      - bats -t katalog/tests/harbor/setup.sh
     when:
       ref:
         include:
@@ -225,7 +225,7 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-clair.sh
+      - bats -t katalog/tests/harbor/clair.sh
     when:
       ref:
         include:
@@ -241,7 +241,7 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-chartmuseum.sh
+      - bats -t katalog/tests/harbor/chartmuseum.sh
     when:
       ref:
         include:
@@ -257,7 +257,7 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-replication.sh
+      - bats -t katalog/tests/harbor/replication.sh
     when:
       ref:
         include:
@@ -281,8 +281,8 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-registry.sh
-      - bats -t katalog/tests/harbor-registry-notary.sh
+      - bats -t katalog/tests/harbor/registry.sh
+      - bats -t katalog/tests/harbor/registry-notary.sh
     when:
       ref:
         include:
@@ -333,7 +333,7 @@ steps:
     settings:
       action: custom-cluster-114
       pipeline_id: cluster-114
-      local_kind_config_path: katalog/tests/config/kind-harbor-config
+      local_kind_config_path: katalog/tests/harbor/config/kind-config
       cluster_version: '1.14.10'
       instance_path: /shared
       aws_default_region:
@@ -359,7 +359,7 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-setup.sh
+      - bats -t katalog/tests/harbor/setup.sh
     when:
       ref:
         include:
@@ -383,7 +383,7 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-clair.sh
+      - bats -t katalog/tests/harbor/clair.sh
     when:
       ref:
         include:
@@ -399,7 +399,7 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-chartmuseum.sh
+      - bats -t katalog/tests/harbor/chartmuseum.sh
     when:
       ref:
         include:
@@ -415,7 +415,7 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-replication.sh
+      - bats -t katalog/tests/harbor/replication.sh
     when:
       ref:
         include:
@@ -439,8 +439,8 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - bats -t katalog/tests/harbor-registry.sh
-      - bats -t katalog/tests/harbor-registry-notary.sh
+      - bats -t katalog/tests/harbor/registry.sh
+      - bats -t katalog/tests/harbor/registry-notary.sh
     when:
       ref:
         include:

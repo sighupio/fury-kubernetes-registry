@@ -1,0 +1,95 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: harbor
+
+resources:
+  - ns.yml
+bases:
+  - ../../katalog/harbor/distributions/harbor-without-psql
+
+configMapGenerator:
+  - name: cm-core
+    behavior: merge
+    literals:
+      - EXT_ENDPOINT=https://my.harbor.domain
+      - POSTGRESQL_HOST=external.psql.host
+      - CLAIR_DB_HOST=external.psql.host
+  - name: cm-jobservice
+    behavior: merge
+    literals:
+      - CORE_URL=http://core
+      - REGISTRY_CONTROLLER_URL=http://registry
+  - name: cm-registry
+    behavior: merge
+    files:
+      - config/registry/config.yml
+
+secretGenerator:
+  - name: secret-clair
+    behavior: merge
+    files:
+      - secret/clair/config.yml
+    literals:
+      - database=postgres://postgres:CHANGEME@external.psql.host:5432/postgres?sslmode=disable
+  - name: secret-core
+    behavior: merge
+    files:
+      - secret/core/tls.crt
+      - secret/core/tls.key
+    literals:
+      - secretKey=not-a-secure-key
+      - secret=P447FhxLeLwjDMYU
+      - HARBOR_ADMIN_PASSWORD=Harbor12345
+      - POSTGRESQL_PASSWORD=CHANGEME
+      - CLAIR_DB_PASSWORD=changeit
+  - name: secret-jobservice
+    behavior: merge
+    literals:
+      - secret=TEST
+  - name: secret-notary-server
+    behavior: merge
+    files:
+      - secret/notary-server/ca.crt
+      - secret/notary-server/tls.crt
+      - secret/notary-server/tls.key
+      - secret/notary-server/server.json
+      - secret/notary-server/signer.json
+  - name: secret-registry
+    behavior: merge
+    literals:
+      - REGISTRY_HTTP_SECRET=example
+      - REGISTRY_STORAGE_S3_ACCESSKEY=accesskeyid
+      - REGISTRY_STORAGE_S3_SECRETKEY=secretkeyid
+
+patchesJson6902:
+  - target:
+      group: ""
+      version: v1
+      kind: PersistentVolumeClaim
+      name: pvc-chartmuseum
+    path: patch/chartmuseum.yml
+  - target:
+      group: ""
+      version: v1
+      kind: PersistentVolumeClaim
+      name: jobservice
+    path: patch/jobservice.yml
+  - target:
+      group: apps
+      version: v1
+      kind: StatefulSet
+      name: redis
+    path: patch/redis.yml
+  - target:
+      group: ""
+      version: v1
+      kind: PersistentVolumeClaim
+      name: registry
+    path: patch/registry.yml
+  - target:
+      group: extensions
+      version: v1beta1
+      kind: Ingress
+      name: harbor-ingress
+    path: patch/ingress.yml
