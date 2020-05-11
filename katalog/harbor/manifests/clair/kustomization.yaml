@@ -8,9 +8,9 @@ resources:
 
 images:
   - name: goharbor/clair-photon
-    newTag: v2.1.1-v1.10.1
+    newTag: v1.10.2
   - name: goharbor/clair-adapter-photon
-    newTag: v1.0.1-v1.10.1
+    newTag: v1.10.2
 
 configMapGenerator:
   - name: clair

@@ -24,7 +24,7 @@ spec:
         fsGroup: 10000
       containers:
         - name: registry
-          image: goharbor/registry-photon:v2.7.1-patch-2819-2553-v1.10.1
+          image: goharbor/registry-photon
           imagePullPolicy: Always
           livenessProbe:
             httpGet:

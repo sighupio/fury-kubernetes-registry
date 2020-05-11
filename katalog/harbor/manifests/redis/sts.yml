@@ -24,7 +24,7 @@ spec:
         fsGroup: 999
       containers:
         - name: redis
-          image: goharbor/redis-photon:v1.10.1
+          image: goharbor/redis-photon
           imagePullPolicy: Always
           livenessProbe:
             tcpSocket:
