@@ -10,7 +10,13 @@ metadata:
     ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
 spec:
+  tls:
+  - hosts:
+    - core.harbor.domain
+    - notary.harbor.domain
+    secretName: harbor-ingress-cert
   rules:
     - http:
         paths:

@@ -7,7 +7,6 @@ bases:
   - ../../clair
   - ../../core
   - ../../notary
-  - ../../nginx
   - ../../jobservice
   - ../../portal
   - ../../redis
