@@ -58,7 +58,7 @@ load "./../lib/helper"
     """
     for file in ${files_to_change}
     do
-        sed -i'' -e 's/%YOUR_DOMAIN%/'"${INSTANCE_IP}"'.nip.io/g' ${file}
+        sed -i'' -e 's/%YOUR_DOMAIN%/'"${INSTANCE_IP}"'.sslip.io/g' ${file}
     done
 }
 

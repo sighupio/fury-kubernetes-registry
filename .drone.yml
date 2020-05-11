@@ -18,7 +18,7 @@ steps:
       action: custom-cluster-116
       pipeline_id: cluster-116
       local_kind_config_path: katalog/tests/harbor/config/kind-config
-      cluster_version: '1.16.4'
+      cluster_version: '1.16.9'
       instance_path: /shared
       aws_default_region:
         from_secret: aws_region
@@ -34,7 +34,7 @@ steps:
           - refs/tags/**
 
   - name: e2e-setup
-    image: quay.io/sighup/e2e-testing:1.1.0_0.1.3_2.16.1_1.4.0_1.16.3_3.2.2_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.4.0_1.16.4_3.2.2_2.4.1
     pull: always
     volumes:
     - name: shared
@@ -74,7 +74,7 @@ steps:
           - refs/tags/**
 
   - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.1.3_2.16.1_1.4.0_1.16.3_3.2.2_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.4.0_1.16.4_3.2.2_2.4.1
     pull: always
     volumes:
     - name: shared
@@ -176,7 +176,7 @@ steps:
       action: custom-cluster-115
       pipeline_id: cluster-115
       local_kind_config_path: katalog/tests/harbor/config/kind-config
-      cluster_version: '1.15.7'
+      cluster_version: '1.15.11'
       instance_path: /shared
       aws_default_region:
         from_secret: aws_region

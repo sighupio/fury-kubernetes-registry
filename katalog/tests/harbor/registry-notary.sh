@@ -5,7 +5,7 @@ load "./../lib/helper"
 @test "[NOTARY] Setup" {
     info
     setup(){
-        docker login harbor.${INSTANCE_IP}.nip.io -u admin -p Harbor12345
+        docker login harbor.${INSTANCE_IP}.sslip.io -u admin -p Harbor12345
     }
     run setup
     [ "$status" -eq 0 ]
@@ -15,10 +15,10 @@ load "./../lib/helper"
     info
     pull(){
         export DOCKER_CONTENT_TRUST=1 # Enforcing it
-        export DOCKER_CONTENT_TRUST_SERVER=https://notary.${INSTANCE_IP}.nip.io # Using the Notary server
-        docker pull harbor.${INSTANCE_IP}.nip.io/library/busybox:1.31
+        export DOCKER_CONTENT_TRUST_SERVER=https://notary.${INSTANCE_IP}.sslip.io # Using the Notary server
+        docker pull harbor.${INSTANCE_IP}.sslip.io/library/busybox:1.31
     }
     run pull
-    [[ "$output" == *"Error: remote trust data does not exist for harbor.${INSTANCE_IP}.nip.io/library/busybox"* ]]
+    [[ "$output" == *"Error: remote trust data does not exist for harbor.${INSTANCE_IP}.sslip.io/library/busybox"* ]]
     [[ "$status" -ne 0 ]]
 }

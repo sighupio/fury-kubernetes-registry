@@ -8,7 +8,7 @@ load "./../lib/helper"
         helm init --client-only
         helm plugin install https://github.com/chartmuseum/helm-push
         helm fetch stable/nginx-ingress --version 1.36.2
-        helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor.${INSTANCE_IP}.nip.io/chartrepo/library
+        helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor.${INSTANCE_IP}.sslip.io/chartrepo/library
     }
     run setup
     [ "$status" -eq 0 ]
@@ -27,7 +27,7 @@ load "./../lib/helper"
 @test "[CHARTS] Check nginx ingress is in chartmuseum" {
     info
     test(){
-        curl -X GET "https://harbor.${INSTANCE_IP}.nip.io/api/chartrepo/library/charts/nginx-ingress/1.36.2" \
+        curl -X GET "https://harbor.${INSTANCE_IP}.sslip.io/api/chartrepo/library/charts/nginx-ingress/1.36.2" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail
     }
