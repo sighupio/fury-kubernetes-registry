@@ -31,8 +31,13 @@ specific dependencies please visit the single package's documentation:
 
 ## Examples
 
-To see examples on how to customize Fury Kubernetes Registry packages please
+To see examples on how to customize Fury Kubernetes Registry packages, please
 go to [examples](examples) directory.
+
+## Documentation
+
+If you want to read the entire documentation including usage examples, feel free to read it in
+the [Kubernetes Fury Distribution documentation site](https://kubernetesfury.com/docs/modules/registry/)
 
 ## License
 
