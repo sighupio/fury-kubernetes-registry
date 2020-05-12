@@ -13,4 +13,5 @@ resources:
 secretGenerator:
   - name: database
     literals:
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=changeit

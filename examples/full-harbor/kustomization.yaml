@@ -90,6 +90,7 @@ secretGenerator:
   - name: database
     behavior: merge
     literals:
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=changeit
     # JobService overwritable configuration
   - name: jobservice
