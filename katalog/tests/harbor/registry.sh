@@ -25,10 +25,7 @@ load "./../lib/helper"
 @test "[REGISTRY] Check busybox image is in the registry" {
     info
     test(){
-        reference=$(curl -s -X GET "https://harbor.${INSTANCE_IP}.sslip.io/api/v2.0/projects/library/repositories/busybox/artifacts" \
-            -H  "accept: application/json" \
-            --user "admin:Harbor12345" --fail | jq -r .[0].digest)
-        tag=$(curl -X GET "https://harbor.${INSTANCE_IP}.sslip.io/api/v2.0/projects/library/repositories/busybox/artifacts/${reference}/tags" \
+        tag=$(curl -X GET "https://harbor.${INSTANCE_IP}.sslip.io/api/v2.0/projects/library/repositories/busybox/artifacts/1.31/tags" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r .[0].name)
         if [ "${tag}" != "1.31" ]; then return 1; fi
