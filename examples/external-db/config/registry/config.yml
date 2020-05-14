@@ -1,7 +1,7 @@
 ---
 version: 0.1
 log:
-  level: info
+  level: debug
   fields:
     service: registry
 storage:
@@ -27,11 +27,9 @@ http:
   debug:
     addr: localhost:5001
 auth:
-  token:
-    issuer: harbor-token-issuer
-    realm: "https://harbor.%YOUR_DOMAIN%/service/token"
-    rootcertbundle: /etc/registry/root.crt
-    service: harbor-registry
+  htpasswd:
+    realm: harbor-registry-basic-realm
+    path: /etc/registry/passwd
 validation:
   disabled: true
 notifications:
