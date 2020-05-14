@@ -72,6 +72,21 @@ load "./../lib/helper"
     [ "$status" -eq 0 ]
 }
 
+@test "[SETUP] requirements - Rollback example manifests (externalIP)" {
+    info
+    files_to_change="""
+    examples/full-harbor/kustomization.yaml
+    examples/full-harbor/config/registry/config.yml
+    examples/full-harbor/patch/ingress.yml
+    examples/full-harbor/secrets/notary/server.json
+    """
+    for file in ${files_to_change}
+    do
+        rm -rf "${file}"
+        mv "${file}-e" "${file}"
+    done
+}
+
 @test "[SETUP] Check Harbor" {
     info
     test(){
