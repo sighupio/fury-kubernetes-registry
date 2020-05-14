@@ -27,9 +27,14 @@ load "./../lib/helper"
 @test "[CHARTS] Check nginx ingress is in chartmuseum" {
     info
     test(){
-        curl -X GET "https://harbor.${INSTANCE_IP}.sslip.io/api/chartrepo/library/charts/nginx-ingress/1.36.2" \
+        name=$(curl -s -X GET "https://harbor.${INSTANCE_IP}.sslip.io/api/v2.0/search?q=nginx-ingress" \
             -H  "accept: application/json" \
-            --user "admin:Harbor12345" --fail
+            --user "admin:Harbor12345" --fail | jq -r .chart[0].Chart.name)
+        version=$(curl -s -X GET "https://harbor.${INSTANCE_IP}.sslip.io/api/v2.0/search?q=nginx-ingress" \
+            -H  "accept: application/json" \
+            --user "admin:Harbor12345" --fail | jq -r .chart[0].Chart.version)
+        if [ "${name}" != "library/nginx-ingress" ]; then return 1; fi
+        if [ "${version}" != "1.36.2" ]; then return 1; fi
     }
     run test
     [ "$status" -eq 0 ]
