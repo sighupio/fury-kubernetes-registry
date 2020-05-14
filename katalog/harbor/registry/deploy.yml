@@ -54,6 +54,9 @@ spec:
             - name: registry-config
               mountPath: /etc/registry/config.yml
               subPath: config.yml
+            - name: registry-passwd
+              mountPath: /etc/registry/passwd
+              subPath: passwd
         - name: registryctl
           image: goharbor/harbor-registryctl
           imagePullPolicy: Always
@@ -96,6 +99,9 @@ spec:
               mountPath: /etc/registryctl/config.yml
               subPath: ctl-config.yml
       volumes:
+        - name: registry-passwd
+          secret:
+            secretName: registry
         - name: registry-root-certificate
           secret:
             secretName: core-root-ca

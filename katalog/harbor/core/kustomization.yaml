@@ -66,3 +66,5 @@ secretGenerator:
       - POSTGRESQL_PASSWORD=changeit
       - CLAIR_DB_PASSWORD=changeit
       - CSRF_KEY=QQRqXf3yTEtceQDS6NMY9F777LZ4bqKt
+      - REGISTRY_CREDENTIAL_USERNAME=harbor_registry_user
+      - REGISTRY_CREDENTIAL_PASSWORD=DhQTxjwUAyUZHaMABvm90dGAJMDX5jaa

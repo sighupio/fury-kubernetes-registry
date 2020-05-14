@@ -21,6 +21,8 @@ configMapGenerator:
 
 secretGenerator:
   - name: registry
+    files:
+      - passwd=config/passwd
     literals:
       - REGISTRY_HTTP_SECRET=Z6HTqCsLzHMmgr9W
       - REGISTRY_REDIS_PASSWORD=""
