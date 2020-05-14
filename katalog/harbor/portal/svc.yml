@@ -1,5 +1,4 @@
 ---
-# Source: harbor/templates/portal/service.yaml
 apiVersion: v1
 kind: Service
 metadata:

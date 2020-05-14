@@ -42,7 +42,7 @@ configMapGenerator:
       - CLAIR_DB_USERNAME=postgres
       - CLAIR_DB=postgres
       - CLAIR_DB_SSLMODE=disable
-      - LOG_LEVEL=info
+      - LOG_LEVEL=debug
       - _REDIS_URL=redis:6379
       - _REDIS_URL_REG=redis://redis:6379/2
       - HTTP_PROXY=

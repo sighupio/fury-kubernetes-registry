@@ -65,3 +65,4 @@ secretGenerator:
       - HARBOR_ADMIN_PASSWORD=Harbor12345
       - POSTGRESQL_PASSWORD=changeit
       - CLAIR_DB_PASSWORD=changeit
+      - CSRF_KEY=QQRqXf3yTEtceQDS6NMY9F777LZ4bqKt
