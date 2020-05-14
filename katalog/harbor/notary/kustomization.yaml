@@ -4,9 +4,9 @@ kind: Kustomization
 
 images:
   - name: goharbor/notary-server-photon
-    newTag: v1.10.2
+    newTag: v2.0.0
   - name: goharbor/notary-signer-photon
-    newTag: v1.10.2
+    newTag: v2.0.0
 
 resources:
   - pki.yml
