@@ -8,7 +8,7 @@ load "./../lib/helper"
         helm init --client-only
         helm plugin install https://github.com/chartmuseum/helm-push
         helm fetch stable/nginx-ingress --version 1.36.2
-        helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor.${INSTANCE_IP}.sslip.io/chartrepo/library
+        helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor.${EXTERNAL_DNS}/chartrepo/library
     }
     run setup
     [ "$status" -eq 0 ]
@@ -27,10 +27,10 @@ load "./../lib/helper"
 @test "[CHARTS] Check nginx ingress is in chartmuseum" {
     info
     test(){
-        name=$(curl -s -X GET "https://harbor.${INSTANCE_IP}.sslip.io/api/v2.0/search?q=nginx-ingress" \
+        name=$(curl -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/search?q=nginx-ingress" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r .chart[0].Chart.name)
-        version=$(curl -s -X GET "https://harbor.${INSTANCE_IP}.sslip.io/api/v2.0/search?q=nginx-ingress" \
+        version=$(curl -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/search?q=nginx-ingress" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r .chart[0].Chart.version)
         if [ "${name}" != "library/nginx-ingress" ]; then return 1; fi

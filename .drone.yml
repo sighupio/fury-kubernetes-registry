@@ -40,9 +40,14 @@ steps:
     - name: shared
       path: /shared
     depends_on: [ init ]
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/setup.sh
     when:
       ref:
@@ -57,6 +62,9 @@ steps:
       path: /shared
     - name: dockersock
       path: /var/run/docker.sock
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - apk add curl jq git bash ca-certificates
@@ -67,6 +75,8 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/clair.sh
     when:
       ref:
@@ -79,10 +89,15 @@ steps:
     volumes:
     - name: shared
       path: /shared
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/chartmuseum.sh
     when:
       ref:
@@ -95,10 +110,15 @@ steps:
     volumes:
     - name: shared
       path: /shared
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/replication.sh
     when:
       ref:
@@ -113,6 +133,9 @@ steps:
       path: /shared
     - name: dockersock
       path: /var/run/docker.sock
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - apk add curl jq git bash ca-certificates
@@ -123,6 +146,8 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
     when:
@@ -198,9 +223,14 @@ steps:
     - name: shared
       path: /shared
     depends_on: [ init ]
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/setup.sh
     when:
       ref:
@@ -215,6 +245,9 @@ steps:
       path: /shared
     - name: dockersock
       path: /var/run/docker.sock
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - apk add curl jq git bash ca-certificates
@@ -225,6 +258,8 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/clair.sh
     when:
       ref:
@@ -237,10 +272,15 @@ steps:
     volumes:
     - name: shared
       path: /shared
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/chartmuseum.sh
     when:
       ref:
@@ -253,10 +293,15 @@ steps:
     volumes:
     - name: shared
       path: /shared
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/replication.sh
     when:
       ref:
@@ -271,6 +316,9 @@ steps:
       path: /shared
     - name: dockersock
       path: /var/run/docker.sock
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - apk add curl jq git bash ca-certificates
@@ -281,6 +329,8 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
     when:
@@ -356,9 +406,14 @@ steps:
     - name: shared
       path: /shared
     depends_on: [ init ]
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/setup.sh
     when:
       ref:
@@ -373,6 +428,9 @@ steps:
       path: /shared
     - name: dockersock
       path: /var/run/docker.sock
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - apk add curl jq git bash ca-certificates
@@ -383,6 +441,8 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/clair.sh
     when:
       ref:
@@ -395,10 +455,15 @@ steps:
     volumes:
     - name: shared
       path: /shared
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/chartmuseum.sh
     when:
       ref:
@@ -411,10 +476,15 @@ steps:
     volumes:
     - name: shared
       path: /shared
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/replication.sh
     when:
       ref:
@@ -429,6 +499,9 @@ steps:
       path: /shared
     - name: dockersock
       path: /var/run/docker.sock
+    environment:
+      DYNAMIC_DNS_SERVICE:
+        from_secret: dynamic_dns_service
     depends_on: [ e2e-setup ]
     commands:
       - apk add curl jq git bash ca-certificates
@@ -439,6 +512,8 @@ steps:
       - cd -
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
     when:

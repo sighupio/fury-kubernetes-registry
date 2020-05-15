@@ -52,13 +52,12 @@ load "./../lib/helper"
     info
     files_to_change="""
     examples/full-harbor/kustomization.yaml
-    examples/full-harbor/config/registry/config.yml
     examples/full-harbor/patch/ingress.yml
     examples/full-harbor/secrets/notary/server.json
     """
     for file in ${files_to_change}
     do
-        sed -i'' -e 's/%YOUR_DOMAIN%/'"${INSTANCE_IP}"'.sslip.io/g' ${file}
+        sed -i'' -e 's/%YOUR_DOMAIN%/'"${EXTERNAL_DNS}"'/g' ${file}
     done
 }
 
