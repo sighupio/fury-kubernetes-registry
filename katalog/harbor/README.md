@@ -12,18 +12,18 @@
 ## Image repository and tag
 
 * Harbor images from [dockerhub](https://hub.docker.com/u/goharbor):
-  * goharbor/chartmuseum-photon
-  * goharbor/clair-photon
-  * goharbor/clair-adapter-photon
-  * goharbor/harbor-core
-  * goharbor/harbor-db
-  * goharbor/harbor-jobservice
-  * goharbor/notary-server-photon
-  * goharbor/notary-signer-photon
-  * goharbor/harbor-portal
-  * goharbor/redis-photon
-  * goharbor/registry-photon
-  * goharbor/harbor-registryctl
+  * goharbor/chartmuseum-photon:v2.0.0
+  * goharbor/clair-photon:v2.0.0
+  * goharbor/clair-adapter-photon:v2.0.0
+  * goharbor/harbor-core:v2.0.0
+  * goharbor/harbor-db:v2.0.0
+  * goharbor/harbor-jobservice:v2.0.0
+  * goharbor/notary-server-photon:v2.0.0
+  * goharbor/notary-signer-photon:v2.0.0
+  * goharbor/harbor-portal:v2.0.0
+  * goharbor/redis-photon:v2.0.0
+  * goharbor/registry-photon:v2.0.0
+  * goharbor/harbor-registryctl:v2.0.0
 * Harbor repository: https://github.com/goharbor/harbor
 
 ## Distributions

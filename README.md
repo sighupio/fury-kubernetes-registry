@@ -17,7 +17,7 @@ specific dependencies please visit the single package's documentation:
 - [Kubernetes](https://kubernetes.io) >= `v1.14.0`
 - [Furyctl](https://github.com/sighupio/furyctl) package manager to download
   Fury packages >= [`v0.2.2`](https://github.com/sighupio/furyctl/releases/tag/v0.2.2)
-- [Kustomize](https://github.com/kubernetes-sigs/kustomize) = `v3.3.0`
+- [Kustomize](https://github.com/kubernetes-sigs/kustomize) >= `v3.3.0`
 
 ## Compatibility
 
