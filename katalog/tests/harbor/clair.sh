@@ -73,6 +73,7 @@ load "./../lib/helper"
         vulns=$(curl -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/projects/library/repositories/ubuntu/artifacts/16.04?with_scan_overview=true" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r '.scan_overview["application/vnd.scanner.adapter.vuln.report.harbor+json; version=1.0"].summary.total')
+        if [ "${vulns}" == "null" ]; then echo "#     No vulnerabilities found. Retrying" >&3; return 1; fi
         if [ "${vulns}" -eq "0" ]; then echo "#     No vulnerabilities found. Retrying" >&3; return 1; fi
     }
     loop_it test 30 60
