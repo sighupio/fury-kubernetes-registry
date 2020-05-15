@@ -22,6 +22,10 @@ spec:
         - name: portal
           image: goharbor/harbor-portal
           imagePullPolicy: Always
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
           livenessProbe:
             httpGet:
               path: /

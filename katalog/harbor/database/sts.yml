@@ -52,6 +52,10 @@ spec:
                 - /docker-healthcheck.sh
             initialDelaySeconds: 1
             periodSeconds: 10
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
           envFrom:
             - secretRef:
                 name: database

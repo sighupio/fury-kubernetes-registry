@@ -36,6 +36,10 @@ spec:
               port: 6379
             initialDelaySeconds: 1
             periodSeconds: 10
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
           volumeMounts:
             - name: data
               mountPath: /var/lib/redis

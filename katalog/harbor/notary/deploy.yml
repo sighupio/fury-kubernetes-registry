@@ -29,6 +29,10 @@ spec:
                 name: notary-server
             - secretRef:
                 name: notary-server
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
           volumeMounts:
             - name: config
               mountPath: /etc/notary/server-config.postgres.json
@@ -80,6 +84,10 @@ spec:
                 name: notary-signer
             - secretRef:
                 name: notary-signer
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
           volumeMounts:
             - name: config
               mountPath: /etc/notary/signer-config.postgres.json

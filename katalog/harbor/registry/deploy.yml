@@ -38,6 +38,10 @@ spec:
               port: 5000
             initialDelaySeconds: 1
             periodSeconds: 10
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
           args: ["serve", "/etc/registry/config.yml"]
           envFrom:
             - secretRef:
@@ -72,6 +76,10 @@ spec:
               port: 8080
             initialDelaySeconds: 1
             periodSeconds: 10
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
           args: ["serve", "/etc/registry/config.yml"]
           envFrom:
             - secretRef:

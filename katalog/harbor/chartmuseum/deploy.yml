@@ -49,6 +49,10 @@ spec:
                 secretKeyRef:
                   name: core
                   key: secret
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
           ports:
             - containerPort: 9999
           volumeMounts:
