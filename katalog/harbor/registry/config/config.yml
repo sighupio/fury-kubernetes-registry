@@ -1,7 +1,7 @@
 ---
 version: 0.1
 log:
-  level: debug
+  level: info
   fields:
     service: registry
 storage:

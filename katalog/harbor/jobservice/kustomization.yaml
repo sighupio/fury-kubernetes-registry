@@ -17,7 +17,7 @@ configMapGenerator:
     literals:
       - CORE_URL=http://core
       - REGISTRY_CONTROLLER_URL=http://registry
-      - LOG_LEVEL=debug
+      - LOG_LEVEL=info
       - HTTP_PROXY=
       - HTTPS_PROXY=
       - NO_PROXY=core,jobservice,database,chartmuseum,clair,notary-server,notary-signer,registry,portal,127.0.0.1,localhost,.local,.internal
