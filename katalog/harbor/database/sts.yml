@@ -1,0 +1,75 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database
+  labels:
+    app: harbor
+    component: database
+spec:
+  replicas: 1
+  serviceName: database
+  selector:
+    matchLabels:
+      app: harbor
+      component: database
+  template:
+    metadata:
+      labels:
+        app: harbor
+        component: database
+    spec:
+      initContainers:
+        - name: change-permission-of-directory
+          image: busybox:latest
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args: ["-c", "chown -R 999:999 /var/lib/postgresql/data"]
+          volumeMounts:
+            - name: database
+              mountPath: /var/lib/postgresql/data
+              subPath:
+        - name: remove-lost-found
+          image: goharbor/harbor-db
+          imagePullPolicy: Always
+          command: ["rm", "-Rf", "/var/lib/postgresql/data/lost+found"]
+          volumeMounts:
+            - name: database
+              mountPath: /var/lib/postgresql/data
+      containers:
+        - name: database
+          image: goharbor/harbor-db
+          imagePullPolicy: Always
+          livenessProbe:
+            exec:
+              command:
+                - /docker-healthcheck.sh
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - /docker-healthcheck.sh
+            initialDelaySeconds: 1
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+          envFrom:
+            - secretRef:
+                name: database
+          volumeMounts:
+            - name: database
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: database
+        labels:
+          app: harbor
+          component: database
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: "1Gi"

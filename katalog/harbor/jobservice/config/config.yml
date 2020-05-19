@@ -1,0 +1,15 @@
+---
+protocol: "http"
+port: 8080
+worker_pool:
+  workers: 10
+  backend: "redis"
+  redis_pool:
+    redis_url: "redis:6379"
+    namespace: "jobservice_ns"
+job_loggers:
+  - name: "STD_OUTPUT"
+    level: INFO
+loggers:
+  - name: "STD_OUTPUT"
+    level: INFO

@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notary-server
+  labels:
+    app: harbor
+    component: notary-server
+spec:
+  ports:
+    - port: 4443
+  selector:
+    app: harbor
+    component: notary-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notary-signer
+  labels:
+    app: harbor
+    component: notary-signer
+spec:
+  ports:
+    - port: 7899
+  selector:
+    app: harbor
+    component: notary-signer

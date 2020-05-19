@@ -1,0 +1,36 @@
+---
+- op: add
+  path: "/metadata/annotations/kubernetes.io~1ingress.class"
+  value: "nginx"
+
+- op: add
+  path: "/metadata/annotations/forecastle.stakater.com~1expose"
+  value: "true"
+
+- op: add
+  path: "/metadata/annotations/forecastle.stakater.com~1appName"
+  value: "Harbor"
+
+- op: add
+  path: "/metadata/annotations/forecastle.stakater.com~1icon"
+  value: "https://goharbor.io/img/logos/harbor-icon-color.png"
+
+- op: replace
+  path: /spec/rules/0/host
+  value: harbor.%YOUR_DOMAIN%
+
+- op: replace
+  path: /spec/rules/1/host
+  value: notary.%YOUR_DOMAIN%
+
+- op: replace
+  path: /spec/tls/0/hosts/0
+  value: harbor.%YOUR_DOMAIN%
+
+- op: replace
+  path: /spec/tls/0/hosts/1
+  value: notary.%YOUR_DOMAIN%
+
+- op: replace
+  path: "/metadata/annotations/cert-manager.io~1cluster-issuer"
+  value: "letsencrypt-prod"

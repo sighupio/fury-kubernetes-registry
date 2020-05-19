@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobservice
+  labels:
+    app: harbor
+    component: jobservice
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: harbor
+      component: jobservice
+  template:
+    metadata:
+      labels:
+        app: harbor
+        component: jobservice
+    spec:
+      securityContext:
+        fsGroup: 10000
+      containers:
+        - name: jobservice
+          image: goharbor/harbor-jobservice
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /api/v1/stats
+              port: 8080
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/v1/stats
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+          envFrom:
+            - configMapRef:
+                name: jobservice
+            - secretRef:
+                name: jobservice
+          env:
+            - name: CORE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: core
+                  key: secret
+            - name: JOBSERVICE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jobservice
+                  key: secret
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: config
+              mountPath: /etc/jobservice/config.yml
+              subPath: config.yml
+      volumes:
+        - name: config
+          configMap:
+            name: jobservice

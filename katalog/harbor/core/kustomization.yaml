@@ -1,0 +1,70 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - pki.yml
+  - deploy.yml
+  - svc.yml
+
+images:
+  - name: goharbor/harbor-core
+    newTag: v2.0.0
+
+configMapGenerator:
+  - name: core
+    files:
+      - app.conf=config/app.conf
+    literals:
+      - DATABASE_TYPE=postgresql
+      - POSTGRESQL_HOST=database
+      - POSTGRESQL_PORT=5432
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_DATABASE=registry
+      - POSTGRESQL_SSLMODE=disable
+      - POSTGRESQL_MAX_IDLE_CONNS=50
+      - POSTGRESQL_MAX_OPEN_CONNS=100
+      - EXT_ENDPOINT=https://core.harbor.domain
+      - CORE_URL=http://core
+      - JOBSERVICE_URL=http://jobservice
+      - REGISTRY_URL=http://registry:5000
+      - TOKEN_SERVICE_URL=http://core/service/token
+      - WITH_NOTARY=true
+      - NOTARY_URL=http://notary-server:4443
+      - CFG_EXPIRATION=5
+      - ADMIRAL_URL=NA
+      - WITH_CLAIR=true
+      - CLAIR_DB_HOST=database
+      - CLAIR_DB_PORT=5432
+      - CLAIR_DB_USERNAME=postgres
+      - CLAIR_DB=postgres
+      - CLAIR_DB_SSLMODE=disable
+      - CLAIR_URL=http://clair:6060
+      - CLAIR_ADAPTER_URL=http://clair:8080
+      - REGISTRY_STORAGE_PROVIDER_NAME=filesystem
+      - WITH_CHARTMUSEUM=true
+      - CHART_REPOSITORY_URL=http://chartmuseum
+      - LOG_LEVEL=info
+      - CONFIG_PATH=/etc/core/app.conf
+      - SYNC_REGISTRY=true
+      - CHART_CACHE_DRIVER=redis
+      - _REDIS_URL=redis:6379
+      - _REDIS_URL_REG=redis://redis:6379/2
+      - PORTAL_URL=http://portal
+      - REGISTRYCTL_URL=http://registry:8080
+      - CLAIR_HEALTH_CHECK_SERVER_URL=http://clair:6061
+      - HTTP_PROXY=
+      - HTTPS_PROXY=
+      - NO_PROXY=core,jobservice,database,chartmuseum,clair,notary-server,notary-signer,registry,portal,127.0.0.1,localhost,.local,.internal
+
+secretGenerator:
+  - name: core
+    literals:
+      - secretKey=not-a-secure-key
+      - secret=P447FhxLeLwjDMYU
+      - HARBOR_ADMIN_PASSWORD=Harbor12345
+      - POSTGRESQL_PASSWORD=changeit
+      - CLAIR_DB_PASSWORD=changeit
+      - CSRF_KEY=QQRqXf3yTEtceQDS6NMY9F777LZ4bqKt
+      - REGISTRY_CREDENTIAL_USERNAME=harbor_registry_user
+      - REGISTRY_CREDENTIAL_PASSWORD=DhQTxjwUAyUZHaMABvm90dGAJMDX5jaa

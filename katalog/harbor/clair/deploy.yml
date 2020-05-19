@@ -1,0 +1,82 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clair
+  labels:
+    app: harbor
+    component: clair
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: harbor
+      component: clair
+  template:
+    metadata:
+      labels:
+        app: harbor
+        component: clair
+    spec:
+      securityContext:
+        fsGroup: 10000
+      containers:
+        - name: clair
+          image: goharbor/clair-photon
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 6061
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 6061
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+          args: ["-log-level", "$(SCANNER_LOG_LEVEL)"]
+          envFrom:
+            - configMapRef:
+                name: clair
+          ports:
+            - containerPort: 6060
+          volumeMounts:
+            - name: config
+              mountPath: /etc/clair/config.yaml
+              subPath: config.yaml
+        - name: adapter
+          image: goharbor/clair-adapter-photon
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /probe/healthy
+              port: 8080
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /probe/ready
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+          envFrom:
+            - configMapRef:
+                name: clair
+            - secretRef:
+                name: clair
+          ports:
+            - containerPort: 8080
+      volumes:
+        - name: config
+          secret:
+            secretName: clair
