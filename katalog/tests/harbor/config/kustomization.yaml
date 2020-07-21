@@ -1,3 +1,17 @@
 bases:
   - ./vendor/katalog/ingress/cert-manager
   - ./vendor/katalog/ingress/nginx
+
+patchesJson6902:
+- target:
+    group: cert-manager.io
+    version: v1alpha2
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  path: patches/issuer.yml
+- target:
+    group: cert-manager.io
+    version: v1alpha2
+    kind: ClusterIssuer
+    name: letsencrypt-staging
+  path: patches/issuer.yml
