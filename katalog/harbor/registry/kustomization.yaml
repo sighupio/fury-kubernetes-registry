@@ -9,9 +9,9 @@ resources:
 
 images:
   - name: goharbor/registry-photon
-    newTag: v2.0.0
+    newTag: v2.0.2
   - name: goharbor/harbor-registryctl
-    newTag: v2.0.0
+    newTag: v2.0.2
 
 configMapGenerator:
   - name: registry
