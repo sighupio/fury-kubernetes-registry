@@ -51,9 +51,9 @@ load "./../lib/helper"
 @test "[SETUP] requirements - Prepare Harbor manifests (externalIP)" {
     info
     files_to_change="""
-    examples/full-harbor/kustomization.yaml
-    examples/full-harbor/patch/ingress.yml
-    examples/full-harbor/secrets/notary/server.json
+    examples/full-harbor-with-trivy/kustomization.yaml
+    examples/full-harbor-with-trivy/patch/ingress.yml
+    examples/full-harbor-with-trivy/secrets/notary/server.json
     """
     for file in ${files_to_change}
     do
@@ -64,7 +64,7 @@ load "./../lib/helper"
 @test "[SETUP] Harbor" {
     info
     install_harbor(){
-        kustomize build examples/full-harbor | kubectl apply -f -
+        kustomize build examples/full-harbor-with-trivy | kubectl apply -f -
     }
     loop_it install_harbor 20 3
     status=${loop_it_result}

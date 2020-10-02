@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: trivy
+  labels:
+    app: harbor
+    component: trivy
+spec:
+  replicas: 1
+  serviceName: trivy
+  selector:
+    matchLabels:
+      app: harbor
+      component: trivy
+  template:
+    metadata:
+      labels:
+        app: harbor
+        component: trivy
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+        fsGroup: 10000
+      automountServiceAccountToken: false
+      containers:
+        - name: trivy
+          image: goharbor/trivy-adapter-photon
+          imagePullPolicy: Always
+          securityContext:
+            privileged: false
+            allowPrivilegeEscalation: false
+          envFrom:
+            - configMapRef:
+                name: trivy
+            - secretRef:
+                name: trivy
+          ports:
+            - name: api-server
+              containerPort: 8080
+          volumeMounts:
+          - name: data
+            mountPath: /home/scanner/.cache
+            subPath:
+            readOnly: false
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /probe/healthy
+              port: api-server
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /probe/ready
+              port: api-server
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: 1
+              memory: 1Gi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+      volumes:
+      - name: data
+        emptyDir: {}

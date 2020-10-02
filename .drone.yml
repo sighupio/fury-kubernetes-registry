@@ -47,14 +47,13 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/setup.sh
     when:
       ref:
         include:
           - refs/tags/**
 
-  - name: e2e-clair
+  - name: e2e-vulns
     image: docker:dind
     pull: always
     volumes:
@@ -76,8 +75,7 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
-      - bats -t katalog/tests/harbor/clair.sh
+      - bats -t katalog/tests/harbor/vulns.sh
     when:
       ref:
         include:
@@ -97,7 +95,6 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/chartmuseum.sh
     when:
       ref:
@@ -118,7 +115,6 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/replication.sh
     when:
       ref:
@@ -147,7 +143,6 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
     when:
@@ -158,7 +153,7 @@ steps:
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.3.2
     pull: always
-    depends_on: [ e2e-clair, e2e-chartmuseum, e2e-replication, e2e-registry ]
+    depends_on: [ e2e-vulns, e2e-chartmuseum, e2e-replication, e2e-registry ]
     settings:
       action: destroy
       pipeline_id: cluster-116
@@ -230,14 +225,13 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/setup.sh
     when:
       ref:
         include:
           - refs/tags/**
 
-  - name: e2e-clair
+  - name: e2e-vulns
     image: docker:dind
     pull: always
     volumes:
@@ -259,8 +253,7 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
-      - bats -t katalog/tests/harbor/clair.sh
+      - bats -t katalog/tests/harbor/vulns.sh
     when:
       ref:
         include:
@@ -280,7 +273,6 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/chartmuseum.sh
     when:
       ref:
@@ -301,7 +293,6 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/replication.sh
     when:
       ref:
@@ -330,7 +321,6 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
     when:
@@ -341,7 +331,7 @@ steps:
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.3.2
     pull: always
-    depends_on: [ e2e-clair, e2e-chartmuseum, e2e-replication, e2e-registry ]
+    depends_on: [ e2e-vulns, e2e-chartmuseum, e2e-replication, e2e-registry ]
     settings:
       action: destroy
       pipeline_id: cluster-115
@@ -413,14 +403,13 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/setup.sh
     when:
       ref:
         include:
           - refs/tags/**
 
-  - name: e2e-clair
+  - name: e2e-vulns
     image: docker:dind
     pull: always
     volumes:
@@ -442,8 +431,7 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
-      - bats -t katalog/tests/harbor/clair.sh
+      - bats -t katalog/tests/harbor/vulns.sh
     when:
       ref:
         include:
@@ -463,7 +451,6 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/chartmuseum.sh
     when:
       ref:
@@ -484,7 +471,6 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/replication.sh
     when:
       ref:
@@ -513,7 +499,6 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - echo "DEBUG - $EXTERNAL_DNS"
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
     when:
@@ -524,7 +509,7 @@ steps:
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.3.2
     pull: always
-    depends_on: [ e2e-clair, e2e-chartmuseum, e2e-replication, e2e-registry ]
+    depends_on: [ e2e-vulns, e2e-chartmuseum, e2e-replication, e2e-registry ]
     settings:
       action: destroy
       pipeline_id: cluster-114
