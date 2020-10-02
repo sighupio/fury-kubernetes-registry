@@ -1,103 +1,84 @@
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: notary-root
   labels:
     app: harbor
     component: notary-signer
+  name: notary-root
 spec:
   selfSigned: {}
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: notary-root-ca
   labels:
     app: harbor
     component: notary-signer
+  name: notary-root-ca
 spec:
-  # name of the tls secret to store
-  # the generated certificate/key pair
-  secretName: notary-root-ca
+  commonName: notary
+  dnsNames:
+  - notary
   isCA: true
   issuerRef:
-    # issuer created in step 1
-    name: notary-root
     kind: Issuer
-  commonName: "notary"
-  dnsNames:
-  # one or more fully-qualified domain name
-  # can be defined here
-    - notary
+    name: notary-root
+  secretName: notary-root-ca
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: notary-root-ca
   labels:
     app: harbor
     component: notary-signer
+  name: notary-root-ca
 spec:
   ca:
     secretName: notary-root-ca
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
+  labels:
+    app: harbor
+    component: notary-signer
   name: notary-signer
-  labels:
-    app: harbor
-    component: notary-signer
 spec:
-  # Secret names are always required.
-  secretName: notary-signer-cert
-  duration: 2160h # 90d
-  renewBefore: 360h # 15d
-  organization:
-  - notary
   commonName: notary-signer
-  isCA: false
-  keySize: 521
-  keyAlgorithm: ecdsa
-  keyEncoding: pkcs1
-  usages:
-    - server auth
-    - client auth
-    - digital signature
-    - key encipherment
   dnsNames:
-    - notary-signer
+  - notary-signer
+  duration: 2160h0m0s
   issuerRef:
-    name: notary-root-ca
     kind: Issuer
+    name: notary-root-ca
+  renewBefore: 360h0m0s
+  secretName: notary-signer-cert
+  usages:
+  - server auth
+  - client auth
+  - digital signature
+  - key encipherment
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: notary-server
   labels:
     app: harbor
     component: notary-signer
+  name: notary-server
 spec:
-  # Secret names are always required.
-  secretName: notary-server-cert
-  duration: 2160h # 90d
-  renewBefore: 360h # 15d
-  organization:
-  - notary
   commonName: notary-server
-  isCA: false
-  keySize: 521
-  keyAlgorithm: ecdsa
-  keyEncoding: pkcs1
-  usages:
-    - server auth
-    - client auth
-    - digital signature
-    - key encipherment
   dnsNames:
-    - notary-server
+  - notary-server
+  duration: 2160h0m0s
   issuerRef:
-    name: notary-root-ca
     kind: Issuer
+    name: notary-root-ca
+  renewBefore: 360h0m0s
+  secretName: notary-server-cert
+  usages:
+  - server auth
+  - client auth
+  - digital signature
+  - key encipherment

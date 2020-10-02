@@ -1,5 +1,5 @@
 versions:
-  ingress: v1.6.1
+  ingress: v1.8.1
 
 bases:
   - name: ingress/cert-manager
