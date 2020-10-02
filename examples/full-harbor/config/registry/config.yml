@@ -19,6 +19,10 @@ storage:
 redis:
   addr: "redis:6379"
   db: 2
+  password:
+  readtimeout: 10s
+  writetimeout: 10s
+  dialtimeout: 10s
 http:
   relativeurls: true
   addr: :5000
@@ -50,3 +54,6 @@ notifications:
         - application/vnd.oci.image.layer.nondistributable.v1.tar+gzip
         - application/vnd.oci.image.layer.nondistributable.v1.tar+zstd
         - application/octet-stream
+compatibility:
+  schema1:
+    enabled: true
