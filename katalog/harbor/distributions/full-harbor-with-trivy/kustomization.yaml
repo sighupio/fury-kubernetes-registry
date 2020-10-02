@@ -1,0 +1,48 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - ../../chartmuseum
+  - ../../trivy
+  - ../../core
+  - ../../notary
+  - ../../database
+  - ../../jobservice
+  - ../../portal
+  - ../../redis
+  - ../../registry
+
+resources:
+  - ingress.yml
+
+configMapGenerator:
+  - name: core
+    behavior: merge
+    literals:
+      - NO_PROXY="core,jobservice,database,chartmuseum,trivy,notary-server,notary-signer,registry,portal,127.0.0.1,localhost,.local,.internal"
+      
+      - WITH_CLAIR=false
+      - CLAIR_DB_HOST=
+      - CLAIR_DB_PORT=
+      - CLAIR_DB_USERNAME=
+      - CLAIR_DB=postgres
+      - CLAIR_DB_SSLMODE=
+      - CLAIR_URL=
+      - CLAIR_ADAPTER_URL=
+      - CLAIR_HEALTH_CHECK_SERVER_URL=
+      
+      - WITH_TRIVY=true
+      - TRIVY_ADAPTER_URL="http://trivy:8080"
+    # JobService overwritable configuration
+  - name: jobservice
+    behavior: merge
+    literals:
+      - NO_PROXY="core,jobservice,database,chartmuseum,trivy,notary-server,notary-signer,registry,portal,127.0.0.1,localhost,.local,.internal"
+
+secretGenerator:
+    # Core overwritable configuration
+  - name: core
+    behavior: merge
+    literals:
+      - CLAIR_DB_PASSWORD=

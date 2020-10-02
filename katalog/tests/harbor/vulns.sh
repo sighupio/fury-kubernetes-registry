@@ -2,7 +2,7 @@
 
 load "./../lib/helper"
 
-@test "[CLAIR] Setup" {
+@test "[VULNS] Setup" {
     info
     setup(){
         docker pull ubuntu:16.04
@@ -12,7 +12,7 @@ load "./../lib/helper"
     [ "$status" -eq 0 ]
 }
 
-@test "[CLAIR] Deploy insecure image" {
+@test "[VULNS] Deploy insecure image" {
     info
     deploy(){
         docker tag ubuntu:16.04 harbor.${EXTERNAL_DNS}/library/ubuntu:16.04
@@ -22,7 +22,7 @@ load "./../lib/helper"
     [ "$status" -eq 0 ]
 }
 
-@test "[CLAIR] Check insecure image is in the registry" {
+@test "[VULNS] Check insecure image is in the registry" {
     info
     test(){
         tag=$(curl -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/projects/library/repositories/ubuntu/artifacts/16.04/tags" \
@@ -34,7 +34,7 @@ load "./../lib/helper"
     [ "$status" -eq 0 ]
 }
 
-@test "[CLAIR] Check clair status" {
+@test "[VULNS] Check scanner status" {
     info
     test(){
         health=$(curl -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/projects/1/scanner" \
@@ -46,7 +46,7 @@ load "./../lib/helper"
     [ "$status" -eq 0 ]
 }
 
-@test "[CLAIR] Scan an insecure image" {
+@test "[VULNS] Scan an insecure image" {
     info
     test(){
         # Trigger Scan

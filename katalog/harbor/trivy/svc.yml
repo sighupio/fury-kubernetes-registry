@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trivy
+  labels:
+    app: harbor
+    component: trivy
+spec:
+  ports:
+    - name: api-server
+      protocol: TCP
+      port: 8080
+  selector:
+    app: harbor
+    component: trivy
