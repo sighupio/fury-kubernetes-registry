@@ -4,8 +4,13 @@ kind: Kustomization
 
 images:
   - name: goharbor/harbor-portal
-    newTag: v2.0.2
+    newTag: v2.1.0
 
 resources:
   - deploy.yml
   - svc.yml
+
+configMapGenerator:
+  - name: portal
+    files:
+      - nginx.conf=config/nginx.conf

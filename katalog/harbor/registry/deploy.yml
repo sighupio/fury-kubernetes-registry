@@ -67,12 +67,14 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/health
+              scheme: HTTP
               port: 8080
             initialDelaySeconds: 300
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /api/health
+              scheme: HTTP
               port: 8080
             initialDelaySeconds: 1
             periodSeconds: 10
@@ -80,7 +82,6 @@ spec:
             requests:
               memory: 256Mi
               cpu: 100m
-          args: ["serve", "/etc/registry/config.yml"]
           envFrom:
             - secretRef:
                 name: registry
@@ -100,6 +101,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /storage
+              subPath:
             - name: registry-config
               mountPath: /etc/registry/config.yml
               subPath: config.yml
