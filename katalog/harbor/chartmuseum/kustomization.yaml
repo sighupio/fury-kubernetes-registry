@@ -4,7 +4,7 @@ kind: Kustomization
 
 images:
   - name: goharbor/chartmuseum-photon
-    newTag: v2.0.2
+    newTag: v2.1.0
 
 resources:
   - pvc.yml
