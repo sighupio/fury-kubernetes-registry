@@ -6,6 +6,10 @@ resources:
   - sts.yml
   - svc.yml
 
+commonLabels:
+  app: harbor
+  component: trivy
+
 images:
   - name: goharbor/trivy-adapter-photon
     newTag: v2.1.0
