@@ -14,14 +14,34 @@ steps:
       - addlicense -c "SIGHUP s.r.l" -v -l bsd --check .
 ---
 kind: pipeline
-name: e2e-kubernetes-1.16
-
-depends_on:
-  - license
+name: policeman
 
 platform:
   os: linux
   arch: amd64
+
+depends_on:
+  - license
+
+steps:
+  - name: lint
+    image: quay.io/sighup/policeman
+    pull: always
+---
+kind: pipeline
+name: e2e-kubernetes-1.16
+
+depends_on:
+  - policeman
+
+platform:
+  os: linux
+  arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/tags/**
 
 steps:
   - name: init
@@ -198,11 +218,16 @@ kind: pipeline
 name: e2e-kubernetes-1.17
 
 depends_on:
-  - license
+  - policeman
 
 platform:
   os: linux
   arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/tags/**
 
 steps:
   - name: init
@@ -379,11 +404,16 @@ kind: pipeline
 name: e2e-kubernetes-1.18
 
 depends_on:
-  - license
+  - policeman
 
 platform:
   os: linux
   arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/tags/**
 
 steps:
   - name: init

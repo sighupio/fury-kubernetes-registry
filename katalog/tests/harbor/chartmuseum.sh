@@ -1,4 +1,5 @@
 #!/usr/bin/env bats
+# shellcheck disable=SC2154
 # Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
@@ -12,7 +13,7 @@ load "./../lib/helper"
         helm init --client-only
         helm plugin install https://github.com/chartmuseum/helm-push
         helm fetch stable/nginx-ingress --version 1.36.2
-        helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor.${EXTERNAL_DNS}/chartrepo/library
+        helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor."${EXTERNAL_DNS}"/chartrepo/library
     }
     run setup
     [ "$status" -eq 0 ]

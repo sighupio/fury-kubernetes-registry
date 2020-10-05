@@ -25,7 +25,7 @@
   * goharbor/redis-photon:v2.1.0
   * goharbor/registry-photon:v2.1.0
   * goharbor/harbor-registryctl:v2.1.0
-* Harbor repository: https://github.com/goharbor/harbor
+* Harbor repository: [https://github.com/goharbor/harbor](https://github.com/goharbor/harbor)
 
 ## Distributions
 

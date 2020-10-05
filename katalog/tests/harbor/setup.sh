@@ -1,4 +1,5 @@
 #!/usr/bin/env bats
+# shellcheck disable=SC2154,SC2034,SC2086,SC2103
 # Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
@@ -61,7 +62,7 @@ load "./../lib/helper"
     """
     for file in ${files_to_change}
     do
-        sed -i'' -e 's/%YOUR_DOMAIN%/'"${EXTERNAL_DNS}"'/g' ${file}
+        sed -i'' -e 's/%YOUR_DOMAIN%/'"${EXTERNAL_DNS}"'/g' "${file}"
     done
 }
 
@@ -82,8 +83,8 @@ load "./../lib/helper"
         if [ "${status}" != "true" ]
         then
             # Don't know why notary does not start at first try
-            kubectl -n harbor patch deployment notary-server -p \ "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"
-            kubectl -n harbor patch deployment notary-signer -p \ "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"
+            kubectl -n harbor rollout restart deployment/notary-server
+            kubectl -n harbor rollout restart deployment/notary-signer
             return 1
         fi
     }
