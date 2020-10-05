@@ -2,9 +2,9 @@
 
 ## What is Harbor?
 
-> Harbor is an open source container image registry that secures images with role-based access control, scans images
+> Harbor is an open-source container image registry that secures images with role-based access control, scans images
 > for vulnerabilities, and signs images as trusted. As a CNCF Incubating project, Harbor delivers compliance,
-> performance, and interoperability to help you consistently and securely manage images across cloud native compute
+> performance, and interoperability to help you consistently and securely manage images across cloud-native compute
 > platforms like Kubernetes and Docker.
 
 *source: [goharbor.io](https://goharbor.io/)*
@@ -15,6 +15,7 @@
   * goharbor/chartmuseum-photon:v2.1.0
   * goharbor/clair-photon:v2.1.0
   * goharbor/clair-adapter-photon:v2.1.0
+  * goharbor/trivy-adapter-photon:v2.1.0
   * goharbor/harbor-core:v2.1.0
   * goharbor/harbor-db:v2.1.0
   * goharbor/harbor-jobservice:v2.1.0
@@ -33,6 +34,13 @@
   * Requires a default storage class configured as all the components rely on persistent volumes to store data.
   * Requires cert-manager and ingress controller
   * Only tested against public endpoints with valid certificates.
+  * Uses Clair as default interrogation service
+* [full-harbor-with-trivy](distributions/full-harbor-with-trivy):
+  * All components deployed together without external dependencies.
+  * Requires a default storage class configured as all the components rely on persistent volumes to store data.
+  * Requires cert-manager and ingress controller
+  * Only tested against public endpoints with valid certificates.
+  * Uses Trivy as default interrogation service
 
 ## License
 
