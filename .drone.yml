@@ -1,6 +1,19 @@
+kind: pipeline
+name: license
+
+steps:
+  - name: check
+    image: docker.io/library/golang:1.14.3
+    pull: always
+    commands:
+      - go get -u github.com/google/addlicense
+      - addlicense -c "SIGHUP s.r.l" -v -l bsd --check .
 ---
 kind: pipeline
 name: e2e-kubernetes-1.16
+
+depends_on:
+  - license
 
 platform:
   os: linux
@@ -180,6 +193,9 @@ volumes:
 kind: pipeline
 name: e2e-kubernetes-1.15
 
+depends_on:
+  - license
+
 platform:
   os: linux
   arch: amd64
@@ -357,6 +373,9 @@ volumes:
 ---
 kind: pipeline
 name: e2e-kubernetes-1.14
+
+depends_on:
+  - license
 
 platform:
   os: linux
