@@ -1,4 +1,5 @@
 #!/usr/bin/env bats
+# shellcheck disable=SC2154,SC2219
 # Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
@@ -10,7 +11,7 @@ load "./../lib/helper"
     info
     setup(){
         docker pull busybox:1.31
-        docker login harbor.${EXTERNAL_DNS} -u admin -p Harbor12345
+        docker login harbor."${EXTERNAL_DNS}" -u admin -p Harbor12345
     }
     run setup
     [ "$status" -eq 0 ]
@@ -19,8 +20,8 @@ load "./../lib/helper"
 @test "[REGISTRY] Deploy busybox image" {
     info
     deploy(){
-        docker tag busybox:1.31 harbor.${EXTERNAL_DNS}/library/busybox:1.31
-        docker push harbor.${EXTERNAL_DNS}/library/busybox:1.31
+        docker tag busybox:1.31 harbor."${EXTERNAL_DNS}"/library/busybox:1.31
+        docker push harbor."${EXTERNAL_DNS}"/library/busybox:1.31
     }
     run deploy
     [ "$status" -eq 0 ]
