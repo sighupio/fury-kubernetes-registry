@@ -13,7 +13,7 @@ resources:
 
 images:
   - name: goharbor/harbor-core
-    newTag: v2.1.0
+    newTag: v2.1.1
 
 configMapGenerator:
   - name: core
