@@ -8,7 +8,7 @@ kind: Kustomization
 
 images:
   - name: goharbor/harbor-db
-    newTag: v2.1.0
+    newTag: v2.1.1
 
 resources:
   - sts.yml
