@@ -10,7 +10,7 @@ load "./../lib/helper"
 @test "[CHARTS] Setup" {
     info
     setup(){
-        helm init --client-only
+        helm init --client-only --stable-repo-url https://charts.helm.sh/stable
         helm plugin install https://github.com/chartmuseum/helm-push
         helm fetch stable/nginx-ingress --version 1.36.2
         helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor."${EXTERNAL_DNS}"/chartrepo/library
