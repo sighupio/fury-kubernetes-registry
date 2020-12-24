@@ -13,9 +13,9 @@ resources:
 
 images:
   - name: goharbor/registry-photon
-    newTag: v2.1.1
+    newTag: v2.1.2
   - name: goharbor/harbor-registryctl
-    newTag: v2.1.1
+    newTag: v2.1.2
 
 configMapGenerator:
   - name: registry

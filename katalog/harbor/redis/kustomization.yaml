@@ -8,7 +8,7 @@ kind: Kustomization
 
 images:
   - name: goharbor/redis-photon
-    newTag: v2.1.1
+    newTag: v2.1.2
 
 resources:
   - sts.yml
