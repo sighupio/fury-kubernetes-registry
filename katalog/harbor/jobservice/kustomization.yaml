@@ -12,7 +12,7 @@ resources:
 
 images:
   - name: goharbor/harbor-jobservice
-    newTag: v2.1.2
+    newTag: v2.1.3
 
 configMapGenerator:
   - name: jobservice
