@@ -1,4 +1,4 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+#g Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -123,6 +123,141 @@ secretGenerator:
       - REGISTRY_HTTP_SECRET=Z6HTqCsLzHMmgr9W
       - REGISTRY_REDIS_PASSWORD=""
 
+patches:
+  - target:
+      kind: Deployment
+      name: chartmuseum
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+      - op: add
+        path: /spec/template/spec/affinity
+        value:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values:
+                        - chartmuseum
+                topologyKey: kubernetes.io/hostname
+  - target:
+      kind: Deployment
+      name: clair
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+      - op: add
+        path: /spec/template/spec/affinity
+        value:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values:
+                        - clair
+                topologyKey: kubernetes.io/hostname
+  - target:
+      kind: Deployment
+      name: core
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+      - op: add
+        path: /spec/template/spec/affinity
+        value:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values:
+                        - core
+                topologyKey: kubernetes.io/hostname
+  - target:
+      kind: Deployment
+      name: jobservice
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+      - op: add
+        path: /spec/template/spec/affinity
+        value:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values:
+                        - jobservice
+                topologyKey: kubernetes.io/hostname
+  - target:
+      kind: Deployment
+      name: notary-server
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+      - op: add
+        path: /spec/template/spec/affinity
+        value:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values:
+                        - notary-server
+                topologyKey: kubernetes.io/hostname
+  - target:
+      kind: Deployment
+      name: portal
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+      - op: add
+        path: /spec/template/spec/affinity
+        value:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values:
+                        - portal
+                topologyKey: kubernetes.io/hostname
+  - target:
+      kind: Deployment
+      name: registry
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+      - op: add
+        path: /spec/template/spec/affinity
+        value:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values:
+                        - registry
+                topologyKey: kubernetes.io/hostname
+
 patchesJson6902:
   - target:
       group: ""
@@ -130,18 +265,6 @@ patchesJson6902:
       kind: PersistentVolumeClaim
       name: pvc-chartmuseum
     path: patch/chartmuseum.yml
-  - target:
-      group: apps
-      version: v1
-      kind: StatefulSet
-      name: database
-    path: patch/database.yml
-  - target:
-      group: apps
-      version: v1
-      kind: StatefulSet
-      name: redis
-    path: patch/redis.yml
   - target:
       group: ""
       version: v1
