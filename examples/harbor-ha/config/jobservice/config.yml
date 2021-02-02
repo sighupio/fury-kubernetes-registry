@@ -9,8 +9,9 @@ worker_pool:
   workers: 10
   backend: "redis"
   redis_pool:
-    redis_url: "redis:6379"
-    namespace: "jobservice_ns"
+    #redis_url: "redis+sentinel://rfs-my-redis-cluster.redis-cluster.svc.cluster.local:26379/mymaster"
+    redis_url: "haproxy-redis:6379/2"
+    namespace: "harbor_jobservice_namespace"
 job_loggers:
   - name: "STD_OUTPUT"
     level: INFO

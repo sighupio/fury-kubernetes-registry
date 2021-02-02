@@ -1,5 +1,4 @@
-#g Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
-# Use of this source code is governed by a BSD-style
+# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.  Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
 ---
@@ -12,14 +11,15 @@ resources:
 
 bases:
   - ../../katalog/harbor/distributions/harbor-without-dbs
+  - haproxy
 
 configMapGenerator:
   # ChartMuseum overwritable configuration
   - name: chartmuseum
     behavior: merge
     literals:
-      - CACHE=redis_sentinel
-      - CACHE_REDIS_ADDR=rfs-my-redis-cluster.redis-cluster.svc:26379
+      - CACHE=redis
+      - CACHE_REDIS_ADDR=haproxy-redis:6379
       - CACHE_REDIS_DB=3
       - BASIC_AUTH_USER=chart_controller
       - DEBUG=false
@@ -36,21 +36,22 @@ configMapGenerator:
     files:
       - app.conf=config/core/app.conf
     literals:
-      - POSTGRESQL_HOST=example-cluster-postgres.postgres-cluster-1.svc
+      - POSTGRESQL_HOST=example-cluster-postgres.postgres-cluster-1.svc.cluster.local
       - POSTGRESQL_PORT=5432
       - POSTGRESQL_USERNAME=postgres
       - POSTGRESQL_DATABASE=registry
-      - POSTGRESQL_SSLMODE=disable
-      - EXT_ENDPOINT=https://harbor.%YOUR_DOMAIN%
-      - CLAIR_DB_HOST=example-cluster-postgres.postgres-cluster-1.svc
+      - POSTGRESQL_SSLMODE=require
+      - EXT_ENDPOINT=http://harbor.sighup-example.com
+      - CLAIR_DB_HOST=example-cluster-postgres.postgres-cluster-1.svc.cluster.local
       - CLAIR_DB_PORT=5432
       - CLAIR_DB_USERNAME=postgres
       - CLAIR_DB=postgres
-      - CLAIR_DB_SSLMODE=disable
+      - CLAIR_DB_SSLMODE=require
       - LOG_LEVEL=debug
-      - CHART_CACHE_DRIVER=redis_sentinel
-      - _REDIS_URL=rfs-my-redis-cluster.redis-cluster.svc:26379
-        # - _REDIS_URL_REG=rfs-my-redis-cluster.redis-cluster.svc:26379/2
+      - CHART_CACHE_DRIVER=redis
+      - _REDIS_URL_REG=redis://haproxy-redis:6379/1?idle_timeout_seconds=30
+      - _REDIS_URL_CORE=redis://haproxy-redis:6379/0?idle_timeout_seconds=30
+      - PORTAL_URL=http://portal
       - HTTP_PROXY=
       - HTTPS_PROXY=
     # JobService overwritable configuration
@@ -64,7 +65,7 @@ configMapGenerator:
       - HTTPS_PROXY=
     # Registry overwritable configuration
   - name: registry
-    behavior: merge
+    behavior: replace
     files:
       - config.yml=config/registry/config.yml
       - ctl-config.yml=config/registry/ctl-config.yml
@@ -82,9 +83,9 @@ secretGenerator:
     files:
       - config.yaml=secrets/clair/config.yaml
     literals:
-      - SCANNER_STORE_REDIS_URL=redis://redis:6379
+      - SCANNER_STORE_REDIS_URL=haproxy-redis:6379
       #get the password of the user from the secret of the postgresql cluster namespace and change here accordingly instead of `changeit`
-      - SCANNER_CLAIR_DATABASE_URL=postgres://postgres:changeit@example-cluster-postgres.postgres-cluster-1.svc:5432/postgres?sslmode=disable
+      - SCANNER_CLAIR_DATABASE_URL=postgres://postgres:RhtBttYV22D3DWVgXIg1WGewDCrx19vlvfnxciWBAhxSrHgvvv6I6cxPecEaHX4y@example-cluster-postgres.postgres-cluster-1.svc:5432/postgres?sslmode=disable
     # Core overwritable configuration
   - name: core
     behavior: merge
@@ -93,8 +94,8 @@ secretGenerator:
       - secret=P447FhxLeLwjDMYU
       - HARBOR_ADMIN_PASSWORD=Harbor12345
       #get the password of the user from the secret of the postgresql cluster namespace and change here accordingly instead of `changeit`
-      - POSTGRESQL_PASSWORD=changeit
-      - CLAIR_DB_PASSWORD=changeit
+      - POSTGRESQL_PASSWORD=RhtBttYV22D3DWVgXIg1WGewDCrx19vlvfnxciWBAhxSrHgvvv6I6cxPecEaHX4y
+      - CLAIR_DB_PASSWORD=RhtBttYV22D3DWVgXIg1WGewDCrx19vlvfnxciWBAhxSrHgvvv6I6cxPecEaHX4y
     # Database overwritable configuration
     # JobService overwritable configuration
   - name: jobservice
@@ -108,14 +109,14 @@ secretGenerator:
       - server.json=secrets/notary/server.json
     literals:
       #get the password of the user from the secret of the postgresql cluster namespace and change here accordingly instead of `changeit`
-      - DB_URL=postgres://postgres:changeit@example-cluster-postgres.postgres-cluster-1.svc:5432/notaryserver?sslmode=disable
+      - DB_URL=postgres://postgres:RhtBttYV22D3DWVgXIg1WGewDCrx19vlvfnxciWBAhxSrHgvvv6I6cxPecEaHX4y@example-cluster-postgres.postgres-cluster-1.svc:5432/notaryserver?sslmode=disable
   - name: notary-signer
     behavior: merge
     files:
       - signer.json=secrets/notary/signer.json
     literals:
       #get the password of the user from the secret of the postgresql cluster namespace and change here accordingly instead of `changeit`
-      - DB_URL=postgres://postgres:changeit@example-cluster-postgres.postgres-cluster-1.svc:5432/notarysigner?sslmode=disable
+      - DB_URL=postgres://postgres:RhtBttYV22D3DWVgXIg1WGewDCrx19vlvfnxciWBAhxSrHgvvv6I6cxPecEaHX4y@example-cluster-postgres.postgres-cluster-1.svc:5432/notarysigner?sslmode=disable
     # Registry overwritable configuration
   - name: registry
     behavior: merge
@@ -128,9 +129,14 @@ patches:
       kind: Deployment
       name: chartmuseum
     patch: |-
+      - op: remove
+        path: /spec/template/spec/volumes/0
+      - op: remove
+      # removing volumeMounts related to pvc volume
+        path: /spec/template/spec/containers/0/volumeMounts/0
       - op: replace
         path: /spec/replicas
-        value: 3
+        value: 2
       - op: add
         path: /spec/template/spec/affinity
         value:
@@ -149,7 +155,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/replicas
-        value: 3
+        value: 2
       - op: add
         path: /spec/template/spec/affinity
         value:
@@ -168,7 +174,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/replicas
-        value: 3
+        value: 2
       - op: add
         path: /spec/template/spec/affinity
         value:
@@ -187,7 +193,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/replicas
-        value: 3
+        value: 2
       - op: add
         path: /spec/template/spec/affinity
         value:
@@ -206,7 +212,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/replicas
-        value: 3
+        value: 2
       - op: add
         path: /spec/template/spec/affinity
         value:
@@ -225,7 +231,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/replicas
-        value: 3
+        value: 2
       - op: add
         path: /spec/template/spec/affinity
         value:
@@ -242,9 +248,18 @@ patches:
       kind: Deployment
       name: registry
     patch: |-
+      # removing persistentVolumeClaim volume
+      - op: remove
+        path: /spec/template/spec/volumes/3
+      - op: remove
+      # removing volumeMounts related to pvc volume
+        path: /spec/template/spec/containers/0/volumeMounts/0
+      - op: remove
+      # removing volumeMounts related to pvc volume
+        path: /spec/template/spec/containers/1/volumeMounts/0
       - op: replace
         path: /spec/replicas
-        value: 3
+        value: 2
       - op: add
         path: /spec/template/spec/affinity
         value:
@@ -277,3 +292,35 @@ patchesJson6902:
       kind: Ingress
       name: harbor-ingress
     path: patch/ingress.yml
+
+images:
+  - name: goharbor/chartmuseum-photon
+    newName: reg.sighup.io/sighupio/fury/goharbor/chartmuseum-photon
+    newTag: v2.1.3
+  - name: goharbor/clair-photon
+    newName: reg.sighup.io/sighupio/fury/goharbor/clair-photon
+    newTag: v2.1.3
+  - name: goharbor/clair-adapter-photon
+    newName: reg.sighup.io/sighupio/fury/goharbor/clair-adapter-photon
+    newTag: v2.1.3
+  - name: goharbor/harbor-core
+    newName: docker.io/goharbor/harbor-core
+    newTag: v2.2.0-dev
+  - name: goharbor/harbor-jobservice
+    newName: reg.sighup.io/sighupio/fury/goharbor/harbor-jobservice
+    newTag: v2.1.3
+  - name: goharbor/notary-server-photon
+    newName: reg.sighup.io/sighupio/fury/goharbor/notary-server-photon
+    newTag: v2.1.3
+  - name: goharbor/notary-signer-photon
+    newName: reg.sighup.io/sighupio/fury/goharbor/notary-signer-photon
+    newTag: v2.1.3
+  - name: goharbor/harbor-portal
+    newName: reg.sighup.io/sighupio/fury/goharbor/harbor-portal
+    newTag: v2.1.3
+  - name: goharbor/registry-photon
+    newName: reg.sighup.io/sighupio/fury/goharbor/registry-photon
+    newTag: v2.1.3
+  - name: goharbor/harbor-registryctl
+    newName: reg.sighup.io/sighupio/fury/goharbor/harbor-registryctl
+    newTag: v2.1.3
