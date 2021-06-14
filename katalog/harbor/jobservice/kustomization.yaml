@@ -20,7 +20,7 @@ configMapGenerator:
       - config.yml=config/config.yml
     literals:
       - CORE_URL=http://core
-      - REGISTRY_CONTROLLER_URL=http://registry
+      - REGISTRY_CONTROLLER_URL=http://registry:8080
       - LOG_LEVEL=info
       - HTTP_PROXY=
       - HTTPS_PROXY=
