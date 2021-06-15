@@ -12,6 +12,7 @@ resources:
 
 images:
   - name: goharbor/harbor-jobservice
+    newName: registry.sighup.io/fury/goharbor/harbor-jobservice
     newTag: v2.1.5
 
 configMapGenerator:

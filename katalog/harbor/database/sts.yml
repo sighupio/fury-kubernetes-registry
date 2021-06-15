@@ -25,7 +25,7 @@ spec:
     spec:
       initContainers:
         - name: change-permission-of-directory
-          image: busybox:latest
+          image: busybox
           imagePullPolicy: Always
           command: ["/bin/sh"]
           args: ["-c", "chown -R 999:999 /var/lib/postgresql/data"]

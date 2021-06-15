@@ -13,6 +13,7 @@ resources:
 
 images:
   - name: goharbor/harbor-core
+    newName: registry.sighup.io/fury/goharbor/harbor-core
     newTag: v2.1.5
 
 configMapGenerator:
