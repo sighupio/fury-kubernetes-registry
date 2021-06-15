@@ -9,7 +9,7 @@ kind: Kustomization
 images:
   - name: goharbor/harbor-portal
     newName: registry.sighup.io/fury/goharbor/harbor-portal
-    newTag: v2.1.5
+    newTag: v2.2.2
 
 resources:
   - deploy.yml
