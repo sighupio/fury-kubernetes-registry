@@ -7,7 +7,7 @@ This repository contains all components necessary to deploy a container registry
 The following packages are included in the Fury Kubernetes Registry Katalog.
 
 - [harbor](katalog/harbor): Harbor is an open-source container image registry that secures images with role-based
-access control, scans images for vulnerabilities, and signs images as trusted. Version: **2.1.3**
+access control, scans images for vulnerabilities, and signs images as trusted. Version: **2.1.5**
 
 ## Requirements
 
