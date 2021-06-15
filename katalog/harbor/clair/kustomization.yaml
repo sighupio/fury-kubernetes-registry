@@ -12,9 +12,9 @@ resources:
 
 images:
   - name: goharbor/clair-photon
-    newTag: v2.1.3
+    newTag: v2.1.5
   - name: goharbor/clair-adapter-photon
-    newTag: v2.1.3
+    newTag: v2.1.5
 
 configMapGenerator:
   - name: clair

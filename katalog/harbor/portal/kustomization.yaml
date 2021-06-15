@@ -8,7 +8,7 @@ kind: Kustomization
 
 images:
   - name: goharbor/harbor-portal
-    newTag: v2.1.3
+    newTag: v2.1.5
 
 resources:
   - deploy.yml
