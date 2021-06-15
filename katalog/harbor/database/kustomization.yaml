@@ -9,7 +9,7 @@ kind: Kustomization
 images:
   - name: goharbor/harbor-db
     newName: registry.sighup.io/fury/goharbor/harbor-db
-    newTag: v2.1.5
+    newTag: v2.2.2
   - name: busybox
     newName: registry.sighup.io/fury/busybox
     newTag: latest

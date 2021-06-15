@@ -9,10 +9,10 @@ kind: Kustomization
 images:
   - name: goharbor/notary-server-photon
     newName: registry.sighup.io/fury/goharbor/notary-server-photon
-    newTag: v2.1.5
+    newTag: v2.2.2
   - name: goharbor/notary-signer-photon
     newName: registry.sighup.io/fury/goharbor/notary-signer-photon
-    newTag: v2.1.5
+    newTag: v2.2.2
 
 resources:
   - pki.yml

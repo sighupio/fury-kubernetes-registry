@@ -9,7 +9,7 @@ kind: Kustomization
 images:
   - name: goharbor/chartmuseum-photon
     newName: registry.sighup.io/fury/goharbor/chartmuseum-photon
-    newTag: v2.1.5
+    newTag: v2.2.2
 
 resources:
   - pvc.yml
