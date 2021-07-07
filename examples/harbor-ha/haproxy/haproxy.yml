@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: haproxy-redis
+  labels:
+    app: haproxy-redis
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: haproxy-redis
+  template:
+    metadata:
+      labels:
+        app: haproxy-redis
+    spec:
+      containers:
+        - name: haproxy
+          image: haproxy:2.3.4
+          ports:
+            - containerPort: 6379
+            - containerPort: 80
+            - containerPort: 9000
+          volumeMounts:
+            - mountPath: /usr/local/etc/haproxy
+              name: haproxy-redis
+      volumes:
+        - name: haproxy-redis
+          configMap:
+            name: haproxy-redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: haproxy-redis
+spec:
+  type: ClusterIP
+  selector:
+    app: haproxy-redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      name: redis
+      targetPort: 6379
+    - protocol: TCP
+      name: dashboard
+      port: 9000
+      targetPort: 9000
