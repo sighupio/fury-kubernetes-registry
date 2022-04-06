@@ -7,7 +7,7 @@ This repository contains all components necessary to deploy a container registry
 The following packages are included in the Fury Kubernetes Registry Katalog.
 
 - [harbor](katalog/harbor): Harbor is an open-source container image registry that secures images with role-based
-access control, scans images for vulnerabilities, and signs images as trusted. Version: **2.2.2**
+access control, scans images for vulnerabilities, and signs images as trusted. Version: **2.4.2**
 
 ## Requirements
 
@@ -21,24 +21,13 @@ specific dependencies, please visit the single package's documentation:
 
 ## Compatibility
 
-| Module Version / Kubernetes Version |       1.14.X       |       1.15.X       |       1.16.X       |       1.17.X       |       1.18.X       |       1.19.X       |       1.20.X       |       1.21.X       |
-| ----------------------------------- | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: |
-| v1.0.0                              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |
-| v1.0.1                              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |
-| v1.1.0                              |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |
-| v1.1.1                              |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |
-| v1.1.2                              |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| v1.2.0                              |                    |                    |                    |                    |     :warning:      |     :warning:      |     :warning:      |     :warning:      |
+| Module Version / Kubernetes Version |       1.18.X       |       1.19.X       |       1.20.X       |       1.21.X       |       1.22.X       |       1.19.X       | 
+| ----------------------------------- | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | 
+| v1.0.0                              | :white_check_mark: |                    | :white_check_mark: |                    |                    |                    |
 
 - :white_check_mark: Compatible
 - :warning: Has issues
 - :x: Incompatible
-
-### Warning while upgrading from 1.X to 1.2
-
-If you are using notary in your Harbor setup and you updated the setup from 1.x to 1.2 you 
-could hit the following [issue](https://github.com/goharbor/harbor/issues/14932).
-
 
 ## Examples
 
