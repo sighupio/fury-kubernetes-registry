@@ -25,13 +25,13 @@ Click on each package to see its full documentation.
 
 ## Compatibility
 
-| Kubernetes Version |   Compatibility   | Notes                                               |
-| ------------------ | :---------------: | --------------------------------------------------- |
-| `1.18.x`           | :white_checkmark: | Conformance tests passed.                           |
-| `1.20.x`           | :white_checkmark: | Conformance tests passed.                           |
-| `1.21.x`           |     :warning:     | Conformance tests passed. Not officially supported. |
-| `1.22.x`           |     :warning:     | Conformance tests passed. Not officially supported. |
-| `1.23.x`           |     :warning:     | Conformance tests passed. Not officially supported. |
+| Kubernetes Version |   Compatibility    | Notes                                               |
+| ------------------ | :---------------:  | --------------------------------------------------- |
+| `1.18.x`           | :white_check_mark: | Conformance tests passed.                           |
+| `1.20.x`           | :white_check_mark: | Conformance tests passed.                           |
+| `1.21.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
+| `1.22.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
+| `1.23.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information on previous releases of the module.
 
