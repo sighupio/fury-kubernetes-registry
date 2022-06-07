@@ -20,4 +20,4 @@ If you are using notary in your Harbor setup and you updated the setup from 1.x 
 
 ## Warning while upgrading from 1.x to 2.0
 
-There's no supported upgrade path. A lift and shift migration is the recommended approach.
+There's no supported upgrade path. See [release note v2.0.0](releases/v2.0.0.md) for more information.
