@@ -69,7 +69,7 @@ resources:
 - ./vendor/katalog/registry/harbor
 ```
 
-5. Apply the necessary patches.
+5. Apply the necessary patches. You can see some examples in the [examples directory](examples/).
 
 6. To deploy the packages to your cluster, execute:
 
