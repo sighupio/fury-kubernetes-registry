@@ -17,7 +17,7 @@ commonLabels:
 images:
   - name: goharbor/trivy-adapter-photon
     newName: registry.sighup.io/fury/goharbor/trivy-adapter-photon
-    newTag: v2.2.2
+    newTag: v2.4.2
 
 configMapGenerator:
   - name: trivy

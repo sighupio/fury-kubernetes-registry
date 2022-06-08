@@ -13,10 +13,10 @@ resources:
 images:
   - name: goharbor/clair-photon
     newName: registry.sighup.io/fury/goharbor/clair-photon
-    newTag: v2.2.2
+    newTag: v2.4.2
   - name: goharbor/clair-adapter-photon
     newName: registry.sighup.io/fury/goharbor/clair-adapter-photon
-    newTag: v2.2.2
+    newTag: v2.4.2
 
 configMapGenerator:
   - name: clair

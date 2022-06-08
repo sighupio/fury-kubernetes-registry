@@ -1,8 +1,9 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2022 SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
 kind: pipeline
+type: docker
 name: license
 
 steps:
@@ -14,6 +15,7 @@ steps:
       - addlicense -c "SIGHUP s.r.l" -v -l bsd --check .
 ---
 kind: pipeline
+type: docker
 name: policeman
 
 platform:
@@ -27,11 +29,21 @@ steps:
   - name: lint
     image: quay.io/sighup/policeman
     pull: always
+    environment:
+      # Identifies false positives like missing 'selector'.
+      # Doing this is valid for Kustomize patches
+      VALIDATE_KUBERNETES_KUBEVAL: "false"
+      # Some duplicated code is intended.
+      VALIDATE_JSCPD: "false"
+      # hadolint already validated dockerfiles
+      VALIDATE_DOCKERFILE: "false"
+      # Disable natural language checks
+      VALIDATE_NATURAL_LANGUAGE: "false"
     depends_on:
       - clone
 
   - name: render
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.18.19_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     depends_on:
       - clone
@@ -48,7 +60,8 @@ steps:
 
 ---
 kind: pipeline
-name: e2e-kubernetes-1.18
+type: docker
+name: e2e-kubernetes-1.20
 
 depends_on:
   - policeman
@@ -57,14 +70,18 @@ platform:
   os: linux
   arch: amd64
 
+node:
+  runner: internal
+
 trigger:
   ref:
     include:
+      - refs/heads/master
       - refs/tags/**
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.11.0-final-aws
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
     pull: always
     volumes:
     - name: shared
