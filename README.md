@@ -15,7 +15,7 @@ If you are new to KFD please refer to the [official documentation][kfd-docs] on 
 
 ## Packages
 
-Fury Kubernetes Registry provides the following packages:
+Kubernetes Fury Registry provides the following packages:
 
 | Package                  | Version  | Description                                                                                                                                                          |
 | ------------------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -79,7 +79,7 @@ kustomize build . | kubectl apply -f -
 
 ### Examples
 
-To see examples on how to customize Fury Kubernetes Registry, please view the [examples](examples) directory.
+To see examples on how to customize Kubernetes Fury Registry, please view the [examples](examples) directory.
 
 <!-- Links -->
 [harbor-site]: https://goharbor.io/
