@@ -8,7 +8,7 @@
 | v1.1.1                              |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |
 | v1.1.2                              |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |
 | v1.2.0                              |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| v2.0.0                              |                    |                    |                    |                    |     :warning:      |     :warning:      |     :warning:      |     :warning:      |
+| v2.0.0                              |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |     :warning:      |
 
 - :white_check_mark: Compatible
 - :warning: Has issues

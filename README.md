@@ -26,12 +26,11 @@ Click on each package to see its full documentation.
 ## Compatibility
 
 | Kubernetes Version |   Compatibility    | Notes                                               |
-| ------------------ | :---------------:  | --------------------------------------------------- |
+| ------------------ | :----------------: | --------------------------------------------------- |
 | `1.18.x`           | :white_check_mark: | Conformance tests passed.                           |
+| `1.19.x`           | :white_check_mark: | Conformance tests passed.                           |
 | `1.20.x`           | :white_check_mark: | Conformance tests passed.                           |
 | `1.21.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
-| `1.22.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
-| `1.23.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information on previous releases of the module.
 
@@ -39,10 +38,10 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 
 ### Prerequisites
 
-| Tool                                    | Version    | Description                                                                                                                                                    |
-|-----------------------------------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [furyctl][furyctl-repo]                 | `>=0.6.0`  | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].     |
-| [kustomize][kustomize-repo]             | `>=3.10.0`  | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
+| Tool                        | Version    | Description                                                                                                                                                    |
+| --------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [furyctl][furyctl-repo]     | `>=0.6.0`  | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].     |
+| [kustomize][kustomize-repo] | `>=3.10.0` | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
 
 All packages in this repository have the following dependencies, for package specific dependencies, please visit the single package's documentation:
 
