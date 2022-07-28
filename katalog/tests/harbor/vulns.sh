@@ -69,8 +69,8 @@ load "./../lib/helper"
         do
             scan_status=$(curl -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/projects/library/repositories/ubuntu/artifacts/16.04?with_scan_overview=true" \
                 -H  "accept: application/json" \
-                -H 'x-accept-vulnerabilities: application/vnd.security.vulnerability.report; version=1.1, application/vnd.scanner.adapter.vuln.report.harbor+json; version=1.0' \
-                --user "admin:Harbor12345" --fail | jq -r '.scan_overview["application/vnd.scanner.adapter.vuln.report.harbor+json; version=1.0"].scan_status')
+                -H 'x-accept-vulnerabilities: application/vnd.security.vulnerability.report; version=1.1' \
+                --user "admin:Harbor12345" --fail | jq -r '.scan_overview["application/vnd.security.vulnerability.report; version=1.1"].scan_status')
             if [ "${scan_status}" != "Success" ]; then echo "#     Scan is not ready yet" >&3; let "retries+=1"; sleep ${retry_seconds}; fi
         done
         if [ "${scan_status}" != "Success" ]; then return 1; fi
@@ -78,8 +78,8 @@ load "./../lib/helper"
         echo "#   Checking scan report" >&3
         vulns=$(curl -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/projects/library/repositories/ubuntu/artifacts/16.04?with_scan_overview=true" \
             -H  "accept: application/json" \
-            -H 'x-accept-vulnerabilities: application/vnd.security.vulnerability.report; version=1.1, application/vnd.scanner.adapter.vuln.report.harbor+json; version=1.0' \
-            --user "admin:Harbor12345" --fail | jq -r '.scan_overview["application/vnd.scanner.adapter.vuln.report.harbor+json; version=1.0"].summary.total')
+            -H 'x-accept-vulnerabilities: application/vnd.security.vulnerability.report; version=1.1' \
+            --user "admin:Harbor12345" --fail | jq -r '.scan_overview["application/vnd.security.vulnerability.report; version=1.1"].summary.total')
         if [ "${vulns}" == "null" ]; then echo "#     No vulnerabilities found. Retrying" >&3; return 1; fi
         if [ "${vulns}" -eq "0" ]; then echo "#     No vulnerabilities found. Retrying" >&3; return 1; fi
     }
