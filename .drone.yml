@@ -76,7 +76,6 @@ node:
 trigger:
   ref:
     include:
-      - refs/heads/master
       - refs/tags/**
 
 steps:
