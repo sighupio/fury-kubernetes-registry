@@ -19,10 +19,10 @@ load "./../lib/helper"
     [ "$status" -eq 0 ]
 }
 
-@test "[CHARTS] Deploy nginx ingress chart" {
+@test "[CHARTS] Push nginx ingress chart to Harbor" {
     info
     deploy(){
-        helm push --username=admin --password=Harbor12345 nginx-ingress-1.36.2.tgz harbor-test
+        helm cm-push --username=admin --password=Harbor12345 nginx-ingress-1.36.2.tgz harbor-test
     }
     run deploy
     [ "$status" -eq 0 ]
@@ -34,10 +34,10 @@ load "./../lib/helper"
     test(){
         name=$(curl -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/search?q=nginx-ingress" \
             -H  "accept: application/json" \
-            --user "admin:Harbor12345" --fail | jq -r .chart[0].Chart.name)
+            --user "admin:Harbor12345" --fail | jq -r '.chart[0].Chart.name')
         version=$(curl -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/search?q=nginx-ingress" \
             -H  "accept: application/json" \
-            --user "admin:Harbor12345" --fail | jq -r .chart[0].Chart.version)
+            --user "admin:Harbor12345" --fail | jq -r '.chart[0].Chart.version')
         if [ "${name}" != "library/nginx-ingress" ]; then return 1; fi
         if [ "${version}" != "1.36.2" ]; then return 1; fi
     }
