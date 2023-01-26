@@ -1,0 +1,49 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-trivy-db-cronjob
+  namespace: registry
+spec:
+  concurrencyPolicy: Forbid
+  schedule: '0 2 * * *'
+  jobTemplate:
+    spec:
+      backoffLimit: 2 
+      activeDeadlineSeconds: 600 
+      template:
+        spec:
+          serviceAccountName: update-trivy-db-sa
+          restartPolicy: Never
+          containers:
+            - name: kubectl
+              image: registry.sighup.io/fury/kubectl
+              command:
+                - 'kubectl'
+                - 'rollout'
+                - 'restart'
+                - 'statefulsets/trivy'
+              livenessProbe:
+                exec:
+                  command:
+                  - kubectl
+                  - version
+                initialDelaySeconds: 5
+                timeoutSeconds: 10
+              readinessProbe:
+                exec:
+                  command:
+                  - kubectl
+                  - version
+                initialDelaySeconds: 5
+                timeoutSeconds: 10
+              resources:
+                limits:
+                  cpu: 100m
+                  memory: 150Mi
+                requests:
+                  cpu: 50m
+                  memory: 128Mi
+              securityContext:
+                runAsUser: 1000
+                runAsNonRoot: true
