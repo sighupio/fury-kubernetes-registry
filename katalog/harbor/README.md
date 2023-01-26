@@ -12,30 +12,23 @@
 ## Image repository and tag
 
 * Harbor images from [dockerhub](https://hub.docker.com/u/goharbor):
-  * goharbor/chartmuseum-photon:v2.4.2
-  * goharbor/clair-photon:v2.4.2
-  * goharbor/clair-adapter-photon:v2.4.2
-  * goharbor/trivy-adapter-photon:v2.4.2
-  * goharbor/harbor-core:v2.4.2
-  * goharbor/harbor-db:v2.4.2
-  * goharbor/harbor-jobservice:v2.4.2
-  * goharbor/notary-server-photon:v2.4.2
-  * goharbor/notary-signer-photon:v2.4.2
-  * goharbor/harbor-portal:v2.4.2
-  * goharbor/redis-photon:v2.4.2
-  * goharbor/registry-photon:v2.4.2
-  * goharbor/harbor-registryctl:v2.4.2
+  * goharbor/chartmuseum-photon:v2.7.0
+  * goharbor/trivy-adapter-photon:v2.7.0
+  * goharbor/harbor-core:v2.7.0
+  * goharbor/harbor-db:v2.7.0
+  * goharbor/harbor-jobservice:v2.7.0
+  * goharbor/notary-server-photon:v2.7.0
+  * goharbor/notary-signer-photon:v2.7.0
+  * goharbor/harbor-portal:v2.7.0
+  * goharbor/redis-photon:v2.7.0
+  * goharbor/registry-photon:v2.7.0
+  * goharbor/harbor-registryctl:v2.7.0
+  * goharbor/harbor-exporter:v2.7.0
 * Harbor repository: [https://github.com/goharbor/harbor](https://github.com/goharbor/harbor)
 
 ## Distributions
 
 * [full-harbor](distributions/full-harbor):
-  * All components deployed together without external dependencies.
-  * Requires a default storage class configured as all the components rely on persistent volumes to store data.
-  * Requires cert-manager and ingress controller
-  * Only tested against public endpoints with valid certificates.
-  * Uses Clair as default interrogation service
-* [full-harbor-with-trivy](distributions/full-harbor-with-trivy):
   * All components deployed together without external dependencies.
   * Requires a default storage class configured as all the components rely on persistent volumes to store data.
   * Requires cert-manager and ingress controller
