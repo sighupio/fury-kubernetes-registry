@@ -9,11 +9,13 @@ kind: Kustomization
 resources:
   - deploy.yml
   - svc.yml
+  - pvc-logs.yml
+  - pvc-scandata.yml
 
 images:
   - name: goharbor/harbor-jobservice
     newName: registry.sighup.io/fury/goharbor/harbor-jobservice
-    newTag: v2.4.2
+    newTag: v2.7.0
 
 configMapGenerator:
   - name: jobservice
@@ -21,11 +23,15 @@ configMapGenerator:
       - config.yml=config/config.yml
     literals:
       - CORE_URL=http://core
+      - REGISTRY_URL=http://registry:5000
+      - TOKEN_SERVICE_URL=http://core/service/token
       - REGISTRY_CONTROLLER_URL=http://registry:8080
       - LOG_LEVEL=info
+      - METRIC_NAMESPACE=harbor
+      - METRIC_SUBSYSTEM=jobservice
       - HTTP_PROXY=
       - HTTPS_PROXY=
-      - NO_PROXY=core,jobservice,database,chartmuseum,clair,notary-server,notary-signer,registry,portal,127.0.0.1,localhost,.local,.internal
+      - NO_PROXY=core,jobservice,database,chartmuseum,trivy,notary-server,notary-signer,registry,portal,exporter,127.0.0.1,localhost,.local,.internal
 
 secretGenerator:
   - name: jobservice

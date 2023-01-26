@@ -9,7 +9,7 @@ kind: Kustomization
 images:
   - name: goharbor/redis-photon
     newName: registry.sighup.io/fury/goharbor/redis-photon
-    newTag: v2.4.2
+    newTag: v2.7.0
 
 resources:
   - sts.yml

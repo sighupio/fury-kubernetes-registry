@@ -25,7 +25,10 @@ spec:
         component: redis
     spec:
       securityContext:
+        runAsUser: 999
         fsGroup: 999
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 120
       containers:
         - name: redis
           image: goharbor/redis-photon

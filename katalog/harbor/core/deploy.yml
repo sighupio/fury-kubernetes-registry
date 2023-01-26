@@ -23,7 +23,10 @@ spec:
         component: core
     spec:
       securityContext:
+        runAsUser: 10000
         fsGroup: 10000
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 120
       containers:
         - name: core
           image: goharbor/harbor-core
@@ -72,6 +75,8 @@ spec:
             - name: token-service-private-key
               mountPath: /etc/core/private_key.pem
               subPath: tls.key
+            - mountPath: /etc/core/ca
+              name: ca-download
             - name: psc
               mountPath: /etc/core/token
       volumes:
@@ -88,6 +93,9 @@ spec:
               - key: secretKey
                 path: key
         - name: token-service-private-key
+          secret:
+            secretName: core-root-ca
+        - name: ca-download
           secret:
             secretName: core-root-ca
         - name: psc

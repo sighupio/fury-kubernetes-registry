@@ -8,7 +8,7 @@ kind: Kustomization
 
 bases:
   - ../../chartmuseum
-  - ../../clair
+  - ../../trivy
   - ../../core
   - ../../notary
   - ../../database
@@ -16,6 +16,7 @@ bases:
   - ../../portal
   - ../../redis
   - ../../registry
+  - ../../exporter
 
 resources:
   - ingress.yml

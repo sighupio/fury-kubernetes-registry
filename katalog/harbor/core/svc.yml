@@ -11,8 +11,13 @@ metadata:
     app: harbor
 spec:
   ports:
-    - port: 80
+    - name: http-web
+      port: 80
       targetPort: 8080
+    - name: http-metrics
+      port: 8001
+      protocol: TCP
+      targetPort: 8001
   selector:
     app: harbor
     component: core

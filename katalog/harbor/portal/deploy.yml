@@ -22,6 +22,10 @@ spec:
         app: harbor
         component: portal
     spec:
+      securityContext:
+        runAsUser: 10000
+        fsGroup: 10000
+      automountServiceAccountToken: false
       containers:
         - name: portal
           image: goharbor/harbor-portal

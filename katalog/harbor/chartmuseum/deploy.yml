@@ -25,7 +25,9 @@ spec:
         component: chartmuseum
     spec:
       securityContext:
+        runAsUser: 10000
         fsGroup: 10000
+      automountServiceAccountToken: false
       containers:
         - name: chartmuseum
           image: goharbor/chartmuseum-photon

@@ -25,7 +25,11 @@ spec:
         component: registry
     spec:
       securityContext:
+        runAsUser: 10000
         fsGroup: 10000
+        fsGroupChangePolicy: OnRootMismatch
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 120
       containers:
         - name: registry
           image: goharbor/registry-photon
@@ -56,9 +60,6 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /storage
-            - name: registry-root-certificate
-              mountPath: /etc/registry/root.crt
-              subPath: tls.crt
             - name: registry-config
               mountPath: /etc/registry/config.yml
               subPath: config.yml
@@ -116,9 +117,6 @@ spec:
         - name: registry-passwd
           secret:
             secretName: registry
-        - name: registry-root-certificate
-          secret:
-            secretName: core-root-ca
         - name: registry-config
           configMap:
             name: registry
