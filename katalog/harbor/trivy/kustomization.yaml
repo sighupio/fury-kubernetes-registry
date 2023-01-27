@@ -42,6 +42,7 @@ configMapGenerator:
       - SCANNER_API_SERVER_ADDR=":8080"
       - SCANNER_TRIVY_TIMEOUT="5m0s"
       - SCANNER_TRIVY_SECURITY_CHECKS="vuln"
+      - SCANNER_TRIVY_OFFLINE_SCAN="true"
 
 secretGenerator:
   - name: trivy
