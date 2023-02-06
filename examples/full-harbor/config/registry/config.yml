@@ -15,11 +15,14 @@ storage:
     layerinfo: redis
   maintenance:
     uploadpurging:
-      enabled: false
+      enabled: true
+      age: 168h
+      interval: 24h
+      dryrun: false
   delete:
     enabled: true
   redirect:
-    disable: true
+    disable: false
 redis:
   addr: "redis:6379"
   db: 2
