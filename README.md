@@ -19,7 +19,7 @@ Kubernetes Fury Registry provides the following packages:
 
 | Package                  | Version  | Description                                                                                                                                                          |
 | ------------------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Harbor](katalog/harbor) | `v2.4.2` | Harbor is an open-source container image registry that secures images with role-based access control, scans images for vulnerabilities, and signs images as trusted. |
+| [Harbor](katalog/harbor) | `v2.7.0` | Harbor is an open-source container image registry that secures images with role-based access control, scans images for vulnerabilities, and signs images as trusted. |
 
 Click on each package to see its full documentation.
 
@@ -27,10 +27,11 @@ Click on each package to see its full documentation.
 
 | Kubernetes Version |   Compatibility    | Notes                                               |
 | ------------------ | :----------------: | --------------------------------------------------- |
-| `1.18.x`           | :white_check_mark: | Conformance tests passed.                           |
-| `1.19.x`           | :white_check_mark: | Conformance tests passed.                           |
 | `1.20.x`           | :white_check_mark: | Conformance tests passed.                           |
 | `1.21.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
+| `1.22.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
+| `1.23.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
+| `1.24.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information on previous releases of the module.
 
@@ -52,7 +53,7 @@ All packages in this repository have the following dependencies, for package spe
 ```yaml
 bases:
   - name: registry/harbor
-    version: "v2.0.0"
+    version: "v2.7.0"
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
@@ -75,6 +76,27 @@ resources:
 ```bash
 kustomize build . | kubectl apply -f -
 ```
+### Monitoring
+
+The Registry Module also includes metrics and dashboards for Harbor's components.
+
+You can monitor the status of Harbor from the provided Grafana Dashboards. Here are some screenshots:
+
+<!-- markdownlint-disable MD033 -->
+<a href="docs/images/screenshots/harbor-general-info.png"><img src="docs/images/screenshots/harbor-general-info.png" width="250"/></a>
+<a href="docs/images/screenshots/harbor-general-metrics.png"><img src="docs/images/screenshots/harbor-general-metrics.png" width="250"/></a>
+<a href="docs/images/screenshots/harbor-core-metrics.png"><img src="docs/images/screenshots/harbor-core-metrics.png" width="250"/></a>
+<a href="docs/images/screenshots/harbor-jobservice-metrics.png"><img src="docs/images/screenshots/harbor-jobservice-metrics.png" width="250"/></a>
+<a href="docs/images/screenshots/harbor-registry-metrics.png"><img src="docs/images/screenshots/harbor-registry-metrics.png" width="250"/></a>
+<!-- markdownlint-enable MD033 -->
+
+> click on each screenshot for the full screen version
+
+The following set of alerts is included:
+
+| Alert Name                         | Summary                                                                                                                                             | Description                                                                                     |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| HarborIsDown                       | The service of Harbor is Down                                                                                                                       | [Critical]: Check the deployment of Harbor and all components as they may be down               |
 
 ### Examples
 
