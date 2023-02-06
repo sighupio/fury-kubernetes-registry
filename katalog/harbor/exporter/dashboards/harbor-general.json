@@ -21,15 +21,12 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
+  "iteration": 1675673814840,
   "links": [],
   "panels": [
     {
-      "collapsed": true,
+      "collapsed": false,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -37,716 +34,715 @@
         "y": 0
       },
       "id": 2,
-      "panels": [
-        {
-          "datasource": "${datasource}",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": []
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 4,
-            "x": 0,
-            "y": 1
-          },
-          "id": 4,
-          "options": {
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showThresholdLabels": false,
-            "showThresholdMarkers": true,
-            "text": {}
-          },
-          "pluginVersion": "8.1.2",
-          "targets": [
-            {
-              "exemplar": false,
-              "expr": "harbor_health",
-              "instant": false,
-              "interval": "",
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "harbor health",
-          "type": "gauge"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${datasource}",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "short"
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 4,
-            "y": 1
-          },
-          "hiddenSeries": false,
-          "id": 6,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.1.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "harbor_up",
-              "format": "time_series",
-              "instant": false,
-              "interval": "",
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "component up status",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${datasource}",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "short"
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 8,
-            "x": 10,
-            "y": 1
-          },
-          "hiddenSeries": false,
-          "id": 8,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.1.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "harbor_system_info",
-              "interval": "",
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "system info",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${datasource}",
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 18,
-            "y": 1
-          },
-          "hiddenSeries": false,
-          "id": 17,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.1.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "harbor_artifact_pulled",
-              "interval": "",
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "artifact pulled",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${datasource}",
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 6,
-            "x": 0,
-            "y": 7
-          },
-          "hiddenSeries": false,
-          "id": 25,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.1.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "harbor_project_total",
-              "interval": "",
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Project total",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${datasource}",
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 6,
-            "x": 6,
-            "y": 7
-          },
-          "hiddenSeries": false,
-          "id": 19,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.1.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "harbor_project_member_total",
-              "interval": "",
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "project members",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${datasource}",
-          "description": "",
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 6,
-            "x": 12,
-            "y": 7
-          },
-          "hiddenSeries": false,
-          "id": 21,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.1.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "harbor_project_quota_usage_byte",
-              "format": "time_series",
-              "interval": "",
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Quota Usage",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${datasource}",
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 6,
-            "x": 18,
-            "y": 7
-          },
-          "hiddenSeries": false,
-          "id": 23,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.1.2",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "harbor_project_repo_total",
-              "interval": "",
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Project repo total",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
+      "panels": [],
       "title": "Info",
       "type": "row"
     },
     {
-      "collapsed": true,
       "datasource": "${datasource}",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
         "overrides": []
       },
+      "gridPos": {
+        "h": 6,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "exemplar": false,
+          "expr": "harbor_health",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "harbor health",
+      "type": "gauge"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 4,
+        "y": 1
+      },
+      "hiddenSeries": false,
+      "id": 6,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.2",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "harbor_up",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{component}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "component up status",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 10,
+        "y": 1
+      },
+      "hiddenSeries": false,
+      "id": 8,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.2",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "harbor_system_info",
+          "interval": "",
+          "legendFormat": "auth_mode={{ auth_mode }} - endpoint={{ endpoint }} - harbor_version={{ harbor_version }} - instance={{ instance }} - namespace={{ namespace }} - self_registration={{ self_registration }}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "system info",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${datasource}",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "hiddenSeries": false,
+      "id": 17,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.2",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "harbor_artifact_pulled",
+          "interval": "",
+          "legendFormat": "{{project_name}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "artifact pulled per project",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${datasource}",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 0,
+        "y": 7
+      },
+      "hiddenSeries": false,
+      "id": 25,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.2",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "harbor_project_total",
+          "interval": "",
+          "legendFormat": "public={{public}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Project total",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${datasource}",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 6,
+        "y": 7
+      },
+      "hiddenSeries": false,
+      "id": 19,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.2",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "harbor_project_member_total",
+          "interval": "",
+          "legendFormat": "{{project_name}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "project members",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${datasource}",
+      "description": "",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 12,
+        "y": 7
+      },
+      "hiddenSeries": false,
+      "id": 21,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.2",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "harbor_project_quota_usage_byte",
+          "format": "time_series",
+          "interval": "",
+          "legendFormat": "{{project_name}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Quota Usage",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${datasource}",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 18,
+        "y": 7
+      },
+      "hiddenSeries": false,
+      "id": 23,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.2",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "harbor_project_repo_total",
+          "interval": "",
+          "legendFormat": "{{project_name}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Project repo total",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": true,
+      "datasource": "${datasource}",
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 1
+        "y": 14
       },
       "id": 52,
       "panels": [
@@ -792,9 +788,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "go_info",
+              "exemplar": true,
+              "expr": "go_info{namespace=~\"registry|harbor\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ],
@@ -881,9 +878,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_cpu_seconds_total",
+              "exemplar": true,
+              "expr": "rate(process_cpu_seconds_total{namespace=~\"registry|harbor\"}[5m])",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -970,9 +968,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "go_threads",
+              "exemplar": true,
+              "expr": "go_threads{namespace=~\"registry|harbor\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -1059,9 +1058,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "go_goroutines",
+              "exemplar": true,
+              "expr": "go_goroutines{namespace=~\"registry|harbor\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -1148,9 +1148,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_open_fds",
+              "exemplar": true,
+              "expr": "process_open_fds{namespace=~\"registry|harbor\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -1237,9 +1238,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "go_memstats_heap_objects",
+              "exemplar": true,
+              "expr": "go_memstats_heap_objects{namespace=~\"registry|harbor\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -1327,9 +1329,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "go_memstats_alloc_bytes",
+              "exemplar": true,
+              "expr": "go_memstats_alloc_bytes{namespace=~\"registry|harbor\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -1416,9 +1419,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "go_memstats_next_gc_bytes",
+              "exemplar": true,
+              "expr": "go_memstats_next_gc_bytes{namespace=~\"registry|harbor\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -1505,9 +1509,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "go_gc_duration_seconds{quantile=\"0.25\"}",
+              "exemplar": true,
+              "expr": "go_gc_duration_seconds{quantile=\"0.25\",namespace=~\"registry|harbor\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -1594,9 +1599,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "go_gc_duration_seconds{quantile=\"0.5\"}",
+              "exemplar": true,
+              "expr": "go_gc_duration_seconds{quantile=\"0.5\", namespace=~\"registry|harbor\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -1684,9 +1690,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "go_gc_duration_seconds{quantile=\"0.75\"}",
+              "exemplar": true,
+              "expr": "go_gc_duration_seconds{quantile=\"0.75\", namespace=~\"registry|harbor\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -1738,15 +1745,11 @@
     {
       "collapsed": true,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 2
+        "y": 15
       },
       "id": 10,
       "panels": [
@@ -1792,9 +1795,11 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_core_http_request_duration_seconds{quantile=\"0.5\"}",
+              "instant": false,
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "method={{method}} - operation={{operation}}",
               "refId": "A"
             }
           ],
@@ -1881,11 +1886,12 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_core_http_request_duration_seconds{quantile=\"0.9\"}",
               "instant": false,
               "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "{{instance}}-{{operation}}",
+              "legendFormat": "{{operation}}",
               "refId": "A"
             }
           ],
@@ -1972,9 +1978,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_core_http_request_duration_seconds{quantile=\"0.99\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "method={{method}} - operation={{operation}}",
               "refId": "A"
             }
           ],
@@ -2066,7 +2073,7 @@
               "instant": false,
               "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "",
+              "legendFormat": "method={{method}} - operation={{operation}}",
               "refId": "A"
             }
           ],
@@ -2153,9 +2160,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_core_http_inflight_requests",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -2207,15 +2215,11 @@
     {
       "collapsed": true,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 3
+        "y": 16
       },
       "id": 74,
       "panels": [
@@ -2261,9 +2265,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_jobservice_info",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "job={{job}} - node={{node}} - pod={{pod}} - pool={{pool}} - workers={{workers}} ",
               "refId": "A"
             }
           ],
@@ -2350,9 +2355,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_task_queue_size",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{type}}",
               "refId": "A"
             }
           ],
@@ -2440,9 +2446,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_task_queue_latency",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{type}}",
               "refId": "A"
             }
           ],
@@ -2530,9 +2537,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_task_concurrency",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{type}}",
               "refId": "A"
             }
           ],
@@ -2620,9 +2628,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "rate(harbor_jobservice_task_total[1m])",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{type}}-{{status}}",
               "refId": "A"
             }
           ],
@@ -2709,9 +2718,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_task_scheduled_total",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}",
               "refId": "A"
             }
           ],
@@ -2798,9 +2808,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_jobservice_task_process_time_seconds{quantile=\"0.5\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{type}}-{{status}}",
               "refId": "A"
             }
           ],
@@ -2887,9 +2898,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_jobservice_task_process_time_seconds{quantile=\"0.9\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{type}}-{{status}}",
               "refId": "A"
             }
           ],
@@ -2976,9 +2988,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "harbor_jobservice_task_process_time_seconds{quantile=\"0.99\"}",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{type}}-{{status}}",
               "refId": "A"
             }
           ],
@@ -3030,15 +3043,11 @@
     {
       "collapsed": true,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 4
+        "y": 17
       },
       "id": 32,
       "panels": [
@@ -3084,9 +3093,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "registry_http_in_flight_requests",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}-{{handler}}",
               "refId": "A"
             }
           ],
@@ -3173,9 +3183,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "rate(registry_http_requests_total[5m])",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}-{{handler}}",
               "refId": "A"
             }
           ],
@@ -3262,9 +3273,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "rate(registry_storage_cache_total[5m])",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}-{{type}}",
               "refId": "A"
             }
           ],
@@ -3351,9 +3363,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "histogram_quantile(0.5, rate(registry_http_request_duration_seconds_bucket[10m]))",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}-{{handler}}",
               "refId": "A"
             }
           ],
@@ -3440,9 +3453,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "histogram_quantile(0.9, rate(registry_http_request_duration_seconds_bucket[10m]))",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}-{{handler}}",
               "refId": "A"
             }
           ],
@@ -3529,9 +3543,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(registry_http_request_duration_seconds_bucket[10m]))",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}-{{handler}}",
               "refId": "A"
             }
           ],
@@ -3618,9 +3633,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "histogram_quantile(0.9, rate(registry_http_request_size_bytes_bucket[10m]))",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}-{{handler}}",
               "refId": "A"
             }
           ],
@@ -3707,9 +3723,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "histogram_quantile(0.9, rate(registry_http_response_size_bytes_bucket[10m]))",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}-{{handler}}",
               "refId": "A"
             }
           ],
@@ -3797,9 +3814,10 @@
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "histogram_quantile(0.9, rate(registry_storage_action_seconds_bucket[10m]))",
               "interval": "",
-              "legendFormat": "",
+              "legendFormat": "{{job}}-{{action}}-{{driver}}",
               "refId": "A"
             }
           ],
@@ -3889,5 +3907,5 @@
   "timezone": "",
   "title": "Harbor",
   "uid": "83xwIJ8Gk",
-  "version": 2
+  "version": 4
 }
