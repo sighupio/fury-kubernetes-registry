@@ -12,8 +12,14 @@ worker_pool:
     redis_url: "redis://redis:6379/1"
     namespace: "jobservice_ns"
 job_loggers:
-  - name: "STD_OUTPUT"
+  - name: "FILE"
     level: INFO
+    settings: # Customized settings of logger
+      base_dir: "/var/log/jobs"
+    sweeper:
+      duration: 14 #days
+      settings: # Customized settings of sweeper
+        work_dir: "/var/log/jobs"
 metric:
   enabled: true
   path: /metrics

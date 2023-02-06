@@ -55,6 +55,9 @@ spec:
                 secretKeyRef:
                   name: core
                   key: secret
+            - # Needed to make AWS' client connect correctly (see https://github.com/helm/chartmuseum/issues/280)
+              name: AWS_SDK_LOAD_CONFIG
+              value: "1"
           resources:
             requests:
               memory: 256Mi

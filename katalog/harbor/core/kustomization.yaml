@@ -38,7 +38,7 @@ configMapGenerator:
       - NOTARY_URL=http://notary-server:4443
       - CORE_LOCAL_URL=http://127.0.0.1:8080
       - WITH_TRIVY=true
-      - TRIVY_ADAPTER_URL=http://trivy-adapter:8080
+      - TRIVY_ADAPTER_URL=http://trivy:8080
       - CFG_EXPIRATION=5
       - ADMIRAL_URL=NA
       - REGISTRY_STORAGE_PROVIDER_NAME=filesystem
@@ -46,7 +46,6 @@ configMapGenerator:
       - CHART_REPOSITORY_URL=http://chartmuseum
       - LOG_LEVEL=info
       - CONFIG_PATH=/etc/core/app.conf
-      - SYNC_REGISTRY=true
       - CHART_CACHE_DRIVER=redis
       - _REDIS_URL_CORE="redis://redis:6379/0?idle_timeout_seconds=30"
       - _REDIS_URL_REG="redis://redis:6379/2?idle_timeout_seconds=30"
