@@ -10,6 +10,7 @@ resources:
   - deploy.yml
   - svc.yml
   - sm.yml
+  - rules.yml
   - dashboards
 
 images:
