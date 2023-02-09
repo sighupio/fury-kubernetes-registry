@@ -57,15 +57,15 @@ steps:
       - render
     commands:
       # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
-      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.20.0,harbor=v2.7.0
+      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.20.0
       # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
-      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.21.0,harbor=v2.7.0
+      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.21.0
       # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
-      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.22.0,harbor=v2.7.0
+      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.22.0
       # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
-      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.23.0,harbor=v2.7.0
+      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.23.0
       # adding preemtive check for Kubernetes 1.24 without blockin the CI to have a list of unspported APIs in use.
-      - /pluto detect distribution.yml --ignore-deprecations --ignore-removals --target-versions=k8s=v1.24.0,harbor=v2.7.0
+      - /pluto detect distribution.yml --ignore-deprecations --ignore-removals --target-versions=k8s=v1.24.0
 
 ---
 name: e2e-kubernetes-1.18
