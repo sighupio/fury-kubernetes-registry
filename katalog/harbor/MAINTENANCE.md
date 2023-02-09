@@ -8,6 +8,7 @@ maintain this document updated. So, any new/modified action has to be written he
 ### Service monitor manifests
 
 The service monitor manifests `katalog/harbor/exporter/sm.yml` file has been templated from:
+
 - <https://github.com/goharbor/harbor-helm/blob/master/templates/metrics/metrics-svcmon.yaml>
 - <https://goharbor.io/docs/2.7.0/administration/metrics/>
 
@@ -39,6 +40,7 @@ Compared to the official dashboards, the following changes have been made:
 - added "Legend" on all gadgets
 
 #### Prometheus Rules
+
 Harbor upstream does not provide a set of Prometheus Rules that we could include.
 The Prometheus Rules defined in `katalog/harbor/exporter/rules.yml` are inspired by those provided by:
 <https://promcat.io/apps/harbor>
