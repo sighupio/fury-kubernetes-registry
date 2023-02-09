@@ -73,6 +73,7 @@ resources:
 ```bash
 kustomize build . | kubectl apply -f -
 ```
+
 ### Monitoring
 
 The Registry Module also includes metrics and dashboards for Harbor's components.
