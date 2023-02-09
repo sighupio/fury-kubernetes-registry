@@ -21,3 +21,4 @@ spec:
         severity: critical
       annotations:
         summary: The service of Harbor is Down
+        description: Habor service is Down.
