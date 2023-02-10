@@ -3,7 +3,7 @@
 # license that can be found in the LICENSE file.
 
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: harbor-ingress
@@ -25,34 +25,55 @@ spec:
     - http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: portal
-              servicePort: 80
+              service:
+                name: portal
+                port:
+                  number: 80
           - path: /api/
+            pathType: Prefix
             backend:
-              serviceName: core
-              servicePort: 80
+              service:
+                name: core
+                port:
+                  number: 80
           - path: /service/
+            pathType: Prefix
             backend:
-              serviceName: core
-              servicePort: 80
+              service:
+                name: core
+                port:
+                  number: 80
           - path: /v2/
+            pathType: Prefix
             backend:
-              serviceName: core
-              servicePort: 80
+              service:
+                name: core
+                port:
+                  number: 80
           - path: /chartrepo/
+            pathType: Prefix
             backend:
-              serviceName: core
-              servicePort: 80
+              service:
+                name: core
+                port:
+                  number: 80
           - path: /c/
+            pathType: Prefix
             backend:
-              serviceName: core
-              servicePort: 80
+              service:
+                name: core
+                port:
+                  number: 80
       host: core.harbor.domain
     - http:
         paths:
-          - path: /
-            backend:
-              serviceName: notary-server
-              servicePort: 4443
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: notary-server
+              port:
+                number: 4443
       host: notary.harbor.domain
