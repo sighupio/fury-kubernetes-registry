@@ -7,7 +7,6 @@ kind: ServiceAccount
 apiVersion: v1
 metadata:
   name: update-trivy-db-sa
-  namespace: registry
   labels:
     app: harbor
 ---
@@ -15,7 +14,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: update-trivy-db-role
-  namespace: registry
   labels:
     app: harbor
 rules:
@@ -27,7 +25,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: update-trivy-db-role-binding
-  namespace: registry
   labels:
     app: harbor
 roleRef:
@@ -37,4 +34,3 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: update-trivy-db-sa
-    namespace: registry

@@ -9,7 +9,6 @@ metadata:
     prometheus: k8s
     role: alert-rules
   name: harbor-rules
-  namespace: monitoring
 spec:
   groups:
   - name: harbor-rules

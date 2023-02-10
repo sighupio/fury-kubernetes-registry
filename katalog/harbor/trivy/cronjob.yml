@@ -7,7 +7,6 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: update-trivy-db-cronjob
-  namespace: registry
 spec:
   concurrencyPolicy: Forbid
   schedule: '0 2 * * *'

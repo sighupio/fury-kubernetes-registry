@@ -9,7 +9,6 @@ metadata:
   labels:
     app: harbor
   name: harbor
-  namespace: registry
 spec:
   endpoints:
   - honorLabels: true
