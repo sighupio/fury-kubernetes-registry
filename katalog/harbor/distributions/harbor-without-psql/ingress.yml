@@ -37,35 +37,35 @@ spec:
               service:
                 name: core
                 port:
-                  number: 80
+                  name: http-web
           - path: /service/
             pathType: Prefix
             backend:
               service:
                 name: core
                 port:
-                  number: 80
+                  name: http-web
           - path: /v2/
             pathType: Prefix
             backend:
               service:
                 name: core
                 port:
-                  number: 80
+                  name: http-web
           - path: /chartrepo/
             pathType: Prefix
             backend:
               service:
                 name: core
                 port:
-                  number: 80
+                  name: http-web
           - path: /c/
             pathType: Prefix
             backend:
               service:
                 name: core
                 port:
-                  number: 80
+                  name: http-web
       host: core.harbor.domain
     - http:
         paths:
