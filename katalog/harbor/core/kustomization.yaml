@@ -62,6 +62,7 @@ configMapGenerator:
       - HTTP_PROXY=
       - HTTPS_PROXY=
       - NO_PROXY=core,jobservice,database,chartmuseum,trivy,notary-server,notary-signer,registry,portal,exporter,127.0.0.1,localhost,.local,.internal
+      - PERMITTED_REGISTRY_TYPES_FOR_PROXY_CACHE=docker-hub,harbor,azure-acr,aws-ecr,google-gcr,quay,docker-registry,jfrog-artifactory
 
 secretGenerator:
   - name: core
