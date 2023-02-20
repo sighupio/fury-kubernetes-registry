@@ -20,3 +20,10 @@ job_loggers:
       duration: 14 #days
       settings: # Customized settings of sweeper
         work_dir: "/var/log/jobs"
+metric:
+  enabled: true
+  path: /metrics
+  port: 8001
+loggers:
+  - name: "STD_OUTPUT"
+    level: INFO
