@@ -1,14 +1,17 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: registry
 
 resources:
   - sts.yml
   - svc.yml
+  - rbac.yml
+  - cronjob.yml
 
 commonLabels:
   app: harbor
@@ -17,14 +20,17 @@ commonLabels:
 images:
   - name: goharbor/trivy-adapter-photon
     newName: registry.sighup.io/fury/goharbor/trivy-adapter-photon
-    newTag: v2.4.2
+    newTag: v2.7.0
+
+  - name: registry.sighup.io/fury/kubectl
+    newTag: v1.22.0
 
 configMapGenerator:
   - name: trivy
     literals:
       - HTTP_PROXY=""
       - HTTPS_PROXY=""
-      - NO_PROXY="core,jobservice,database,chartmuseum,trivy,notary-server,notary-signer,registry,portal,127.0.0.1,localhost,.local,.internal"
+      - NO_PROXY="core,jobservice,database,chartmuseum,trivy,notary-server,notary-signer,registry,portal,exporter,127.0.0.1,localhost,.local,.internal"
       - SCANNER_LOG_LEVEL="info"
       - SCANNER_TRIVY_CACHE_DIR="/home/scanner/.cache/trivy"
       - SCANNER_TRIVY_REPORTS_DIR="/home/scanner/.cache/reports"
@@ -32,9 +38,12 @@ configMapGenerator:
       - SCANNER_TRIVY_VULN_TYPE="os,library"
       - SCANNER_TRIVY_SEVERITY="UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
       - SCANNER_TRIVY_IGNORE_UNFIXED="false"
-      - SCANNER_TRIVY_SKIP_UPDATE="false"
+      - SCANNER_TRIVY_SKIP_UPDATE="true"
       - SCANNER_TRIVY_INSECURE="false"
       - SCANNER_API_SERVER_ADDR=":8080"
+      - SCANNER_TRIVY_TIMEOUT="5m0s"
+      - SCANNER_TRIVY_SECURITY_CHECKS="vuln"
+      - SCANNER_TRIVY_OFFLINE_SCAN="true"
 
 secretGenerator:
   - name: trivy

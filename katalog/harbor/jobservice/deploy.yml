@@ -1,4 +1,4 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -25,7 +25,10 @@ spec:
         component: jobservice
     spec:
       securityContext:
+        runAsUser: 10000
         fsGroup: 10000
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 120
       containers:
         - name: jobservice
           image: goharbor/harbor-jobservice
@@ -68,7 +71,17 @@ spec:
             - name: config
               mountPath: /etc/jobservice/config.yml
               subPath: config.yml
+            - name: job-logs
+              mountPath: /var/log/jobs
+            - name: job-scandata-exports
+              mountPath: /var/scandata_exports
       volumes:
         - name: config
           configMap:
             name: jobservice
+        - name: job-logs
+          persistentVolumeClaim:
+            claimName: pvc-jobservice
+        - name: job-scandata-exports
+          persistentVolumeClaim:
+            claimName: pvc-job-scandata-exports

@@ -1,4 +1,4 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -23,11 +23,27 @@ spec:
         component: notary-server
     spec:
       securityContext:
+        runAsUser: 10000
         fsGroup: 10000
+      automountServiceAccountToken: false
       containers:
         - name: notary-server
           image: goharbor/notary-server-photon
           imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /_notary_server/health
+              scheme: "HTTP"
+              port: 4443
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /_notary_server/health
+              scheme: "HTTP"
+              port: 4443
+            initialDelaySeconds: 20
+            periodSeconds: 10
           envFrom:
             - configMapRef:
                 name: notary-server
@@ -78,11 +94,27 @@ spec:
         component: notary-signer
     spec:
       securityContext:
+        runAsUser: 10000
         fsGroup: 10000
+      automountServiceAccountToken: false
       containers:
         - name: notary-signer
           image: goharbor/notary-signer-photon
           imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /
+              scheme: "HTTPS"
+              port: 7899
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              scheme: "HTTPS"
+              port: 7899
+            initialDelaySeconds: 20
+            periodSeconds: 10
           envFrom:
             - configMapRef:
                 name: notary-signer

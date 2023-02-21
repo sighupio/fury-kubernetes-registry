@@ -1,4 +1,4 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -17,6 +17,22 @@ spec:
         runAsUser: 10000
         fsGroup: 10000
       automountServiceAccountToken: false
+      initContainers:
+        - name: "update-trivy-db"
+          image: goharbor/trivy-adapter-photon
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args: ["-c", "trivy image --download-db-only"]
+          volumeMounts:
+            - name: data
+              mountPath: /home/scanner/.cache
+              subPath:
+              readOnly: false
+          envFrom:
+            - configMapRef:
+                name: trivy
+            - secretRef:
+                name: trivy
       containers:
         - name: trivy
           image: goharbor/trivy-adapter-photon

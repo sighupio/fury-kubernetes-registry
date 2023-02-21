@@ -1,0 +1,36 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: update-trivy-db-sa
+  labels:
+    app: harbor
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: update-trivy-db-role
+  labels:
+    app: harbor
+rules:
+  - apiGroups: ["apps", "extensions", ""]
+    resources: ["statefulsets"]
+    verbs: ["get", "patch", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: update-trivy-db-role-binding
+  labels:
+    app: harbor
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: update-trivy-db-role
+subjects:
+  - kind: ServiceAccount
+    name: update-trivy-db-sa

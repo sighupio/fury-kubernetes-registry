@@ -1,4 +1,4 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -15,11 +15,14 @@ storage:
     layerinfo: redis
   maintenance:
     uploadpurging:
-      enabled: false
+      enabled: true
+      age: 168h
+      interval: 24h
+      dryrun: false
   delete:
     enabled: true
   redirect:
-    disable: true
+    disable: false
 redis:
   addr: "redis:6379"
   db: 2
@@ -28,12 +31,15 @@ redis:
   writetimeout: 10s
   dialtimeout: 10s
 http:
-  relativeurls: true
   addr: :5000
+  relativeurls: false
   # set via environment variable
   # secret: placeholder
   debug:
-    addr: localhost:5001
+    addr: :8001
+    prometheus:
+      enabled: true
+      path: /metrics
 auth:
   htpasswd:
     realm: harbor-registry-basic-realm

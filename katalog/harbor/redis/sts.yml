@@ -1,4 +1,4 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -25,7 +25,10 @@ spec:
         component: redis
     spec:
       securityContext:
+        runAsUser: 999
         fsGroup: 999
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 120
       containers:
         - name: redis
           image: goharbor/redis-photon

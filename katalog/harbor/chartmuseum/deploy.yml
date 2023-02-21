@@ -1,4 +1,4 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -25,7 +25,9 @@ spec:
         component: chartmuseum
     spec:
       securityContext:
+        runAsUser: 10000
         fsGroup: 10000
+      automountServiceAccountToken: false
       containers:
         - name: chartmuseum
           image: goharbor/chartmuseum-photon
@@ -53,6 +55,9 @@ spec:
                 secretKeyRef:
                   name: core
                   key: secret
+            - # Needed to make AWS' client connect correctly (see https://github.com/helm/chartmuseum/issues/280)
+              name: AWS_SDK_LOAD_CONFIG
+              value: "1"
           resources:
             requests:
               memory: 256Mi

@@ -1,4 +1,4 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -6,17 +6,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: clair
+  name: exporter
   labels:
     app: harbor
 spec:
   ports:
-    - name: adapter
-      port: 8080
-    - name: clair
-      port: 6060
-    - name: clair-health
-      port: 6061
+    - name: http-metrics
+      port: 8001
+      protocol: TCP
+      targetPort: 8001
   selector:
     app: harbor
-    component: clair
+    component: exporter

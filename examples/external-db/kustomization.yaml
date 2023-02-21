@@ -1,14 +1,11 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: harbor
-
-resources:
-  - ns.yml
+namespace: registry
 
 bases:
   - ../../katalog/harbor/distributions/full-harbor
@@ -136,7 +133,7 @@ patchesJson6902:
     path: patch/registry.yml
   - target:
       group: networking.k8s.io
-      version: v1beta1
+      version: v1
       kind: Ingress
       name: harbor-ingress
     path: patch/ingress.yml

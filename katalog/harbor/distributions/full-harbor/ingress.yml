@@ -1,9 +1,9 @@
-# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: harbor-ingress
@@ -25,34 +25,55 @@ spec:
     - http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: portal
-              servicePort: 80
+              service:
+                name: portal
+                port:
+                  number: 80
           - path: /api/
+            pathType: Prefix
             backend:
-              serviceName: core
-              servicePort: 80
+              service:
+                name: core
+                port:
+                  name: http-web
           - path: /service/
+            pathType: Prefix
             backend:
-              serviceName: core
-              servicePort: 80
+              service:
+                name: core
+                port:
+                  name: http-web
           - path: /v2/
+            pathType: Prefix
             backend:
-              serviceName: core
-              servicePort: 80
+              service:
+                name: core
+                port:
+                  name: http-web
           - path: /chartrepo/
+            pathType: Prefix
             backend:
-              serviceName: core
-              servicePort: 80
+              service:
+                name: core
+                port:
+                  name: http-web
           - path: /c/
+            pathType: Prefix
             backend:
-              serviceName: core
-              servicePort: 80
+              service:
+                name: core
+                port:
+                  name: http-web
       host: core.harbor.domain
     - http:
         paths:
-          - path: /
-            backend:
-              serviceName: notary-server
-              servicePort: 4443
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: notary-server
+              port:
+                number: 4443
       host: notary.harbor.domain
