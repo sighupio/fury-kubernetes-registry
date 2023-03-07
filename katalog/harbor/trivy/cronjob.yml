@@ -9,7 +9,7 @@ metadata:
   name: update-trivy-db-cronjob
 spec:
   concurrencyPolicy: Forbid
-  schedule: '0 2 * * *'
+  schedule: '0 4 * * *'
   jobTemplate:
     spec:
       backoffLimit: 2 

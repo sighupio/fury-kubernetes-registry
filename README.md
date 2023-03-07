@@ -52,7 +52,7 @@ All packages in this repository have the following dependencies, for package spe
 ```yaml
 bases:
   - name: registry/harbor
-    version: "v3.0.0"
+    version: "v3.0.1"
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.

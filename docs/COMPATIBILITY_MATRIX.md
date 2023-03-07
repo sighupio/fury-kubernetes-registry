@@ -10,6 +10,7 @@
 | v1.2.0                              |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | v2.0.0                              |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | v3.0.0                              |                    |                    |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| v3.0.1                              |                    |                    |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 - :white_check_mark: Compatible
 - :warning: Has issues
@@ -25,4 +26,4 @@ There's no supported upgrade path. See [release note v2.0.0](releases/v2.0.0.md)
 
 ## Warning while upgrading from 2.x to 3.0
 
-There's no supported upgrade path. See [release note v3.0.0](releases/v3.0.0.md) for more information.
+There's no supported upgrade path. See [release note v3.0.1](releases/v3.0.1.md) for more information.

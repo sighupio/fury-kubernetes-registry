@@ -52,3 +52,7 @@ To export the list of alerts from the YAML file to include them in the readme yo
 ```bash
 yq e '.spec.groups[] | .rules[] |  "| " + .alert + " | " + (.annotations.summary // "-" | sub("\n",". "))+ " | " + (.annotations.description // "-" | sub("\n",". ")) + " |"' katalog/harbor/exporter/rules.yml
 ```
+
+### Trivy Database Update Offline
+
+The trivy configuration has been updated to download the new image with the updated vulnerability database every night. To do this we have added: [an image that is built every night](https://github.com/sighupio/trivy-adapter-photon-offline), an ad-hoc rbac and a cronjob to restart the pod. The new image is downloaded from the following [repository](https://quay.io/repository/sighup/trivy-adapter-photon-offline?tab=tags).
