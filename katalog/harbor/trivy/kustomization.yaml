@@ -19,7 +19,7 @@ commonLabels:
 
 images:
   - name: goharbor/trivy-adapter-photon
-    newName: quay.io/sighup/trivy-adapter-photon-offline
+    newName: registry.sighup.io/fury/goharbor/trivy-adapter-photon-offline
     newTag: v2.7.0
 
   - name: registry.sighup.io/fury/kubectl
