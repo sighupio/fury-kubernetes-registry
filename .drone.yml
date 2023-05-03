@@ -108,6 +108,12 @@ steps:
         from_secret: dockerhub_username
       dockerhub_password:
         from_secret: dockerhub_password
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       ref:
         include:
@@ -249,6 +255,12 @@ steps:
         from_secret: dockerhub_username
       dockerhub_password:
         from_secret: dockerhub_password
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       status:
         - success
@@ -303,6 +315,12 @@ steps:
         from_secret: dockerhub_username
       dockerhub_password:
         from_secret: dockerhub_password
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       ref:
         include:
@@ -444,6 +462,12 @@ steps:
         from_secret: dockerhub_username
       dockerhub_password:
         from_secret: dockerhub_password
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       status:
         - success
@@ -498,6 +522,12 @@ steps:
         from_secret: dockerhub_username
       dockerhub_password:
         from_secret: dockerhub_password
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       ref:
         include:
@@ -639,6 +669,12 @@ steps:
         from_secret: dockerhub_username
       dockerhub_password:
         from_secret: dockerhub_password
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       status:
         - success
@@ -693,6 +729,12 @@ steps:
         from_secret: dockerhub_username
       dockerhub_password:
         from_secret: dockerhub_password
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       ref:
         include:
@@ -834,6 +876,12 @@ steps:
         from_secret: dockerhub_username
       dockerhub_password:
         from_secret: dockerhub_password
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       status:
         - success
