@@ -84,7 +84,7 @@ trigger:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.11.0-final-aws
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
     pull: always
     volumes:
       - name: shared
@@ -231,7 +231,7 @@ steps:
           - refs/tags/**
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.11.0-final-aws
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
     pull: always
     depends_on: [e2e-vulns, e2e-chartmuseum, e2e-replication, e2e-registry]
     settings:
@@ -279,7 +279,7 @@ trigger:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.11.0-final-aws
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
     pull: always
     volumes:
       - name: shared
@@ -426,7 +426,7 @@ steps:
           - refs/tags/**
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.11.0-final-aws
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
     pull: always
     depends_on: [e2e-vulns, e2e-chartmuseum, e2e-replication, e2e-registry]
     settings:
@@ -474,7 +474,7 @@ trigger:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.11.0-final-aws
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
     pull: always
     volumes:
       - name: shared
@@ -621,7 +621,7 @@ steps:
           - refs/tags/**
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.11.0-final-aws
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
     pull: always
     depends_on: [e2e-vulns, e2e-chartmuseum, e2e-replication, e2e-registry]
     settings:
@@ -669,7 +669,7 @@ trigger:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.11.0-final-aws
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
     pull: always
     volumes:
       - name: shared
@@ -816,7 +816,7 @@ steps:
           - refs/tags/**
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.11.0-final-aws
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
     pull: always
     depends_on: [e2e-vulns, e2e-chartmuseum, e2e-replication, e2e-registry]
     settings:
@@ -855,7 +855,7 @@ depends_on:
   - e2e-kubernetes-1.23
   - e2e-kubernetes-1.24
   - e2e-kubernetes-1.25
-  
+
 platform:
   os: linux
   arch: amd64
