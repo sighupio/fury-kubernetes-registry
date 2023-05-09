@@ -79,13 +79,7 @@ load "./../lib/helper"
     info
     test(){
         status=$(kubectl get pods -n registry -l app=harbor -o jsonpath='{range .items[*].status.containerStatuses[*]}{.ready}{"\n"}{end}' | uniq)
-        if [ "${status}" != "true" ]
-        then
-            # Don't know why notary does not start at first try
-            kubectl -n registry rollout restart deployment/notary-server
-            kubectl -n registry rollout restart deployment/notary-signer
-            return 1
-        fi
+        if [ "${status}" != "true" ]; then return 1; fi
     }
     loop_it test 10 30
     status=${loop_it_result}
