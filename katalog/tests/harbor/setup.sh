@@ -55,9 +55,9 @@ load "./../lib/helper"
 @test "[SETUP] requirements - Prepare Harbor manifests (externalIP)" {
     info
     files_to_change="""
-    examples/full-harbor-with-trivy/kustomization.yaml
-    examples/full-harbor-with-trivy/patch/ingress.yml
-    examples/full-harbor-with-trivy/secrets/notary/server.json
+    examples/full-harbor/kustomization.yaml
+    examples/full-harbor/patch/ingress.yml
+    examples/full-harbor/secrets/notary/server.json
     """
     for file in ${files_to_change}
     do
@@ -68,7 +68,7 @@ load "./../lib/helper"
 @test "[SETUP] Harbor" {
     info
     install_harbor(){
-        kustomize build examples/full-harbor-with-trivy | kubectl apply -f -
+        kustomize build examples/full-harbor | kubectl apply -f -
     }
     loop_it install_harbor 20 3
     status=${loop_it_result}
@@ -78,12 +78,12 @@ load "./../lib/helper"
 @test "[SETUP] Check Harbor" {
     info
     test(){
-        status=$(kubectl get pods -n harbor -l app=harbor -o jsonpath='{range .items[*].status.containerStatuses[*]}{.ready}{"\n"}{end}' | uniq)
+        status=$(kubectl get pods -n registry -l app=harbor -o jsonpath='{range .items[*].status.containerStatuses[*]}{.ready}{"\n"}{end}' | uniq)
         if [ "${status}" != "true" ]
         then
             # Don't know why notary does not start at first try
-            kubectl -n harbor rollout restart deployment/notary-server
-            kubectl -n harbor rollout restart deployment/notary-signer
+            kubectl -n registry rollout restart deployment/notary-server
+            kubectl -n registry rollout restart deployment/notary-signer
             return 1
         fi
     }
@@ -95,7 +95,7 @@ load "./../lib/helper"
 @test "[SETUP] Check Harbor certificates" {
     info
     test(){
-        status=$(kubectl -n harbor get certs -o jsonpath='{range .items[*].status.conditions[?(@.type=="Ready")]}{.status}{"\n"}{end}' | uniq)
+        status=$(kubectl -n registry get certs -o jsonpath='{range .items[*].status.conditions[?(@.type=="Ready")]}{.status}{"\n"}{end}' | uniq)
         if [ "${status}" != "True" ]; then return 1; fi
     }
     loop_it test 30 3
