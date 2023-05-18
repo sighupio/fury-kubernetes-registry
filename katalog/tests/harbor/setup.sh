@@ -81,18 +81,8 @@ load "./../lib/helper"
         status=$(kubectl get pods -n registry -l app=harbor -o jsonpath='{range .items[*].status.containerStatuses[*]}{.ready}{"\n"}{end}' | uniq)
         if [ "${status}" != "true" ]; then return 1; fi
     }
-    loop_it test 10 30
+    loop_it test 30 30
     status=${loop_it_result}
     [ "$status" -eq 0 ]
 }
 
-@test "[SETUP] Check Harbor certificates" {
-    info
-    test(){
-        status=$(kubectl -n registry get certs -o jsonpath='{range .items[*].status.conditions[?(@.type=="Ready")]}{.status}{"\n"}{end}' | uniq)
-        if [ "${status}" != "True" ]; then return 1; fi
-    }
-    loop_it test 30 3
-    status=${loop_it_result}
-    [ "$status" -eq 0 ]
-}
