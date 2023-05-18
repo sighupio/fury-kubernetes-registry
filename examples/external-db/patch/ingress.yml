@@ -37,4 +37,4 @@
 
 - op: replace
   path: "/metadata/annotations/cert-manager.io~1cluster-issuer"
-  value: "letsencrypt-prod"
+  value: "selfsigned-issuer"

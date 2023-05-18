@@ -6,6 +6,9 @@ bases:
   - ./vendor/katalog/ingress/cert-manager
   - ./vendor/katalog/ingress/nginx
 
+resources:
+  - ./resources/issuer.yml
+
 patchesJson6902:
 - target:
     group: cert-manager.io
