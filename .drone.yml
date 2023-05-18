@@ -171,7 +171,7 @@ steps:
           - refs/tags/**
 
   - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.22.0_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.26.3_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
@@ -381,7 +381,7 @@ steps:
           - refs/tags/**
 
   - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.23.0_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.26.3_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
@@ -591,7 +591,7 @@ steps:
           - refs/tags/**
 
   - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.9.0_3.1.1_1.9.4_1.24.0_3.5.3_4.21.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.26.3_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
@@ -801,7 +801,7 @@ steps:
           - refs/tags/**
 
   - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.9.0_3.1.1_1.9.4_1.25.3_3.5.3_4.21.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.26.3_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
