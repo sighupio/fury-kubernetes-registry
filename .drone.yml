@@ -143,19 +143,18 @@ steps:
           - refs/tags/**
 
   - name: e2e-vulns
-    image: docker:dind
+    image: quay.io/sighup/skopeo:v1.0.0
     pull: always
     volumes:
       - name: shared
         path: /shared
-      - name: dockersock
-        path: /var/run/docker.sock
     environment:
       DYNAMIC_DNS_SERVICE:
         from_secret: dynamic_dns_service
     depends_on: [e2e-setup]
     commands:
-      - apk add curl jq git bash ca-certificates
+      - apt update
+      - apt install curl jq git bash ca-certificates -y
       - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
       - cd /tmp/bats-core
       - git checkout v1.1.0
@@ -211,19 +210,18 @@ steps:
           - refs/tags/**
 
   - name: e2e-registry
-    image: docker:dind
+    image: quay.io/sighup/skopeo:v1.0.0
     pull: always
     volumes:
       - name: shared
         path: /shared
-      - name: dockersock
-        path: /var/run/docker.sock
     environment:
       DYNAMIC_DNS_SERVICE:
         from_secret: dynamic_dns_service
     depends_on: [e2e-setup]
     commands:
-      - apk add curl jq git bash ca-certificates
+      - apt update
+      - apt install curl jq git bash ca-certificates -y
       - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
       - cd /tmp/bats-core
       - git checkout v1.1.0
@@ -353,19 +351,18 @@ steps:
           - refs/tags/**
 
   - name: e2e-vulns
-    image: docker:dind
+    image: quay.io/sighup/skopeo:v1.0.0
     pull: always
     volumes:
       - name: shared
         path: /shared
-      - name: dockersock
-        path: /var/run/docker.sock
     environment:
       DYNAMIC_DNS_SERVICE:
         from_secret: dynamic_dns_service
     depends_on: [e2e-setup]
     commands:
-      - apk add curl jq git bash ca-certificates
+      - apt update
+      - apt install curl jq git bash ca-certificates -y
       - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
       - cd /tmp/bats-core
       - git checkout v1.1.0
@@ -421,7 +418,7 @@ steps:
           - refs/tags/**
 
   - name: e2e-registry
-    image: docker:dind
+    image: quay.io/sighup/skopeo:v1.0.0
     pull: always
     volumes:
       - name: shared
@@ -433,7 +430,8 @@ steps:
         from_secret: dynamic_dns_service
     depends_on: [e2e-setup]
     commands:
-      - apk add curl jq git bash ca-certificates
+      - apt update
+      - apt install curl jq git bash ca-certificates -y
       - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
       - cd /tmp/bats-core
       - git checkout v1.1.0
@@ -563,19 +561,18 @@ steps:
           - refs/tags/**
 
   - name: e2e-vulns
-    image: docker:dind
+    image: quay.io/sighup/skopeo:v1.0.0
     pull: always
     volumes:
       - name: shared
         path: /shared
-      - name: dockersock
-        path: /var/run/docker.sock
     environment:
       DYNAMIC_DNS_SERVICE:
         from_secret: dynamic_dns_service
     depends_on: [e2e-setup]
     commands:
-      - apk add curl jq git bash ca-certificates
+      - apt update
+      - apt install curl jq git bash ca-certificates -y
       - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
       - cd /tmp/bats-core
       - git checkout v1.1.0
@@ -631,7 +628,7 @@ steps:
           - refs/tags/**
 
   - name: e2e-registry
-    image: docker:dind
+    image: quay.io/sighup/skopeo:v1.0.0
     pull: always
     volumes:
       - name: shared
@@ -643,7 +640,8 @@ steps:
         from_secret: dynamic_dns_service
     depends_on: [e2e-setup]
     commands:
-      - apk add curl jq git bash ca-certificates
+      - apt update
+      - apt install curl jq git bash ca-certificates -y
       - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
       - cd /tmp/bats-core
       - git checkout v1.1.0
@@ -773,19 +771,18 @@ steps:
           - refs/tags/**
 
   - name: e2e-vulns
-    image: docker:dind
+    image: quay.io/sighup/skopeo:v1.0.0
     pull: always
     volumes:
       - name: shared
         path: /shared
-      - name: dockersock
-        path: /var/run/docker.sock
     environment:
       DYNAMIC_DNS_SERVICE:
         from_secret: dynamic_dns_service
     depends_on: [e2e-setup]
     commands:
-      - apk add curl jq git bash ca-certificates
+      - apt update
+      - apt install curl jq git bash ca-certificates -y
       - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
       - cd /tmp/bats-core
       - git checkout v1.1.0
@@ -841,7 +838,7 @@ steps:
           - refs/tags/**
 
   - name: e2e-registry
-    image: docker:dind
+    image: quay.io/sighup/skopeo:v1.0.0
     pull: always
     volumes:
       - name: shared
@@ -853,7 +850,8 @@ steps:
         from_secret: dynamic_dns_service
     depends_on: [e2e-setup]
     commands:
-      - apk add curl jq git bash ca-certificates
+      - apt update
+      - apt install curl jq git bash ca-certificates -y
       - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
       - cd /tmp/bats-core
       - git checkout v1.1.0
