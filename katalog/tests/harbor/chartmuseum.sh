@@ -10,10 +10,10 @@ load "./../lib/helper"
 @test "[CHARTS] Setup" {
     info
     setup(){
-        helm init --client-only --stable-repo-url https://charts.helm.sh/stable
+        helm repo add stable https://charts.helm.sh/stable 
         helm plugin install https://github.com/chartmuseum/helm-push
         helm fetch stable/nginx-ingress --version 1.36.2
-        helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor."${EXTERNAL_DNS}"/chartrepo/library
+        helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor."${EXTERNAL_DNS}"/chartrepo/library --insecure-skip-tls-verify
     }
     run setup
     [ "$status" -eq 0 ]
@@ -22,7 +22,7 @@ load "./../lib/helper"
 @test "[CHARTS] Push nginx ingress chart to Harbor" {
     info
     deploy(){
-        helm cm-push --username=admin --password=Harbor12345 nginx-ingress-1.36.2.tgz harbor-test
+        helm cm-push nginx-ingress-1.36.2.tgz harbor-test --insecure
     }
     run deploy
     [ "$status" -eq 0 ]
@@ -32,10 +32,10 @@ load "./../lib/helper"
 @test "[CHARTS] Check nginx ingress is in chartmuseum" {
     info
     test(){
-        name=$(curl -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/search?q=nginx-ingress" \
+        name=$(curl -k -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/search?q=nginx-ingress" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r '.chart[0].Chart.name')
-        version=$(curl -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/search?q=nginx-ingress" \
+        version=$(curl -k -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/search?q=nginx-ingress" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r '.chart[0].Chart.version')
         if [ "${name}" != "library/nginx-ingress" ]; then return 1; fi
