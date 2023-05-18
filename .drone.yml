@@ -725,7 +725,7 @@ steps:
       action: custom-cluster-125
       pipeline_id: cluster-125
       local_kind_config_path: katalog/tests/harbor/config/kind-config
-      cluster_version: "1.25.0"
+      cluster_version: "1.25.3"
       instance_path: /shared
       aws_default_region:
         from_secret: aws_region
