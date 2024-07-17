@@ -168,7 +168,7 @@ steps:
           - refs/tags/**
 
   - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
