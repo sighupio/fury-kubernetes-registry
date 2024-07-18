@@ -34,6 +34,7 @@ Click on each package to see its full documentation.
 | `1.26.x`           | :white_check_mark: | Conformance tests passed.                           |
 | `1.27.x`           | :white_check_mark: | Conformance tests passed.                           |
 | `1.28.x`           | :white_check_mark: | Conformance tests passed.                           |
+| `1.29.x`           | :white_check_mark: | Conformance tests passed.                           |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information on previous releases of the module.
 
