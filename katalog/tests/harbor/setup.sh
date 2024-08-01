@@ -79,6 +79,9 @@ load "./../lib/helper"
     info
     test(){
         status=$(kubectl get pods -n registry -l app=harbor -o jsonpath='{range .items[*].status.containerStatuses[*]}{.ready}{"\n"}{end}' | uniq)
+        kubectl get pods -n registry -l app=harbor -o jsonpath='{range .items[*].status.containerStatuses[*]}{.ready}{"\n"}{end}' | uniq >&3
+        kubectl get pods -n registry -l app=harbor >&3
+        kubectl describe pods -n registry -l app=harbor | grep -i events >&3
         if [ "${status}" != "true" ]; then return 1; fi
     }
     loop_it test 30 30

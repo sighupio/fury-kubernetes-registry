@@ -31,6 +31,10 @@ Click on each package to see its full documentation.
 | `1.23.x`           | :white_check_mark: | Conformance tests passed.                           |
 | `1.24.x`           | :white_check_mark: | Conformance tests passed.                           |
 | `1.25.x`           | :white_check_mark: | Conformance tests passed.                           |
+| `1.26.x`           | :white_check_mark: | Conformance tests passed.                           |
+| `1.27.x`           | :white_check_mark: | Conformance tests passed.                           |
+| `1.28.x`           | :white_check_mark: | Conformance tests passed.                           |
+| `1.29.x`           | :white_check_mark: | Conformance tests passed.                           |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information on previous releases of the module.
 
@@ -52,7 +56,7 @@ All packages in this repository have the following dependencies, for package spe
 ```yaml
 bases:
   - name: registry/harbor
-    version: "v3.0.2"
+    version: "v3.1.0"
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
