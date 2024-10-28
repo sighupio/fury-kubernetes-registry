@@ -20,10 +20,12 @@ All the following examples are tested in the pipeline
 
 ### e2e tests
 
-[chartmuseum](../../katalog/tests/harbor/chartmuseum.sh)
-[registry-notary](../../katalog/tests/harbor/registry-notary.sh)
-[registry](../../katalog/tests/harbor/registry.sh)
-[replication](../../katalog/tests/harbor/replication.sh)
+- [setup](../../katalog/tests/harbor/setup.sh)
+- [vulns](../../katalog/tests/harbor/vulns.sh)
+- [chartmuseum](../../katalog/tests/harbor/chartmuseum.sh)
+- [replication](../../katalog/tests/harbor/replication.sh)
+- [registry](../../katalog/tests/harbor/registry.sh)
+- [registry-notary](../../katalog/tests/harbor/registry-notary.sh)
 
 ### Dashboard and Rules
 

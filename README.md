@@ -27,16 +27,12 @@ Click on each package to see its full documentation.
 
 | Kubernetes Version |   Compatibility    | Notes                                               |
 | ------------------ | :----------------: | --------------------------------------------------- |
-| `1.22.x`           | :white_check_mark: | Conformance tests passed.                           |
-| `1.23.x`           | :white_check_mark: | Conformance tests passed.                           |
-| `1.24.x`           | :white_check_mark: | Conformance tests passed.                           |
-| `1.25.x`           | :white_check_mark: | Conformance tests passed.                           |
-| `1.26.x`           | :white_check_mark: | Conformance tests passed.                           |
-| `1.27.x`           | :white_check_mark: | Conformance tests passed.                           |
 | `1.28.x`           | :white_check_mark: | Conformance tests passed.                           |
 | `1.29.x`           | :white_check_mark: | Conformance tests passed.                           |
+| `1.30.x`           | :white_check_mark: | Conformance tests passed.                           |
+| `1.31.x`           | :white_check_mark: | Conformance tests passed.                           |
 
-Check the [compatibility matrix][compatibility-matrix] for additional information on previous releases of the module.
+The table shows the latest 4 compatible versions. Check the [compatibility matrix][compatibility-matrix] for the complete list of all supported versions.
 
 ## Usage
 
@@ -56,7 +52,7 @@ All packages in this repository have the following dependencies, for package spe
 ```yaml
 bases:
   - name: registry/harbor
-    version: "v3.1.0"
+    version: "v3.2.0"
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
