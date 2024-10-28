@@ -3,7 +3,7 @@
 ## What is Harbor?
 
 > Harbor is an open-source container image registry that secures images with role-based access control, scans images
-> for vulnerabilities, and signs images as trusted. As a CNCF Incubating project, Harbor delivers compliance,
+> for vulnerabilities, and signs images as trusted. As a CNCF Graduated-level project, Harbor delivers compliance,
 > performance, and interoperability to help you consistently and securely manage images across cloud-native compute
 > platforms like Kubernetes and Docker.
 
