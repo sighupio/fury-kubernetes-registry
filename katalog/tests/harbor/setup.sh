@@ -89,3 +89,14 @@ load "./../lib/helper"
     [ "$status" -eq 0 ]
 }
 
+@test "[SETUP] Check Harbor Connectivity" {
+   info
+   test(){
+       curl -k -v https://harbor.${EXTERNAL_DNS}/api/v2.0/health >&3
+       kubectl get ingress -n registry >&3
+       kubectl describe ingress -n registry >&3
+   }
+   loop_it test 30 5
+   status=${loop_it_result}
+   [ "$status" -eq 0 ]
+}

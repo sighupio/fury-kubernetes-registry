@@ -83,7 +83,7 @@ load "./../lib/helper"
         if [ "${vulns}" == "null" ]; then echo "#     No vulnerabilities found. Retrying" >&3; return 1; fi
         if [ "${vulns}" -eq "0" ]; then echo "#     No vulnerabilities found. Retrying" >&3; return 1; fi
     }
-    loop_it test 30 30
+    loop_it test 10 10
     status=${loop_it_result}
     [ "$status" -eq 0 ]
 }
