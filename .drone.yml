@@ -355,9 +355,9 @@ steps:
         path: /var/run/docker.sock
     environment:
       KIND_CONFIG: ./katalog/tests/harbor/config/kind-config
-      CLUSTER_VERSION: v1.30.0
-      KUBECONFIG: kubeconfig-harbor-v1.30.0
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.0
+      CLUSTER_VERSION: v1.30.4
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.4
     commands:
       - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config $${KIND_CONFIG}
       - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
@@ -367,7 +367,7 @@ steps:
     pull: always
     network_mode: host
     environment:
-      KUBECONFIG: kubeconfig-harbor-v1.30.0
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
       TEST_DOMAIN: "127.0.0.1.nip.io"
     depends_on:
       - create-kind-cluster
@@ -380,7 +380,7 @@ steps:
     pull: always
     network_mode: host
     environment:
-      KUBECONFIG: kubeconfig-harbor-v1.30.0
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
       TEST_DOMAIN: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
@@ -392,7 +392,7 @@ steps:
     pull: always
     network_mode: host
     environment:
-      KUBECONFIG: kubeconfig-harbor-v1.30.0
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
       TEST_DOMAIN: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
@@ -404,7 +404,7 @@ steps:
     pull: always
     network_mode: host
     environment:
-      KUBECONFIG: kubeconfig-harbor-v1.30.0
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
       TEST_DOMAIN: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
@@ -419,7 +419,7 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      KUBECONFIG: kubeconfig-harbor-v1.30.0
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
       TEST_DOMAIN: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
@@ -433,7 +433,7 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.4
     commands:
       - kind delete cluster --name $${CLUSTER_NAME} || true
     depends_on:
