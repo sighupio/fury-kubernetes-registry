@@ -374,6 +374,7 @@ steps:
     depends_on:
       - create-kind-cluster
     commands:
+      - curl -LOs https://github.com/sighupio/furyctl/releases/download/v0.11.1/furyctl-linux-amd64 && chmod +x furyctl-linux-amd64 && mv furyctl-linux-amd64 /usr/local/bin/furyctl
       - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
       - bats -t katalog/tests/harbor/setup.sh
 
@@ -502,6 +503,7 @@ steps:
     depends_on:
       - create-kind-cluster
     commands:
+      - curl -LOs https://github.com/sighupio/furyctl/releases/download/v0.11.1/furyctl-linux-amd64 && chmod +x furyctl-linux-amd64 && mv furyctl-linux-amd64 /usr/local/bin/furyctl
       - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
       - bats -t katalog/tests/harbor/setup.sh
 
