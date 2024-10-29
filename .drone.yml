@@ -63,7 +63,7 @@ steps:
     depends_on:
       - render
     commands:
-      # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
+      # Using --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
       - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.28.0
       - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.29.0
       - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.30.0
@@ -113,7 +113,8 @@ steps:
     network_mode: host
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.28.0
-      EXTERNAL_DNS: "127.0.0.1.nip.io"
+      # Using nip.io DNS wildcard service to resolve <harbor-domain>.127.0.0.1.nip.io to localhost where Kind exposes services.
+      TEST_DOMAIN: "127.0.0.1.nip.io"
     depends_on:
       - create-kind-cluster
     commands:
@@ -126,7 +127,7 @@ steps:
     network_mode: host
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.28.0
-      EXTERNAL_DNS: "127.0.0.1.nip.io"
+      TEST_DOMAIN: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
     commands:
@@ -138,7 +139,7 @@ steps:
     network_mode: host
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.28.0
-      EXTERNAL_DNS: "127.0.0.1.nip.io"
+      TEST_DOMAIN: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
     commands:
@@ -150,7 +151,7 @@ steps:
     network_mode: host
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.28.0
-      EXTERNAL_DNS: "127.0.0.1.nip.io"
+      TEST_DOMAIN: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
     commands:
@@ -165,7 +166,7 @@ steps:
         path: /var/run/docker.sock
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.28.0
-      EXTERNAL_DNS: "127.0.0.1.nip.io"
+      TEST_DOMAIN: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
     commands:
@@ -197,12 +198,396 @@ volumes:
       path: /var/run/docker.sock
 
 ---
+name: e2e-kubernetes-1.29
+kind: pipeline
+type: docker
+
+depends_on:
+  - policeman
+
+clone:
+  depth: 1
+
+platform:
+  os: linux
+  arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/tags/**
+
+steps:
+  - name: create-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    pull: always
+    depends_on:
+      - clone
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      KIND_CONFIG: ./katalog/tests/harbor/config/kind-config
+      CLUSTER_VERSION: v1.29.0
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.29.0
+    commands:
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config $${KIND_CONFIG}
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e-setup
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - create-kind-cluster
+    commands:
+      - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
+      - bats -t katalog/tests/harbor/setup.sh
+
+  - name: e2e-vulns
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/vulns.sh
+
+  - name: e2e-chartmuseum
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/chartmuseum.sh
+
+  - name: e2e-replication
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/replication.sh
+
+  - name: e2e-registry
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    pull: always
+    network_mode: host
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/registry.sh
+      - bats -t katalog/tests/harbor/registry-notary.sh
+
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.29.0
+    commands:
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e-vulns
+      - e2e-chartmuseum
+      - e2e-replication
+      - e2e-registry
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
+
+---
+name: e2e-kubernetes-1.30
+kind: pipeline
+type: docker
+
+depends_on:
+  - policeman
+
+clone:
+  depth: 1
+
+platform:
+  os: linux
+  arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/tags/**
+
+steps:
+  - name: create-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.30.5_3.10.0
+    pull: always
+    depends_on:
+      - clone
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      KIND_CONFIG: ./katalog/tests/harbor/config/kind-config
+      CLUSTER_VERSION: v1.30.0
+      KUBECONFIG: kubeconfig-harbor-v1.30.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.0
+    commands:
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config $${KIND_CONFIG}
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e-setup
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.30.5_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.30.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - create-kind-cluster
+    commands:
+      - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
+      - bats -t katalog/tests/harbor/setup.sh
+
+  - name: e2e-vulns
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.30.5_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.30.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/vulns.sh
+
+  - name: e2e-chartmuseum
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.30.5_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.30.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/chartmuseum.sh
+
+  - name: e2e-replication
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.30.5_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.30.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/replication.sh
+
+  - name: e2e-registry
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.30.5_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.30.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/registry.sh
+      - bats -t katalog/tests/harbor/registry-notary.sh
+
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.30.5_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.0
+    commands:
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e-vulns
+      - e2e-chartmuseum
+      - e2e-replication
+      - e2e-registry
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
+
+---
+name: e2e-kubernetes-1.31
+kind: pipeline
+type: docker
+
+depends_on:
+  - policeman
+
+clone:
+  depth: 1
+
+platform:
+  os: linux
+  arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/tags/**
+
+steps:
+  - name: create-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.24.0_1.31.1_3.10.0
+    pull: always
+    depends_on:
+      - clone
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      KIND_CONFIG: ./katalog/tests/harbor/config/kind-config
+      CLUSTER_VERSION: v1.31.0
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.31.0
+    commands:
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config $${KIND_CONFIG}
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e-setup
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.31.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - create-kind-cluster
+    commands:
+      - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
+      - bats -t katalog/tests/harbor/setup.sh
+
+  - name: e2e-vulns
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.31.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/vulns.sh
+
+  - name: e2e-chartmuseum
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.31.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/chartmuseum.sh
+
+  - name: e2e-replication
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.31.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/replication.sh
+
+  - name: e2e-registry
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.31.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - bats -t katalog/tests/harbor/registry.sh
+      - bats -t katalog/tests/harbor/registry-notary.sh
+
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.24.0_1.31.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.31.0
+    commands:
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e-vulns
+      - e2e-chartmuseum
+      - e2e-replication
+      - e2e-registry
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
+
+---
 name: release
 kind: pipeline
 type: docker
 
 depends_on:
   - e2e-kubernetes-1.28
+  - e2e-kubernetes-1.28
+  - e2e-kubernetes-1.30
+  - e2e-kubernetes-1.31
 
 platform:
   os: linux

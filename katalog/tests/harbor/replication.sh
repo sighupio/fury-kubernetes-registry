@@ -10,12 +10,12 @@ load "./../lib/helper"
 @test "[REPLICATION] Setup upstream" {
     info
     setup(){
-        curl -k -X POST "https://harbor.${EXTERNAL_DNS}/api/v2.0/registries" \
+        curl -k -X POST "https://harbor.${TEST_DOMAIN}/api/v2.0/registries" \
             -H  "accept: application/json" \
             -H "Content-Type: application/json" \
             --data '{"name":"dockerhub","type":"docker-hub","url":"https://hub.docker.com","insecure":true}' \
             --user "admin:Harbor12345" --fail
-        curl -k -X POST "https://harbor.${EXTERNAL_DNS}/api/v2.0/registries/ping" \
+        curl -k -X POST "https://harbor.${TEST_DOMAIN}/api/v2.0/registries/ping" \
             -H  "accept: application/json" \
             -H "Content-Type: application/json" \
             --data '{"name":"dockerhub","type":"docker-hub","url":"https://hub.docker.com","insecure":true}' \
@@ -28,10 +28,10 @@ load "./../lib/helper"
 @test "[REPLICATION] Setup testing replication policy" {
     info
     setup(){
-        docker_hub_registry_id=$(curl -k -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/registries" \
+        docker_hub_registry_id=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/registries" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r .[0].id)
-        curl -k -X POST "https://harbor.${EXTERNAL_DNS}/api/v2.0/replication/policies" \
+        curl -k -X POST "https://harbor.${TEST_DOMAIN}/api/v2.0/replication/policies" \
             -H  "accept: application/json" \
             -H "Content-Type: application/json" \
             --data '{"name":"test-from-dockerhub","src_registry":{"id":'"${docker_hub_registry_id}"'},"dest_registry":{"id":0},"dest_namespace":"library","filters":[{"type":"name","value":"nginx/nginx-prometheus-exporter"},{"type":"tag","value":"0.4.*"}],"trigger":{"type":"manual"},"deletion":false,"override":true,"enabled":true}' \
@@ -45,10 +45,10 @@ load "./../lib/helper"
 @test "[REPLICATION] Start test replication policy" {
     info
     start(){
-        replication_policy_id=$(curl -k -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/replication/policies" \
+        replication_policy_id=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/replication/policies" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r .[0].id)
-        curl -k -X POST "https://harbor.${EXTERNAL_DNS}/api/v2.0/replication/executions" \
+        curl -k -X POST "https://harbor.${TEST_DOMAIN}/api/v2.0/replication/executions" \
             -H  "accept: application/json" \
             -H "Content-Type: application/json" \
             --data '{"policy_id":'"${replication_policy_id}"'}' \
@@ -61,13 +61,13 @@ load "./../lib/helper"
 @test "[REPLICATION] Check replication execution" {
     info
     test(){
-        replication_policy_id=$(curl -k -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/replication/policies" \
+        replication_policy_id=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/replication/policies" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r .[0].id)
-        replication_execution_id=$(curl -k -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/replication/executions?policy_id=${replication_policy_id}" \
+        replication_execution_id=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/replication/executions?policy_id=${replication_policy_id}" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r .[0].id)
-        replication_execution_status=$(curl -k -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/replication/executions/${replication_execution_id}" \
+        replication_execution_status=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/replication/executions/${replication_execution_id}" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r .status)
         if [ "${replication_execution_status}" != "Succeed" ]; then return 1; fi
@@ -80,7 +80,7 @@ load "./../lib/helper"
 @test "[REPLICATION] Check replicated images are available in harbor" {
     info
     test(){
-        curl -k -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/projects/library/repositories/nginx-prometheus-exporter/artifacts/0.4.0" \
+        curl -k -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/projects/library/repositories/nginx-prometheus-exporter/artifacts/0.4.0" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail
     }
@@ -91,16 +91,16 @@ load "./../lib/helper"
 @test "[REPLICATION] Delete" {
     info
     delete(){
-        replication_policy_id=$(curl -k -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/replication/policies" \
+        replication_policy_id=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/replication/policies" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r .[0].id)
-        curl -k -X DELETE "https://harbor.${EXTERNAL_DNS}/api/v2.0/replication/policies/${replication_policy_id}" \
+        curl -k -X DELETE "https://harbor.${TEST_DOMAIN}/api/v2.0/replication/policies/${replication_policy_id}" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail
-        registry_id=$(curl -k -s -X GET "https://harbor.${EXTERNAL_DNS}/api/v2.0/registries" \
+        registry_id=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/registries" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r .[0].id)
-        curl -k -X DELETE "https://harbor.${EXTERNAL_DNS}/api/v2.0/registries/${registry_id}" \
+        curl -k -X DELETE "https://harbor.${TEST_DOMAIN}/api/v2.0/registries/${registry_id}" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail
     }

@@ -52,7 +52,7 @@ load "./../lib/helper"
     [ "$status" -eq 0 ]
 }
 
-@test "[SETUP] requirements - Prepare Harbor manifests (externalIP)" {
+@test "[SETUP] requirements - Prepare Harbor manifests" {
     info
     files_to_change="""
     examples/full-harbor/kustomization.yaml
@@ -61,7 +61,7 @@ load "./../lib/helper"
     """
     for file in ${files_to_change}
     do
-        sed -i'' -e 's/%YOUR_DOMAIN%/'"${EXTERNAL_DNS}"'/g' "${file}"
+        sed -i'' -e 's/%YOUR_DOMAIN%/'"${TEST_DOMAIN}"'/g' "${file}"
     done
 }
 
@@ -89,10 +89,10 @@ load "./../lib/helper"
     [ "$status" -eq 0 ]
 }
 
-@test "[SETUP] Check Harbor Connectivity" {
+@test "[SETUP] Check Harbor connectivity" {
    info
    test(){
-       curl -k -v https://harbor.${EXTERNAL_DNS}/api/v2.0/health >&3
+       curl -k -v https://harbor."${TEST_DOMAIN}"/api/v2.0/health >&3
        kubectl get ingress -n registry >&3
        kubectl describe ingress -n registry >&3
    }
