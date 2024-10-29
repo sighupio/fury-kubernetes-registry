@@ -20,7 +20,7 @@ load "./../lib/helper"
        helm fetch stable/nginx-ingress --version 1.36.2
        
        echo "Testing Harbor connection" >&3
-       curl -k -v https://harbor.${EXTERNAL_DNS}/api/v2.0/health >&3
+       curl -k -v https://harbor."${EXTERNAL_DNS}"/api/v2.0/health >&3
        
        echo "Adding Harbor repo" >&3
        helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor."${EXTERNAL_DNS}"/chartrepo/library --insecure-skip-tls-verify
