@@ -8,16 +8,28 @@
 load "./../lib/helper"
 
 @test "[CHARTS] Setup" {
-    info
-    setup(){
-        helm repo add stable https://charts.helm.sh/stable 
-        helm plugin install https://github.com/chartmuseum/helm-push
-        helm fetch stable/nginx-ingress --version 1.36.2
-        helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor."${EXTERNAL_DNS}"/chartrepo/library --insecure-skip-tls-verify
-    }
-    run setup
-    [ "$status" -eq 0 ]
+   info
+   setup(){
+       echo "Adding stable repo" >&3
+       helm repo add stable https://charts.helm.sh/stable
+       
+       echo "Installing helm-push plugin" >&3
+       helm plugin install https://github.com/chartmuseum/helm-push
+       
+       echo "Fetching nginx-ingress" >&3
+       helm fetch stable/nginx-ingress --version 1.36.2
+       
+       echo "Testing Harbor connection" >&3
+       curl -k -v https://harbor.${EXTERNAL_DNS}/api/v2.0/health >&3
+       
+       echo "Adding Harbor repo" >&3
+       helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor."${EXTERNAL_DNS}"/chartrepo/library --insecure-skip-tls-verify
+   }
+   run setup
+   echo "Setup output: $output" >&3
+   [ "$status" -eq 0 ]
 }
+
 
 @test "[CHARTS] Push nginx ingress chart to Harbor" {
     info

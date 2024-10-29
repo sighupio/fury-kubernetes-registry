@@ -126,6 +126,7 @@ steps:
     network_mode: host
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.28.0
+      EXTERNAL_DNS: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
     commands:
@@ -137,6 +138,7 @@ steps:
     network_mode: host
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.28.0
+      EXTERNAL_DNS: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
     commands:
@@ -148,6 +150,7 @@ steps:
     network_mode: host
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.28.0
+      EXTERNAL_DNS: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
     commands:
@@ -162,6 +165,7 @@ steps:
         path: /var/run/docker.sock
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.28.0
+      EXTERNAL_DNS: "127.0.0.1.nip.io"
     depends_on:
       - e2e-setup
     commands:
