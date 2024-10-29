@@ -113,6 +113,7 @@ steps:
     network_mode: host
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.28.0
+      EXTERNAL_DNS: "127.0.0.1.nip.io"
     depends_on:
       - create-kind-cluster
     commands:
