@@ -21,7 +21,7 @@ load "./../lib/helper"
     info
     install_ingress(){
         cd katalog/tests/harbor/config
-        furyctl vendor -H
+        furyctl legacy vendor -H
         cd -
         kustomize build katalog/tests/harbor/config | kubectl apply -f -
     }

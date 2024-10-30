@@ -108,21 +108,24 @@ steps:
       - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
 
   - name: e2e-setup
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
     pull: always
     network_mode: host
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.28.0
       # Using nip.io DNS wildcard service to resolve <harbor-domain>.127.0.0.1.nip.io to localhost where Kind exposes services.
       TEST_DOMAIN: "127.0.0.1.nip.io"
+      FURYCTL_VERSION: v0.29.10
     depends_on:
       - create-kind-cluster
     commands:
+      - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
+      - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
       - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
       - bats -t katalog/tests/harbor/setup.sh
 
   - name: e2e-vulns
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
     pull: always
     network_mode: host
     environment:
@@ -134,7 +137,7 @@ steps:
       - bats -t katalog/tests/harbor/vulns.sh
 
   - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
     pull: always
     network_mode: host
     environment:
@@ -146,7 +149,7 @@ steps:
       - bats -t katalog/tests/harbor/chartmuseum.sh
 
   - name: e2e-replication
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
     pull: always
     network_mode: host
     environment:
@@ -158,7 +161,7 @@ steps:
       - bats -t katalog/tests/harbor/replication.sh
 
   - name: e2e-registry
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
     pull: always
     network_mode: host
     volumes:
@@ -237,20 +240,23 @@ steps:
       - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
 
   - name: e2e-setup
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
     pull: always
     network_mode: host
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.29.0
       TEST_DOMAIN: "127.0.0.1.nip.io"
+      FURYCTL_VERSION: v0.29.10
     depends_on:
       - create-kind-cluster
     commands:
+      - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
+      - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
       - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
       - bats -t katalog/tests/harbor/setup.sh
 
   - name: e2e-vulns
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
     pull: always
     network_mode: host
     environment:
@@ -262,7 +268,7 @@ steps:
       - bats -t katalog/tests/harbor/vulns.sh
 
   - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
     pull: always
     network_mode: host
     environment:
@@ -274,7 +280,7 @@ steps:
       - bats -t katalog/tests/harbor/chartmuseum.sh
 
   - name: e2e-replication
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
     pull: always
     network_mode: host
     environment:
@@ -286,7 +292,7 @@ steps:
       - bats -t katalog/tests/harbor/replication.sh
 
   - name: e2e-registry
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.29.1_3.5.3_4.33.3
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
     pull: always
     network_mode: host
     volumes:
@@ -371,10 +377,12 @@ steps:
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.30.4
       TEST_DOMAIN: "127.0.0.1.nip.io"
+      FURYCTL_VERSION: v0.29.10
     depends_on:
       - create-kind-cluster
     commands:
-      - curl -LOs https://github.com/sighupio/furyctl/releases/download/v0.11.1/furyctl-linux-amd64 && chmod +x furyctl-linux-amd64 && mv furyctl-linux-amd64 /usr/local/bin/furyctl
+      - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
+      - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
       - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
       - bats -t katalog/tests/harbor/setup.sh
 
@@ -500,10 +508,12 @@ steps:
     environment:
       KUBECONFIG: kubeconfig-harbor-v1.31.0
       TEST_DOMAIN: "127.0.0.1.nip.io"
+      FURYCTL_VERSION: v0.29.10
     depends_on:
       - create-kind-cluster
     commands:
-      - curl -LOs https://github.com/sighupio/furyctl/releases/download/v0.11.1/furyctl-linux-amd64 && chmod +x furyctl-linux-amd64 && mv furyctl-linux-amd64 /usr/local/bin/furyctl
+      - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
+      - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
       - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
       - bats -t katalog/tests/harbor/setup.sh
 
