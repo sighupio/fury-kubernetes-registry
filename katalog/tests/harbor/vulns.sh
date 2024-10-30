@@ -28,7 +28,7 @@ load "./../lib/helper"
 @test "[VULNS] Check insecure image is in the registry" {
     info
     test(){
-        tag=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/projects/library/repositories/web-dvwa/artifacts/1.9/tags" \
+        tag=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}:${HTTPS_PORT}/api/v2.0/projects/library/repositories/web-dvwa/artifacts/1.9/tags" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r '.[0].name')
         if [ "${tag}" != "1.9" ]; then return 1; fi
@@ -40,7 +40,7 @@ load "./../lib/helper"
 @test "[VULNS] Check scanner status" {
     info
     test(){
-        health=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/projects/1/scanner" \
+        health=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}:${HTTPS_PORT}/api/v2.0/projects/1/scanner" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r '.health')
         if [ "${health}" != "healthy" ]; then return 1; fi
@@ -54,7 +54,7 @@ load "./../lib/helper"
     test(){
         # Trigger Scan
         echo "#   Trigger the scan" >&3
-        curl -k -X POST "https://harbor.${TEST_DOMAIN}/api/v2.0/projects/library/repositories/web-dvwa/artifacts/1.9/scan" \
+        curl -k -X POST "https://harbor.${TEST_DOMAIN}:${HTTPS_PORT}/api/v2.0/projects/library/repositories/web-dvwa/artifacts/1.9/scan" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail
         # Wait for scan
@@ -65,7 +65,7 @@ load "./../lib/helper"
         echo "#   Wait to get the scan report" >&3
         while [[ "${scan_status}" != "Success" ]] && [[ "${retries}" -lt ${mas_retries} ]]
         do
-            scan_status=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/projects/library/repositories/web-dvwa/artifacts/1.9?with_scan_overview=true" \
+            scan_status=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}:${HTTPS_PORT}/api/v2.0/projects/library/repositories/web-dvwa/artifacts/1.9?with_scan_overview=true" \
                 -H  "accept: application/json" \
                 -H 'x-accept-vulnerabilities: application/vnd.security.vulnerability.report; version=1.1' \
                 --user "admin:Harbor12345" --fail | jq -r '.scan_overview["application/vnd.security.vulnerability.report; version=1.1"].scan_status')
@@ -75,7 +75,7 @@ load "./../lib/helper"
         if [ "${scan_status}" != "Success" ]; then return 1; fi
         # See scan report
         echo "#   Checking scan report" >&3
-        vulns=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/projects/library/repositories/web-dvwa/artifacts/1.9?with_scan_overview=true" \
+        vulns=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}:${HTTPS_PORT}/api/v2.0/projects/library/repositories/web-dvwa/artifacts/1.9?with_scan_overview=true" \
             -H  "accept: application/json" \
             -H 'x-accept-vulnerabilities: application/vnd.security.vulnerability.report; version=1.1, application/vnd.scanner.adapter.vuln.report.harbor+json; version=1.0' \
             --user "admin:Harbor12345" --fail | jq -r '.scan_overview["application/vnd.security.vulnerability.report; version=1.1"].summary.total')

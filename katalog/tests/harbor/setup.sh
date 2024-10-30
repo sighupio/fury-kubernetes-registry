@@ -61,7 +61,8 @@ load "./../lib/helper"
     """
     for file in ${files_to_change}
     do
-        sed -i'' -e 's/%YOUR_DOMAIN%/'"${TEST_DOMAIN}"'/g' "${file}"
+        sed -i'' -e 's/%YOUR_DOMAIN%/'"${TEST_DOMAIN}"'/g; s/%YOUR_PORT%/'"${HTTPS_PORT}"'/g' "${file}"
+
     done
 }
 

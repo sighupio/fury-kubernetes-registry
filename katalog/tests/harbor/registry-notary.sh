@@ -18,7 +18,7 @@ load "./../lib/helper"
 @test "[NOTARY] Setup" {
     info
     setup(){
-        curl -k -X PUT "https://harbor.${TEST_DOMAIN}/api/v2.0/projects/library" \
+        curl -k -X PUT "https://harbor.${TEST_DOMAIN}:${HTTPS_PORT}/api/v2.0/projects/library" \
             -H  "accept: application/json" \
             -H "Content-Type: application/json" \
             --data '{"metadata": {"enable_content_trust": "true","enable_content_trust_cosign": "true"}}' \

@@ -40,10 +40,10 @@ load "./../lib/helper"
 @test "[CHARTS] Check nginx ingress is in chartmuseum" {
     info
     test(){
-        name=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/search?q=nginx-ingress" \
+        name=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}:${HTTPS_PORT}/api/v2.0/search?q=nginx-ingress" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r '.chart[0].Chart.name')
-        version=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}/api/v2.0/search?q=nginx-ingress" \
+        version=$(curl -k -s -X GET "https://harbor.${TEST_DOMAIN}:${HTTPS_PORT}/api/v2.0/search?q=nginx-ingress" \
             -H  "accept: application/json" \
             --user "admin:Harbor12345" --fail | jq -r '.chart[0].Chart.version')
         if [ "${name}" != "library/nginx-ingress" ]; then return 1; fi

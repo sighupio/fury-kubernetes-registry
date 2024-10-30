@@ -90,6 +90,12 @@ trigger:
       - refs/tags/**
 
 steps:
+  - name: generate-kind-config
+    image: alpine:latest
+    pull: always
+    commands:
+      - sh ./katalog/tests/harbor/config/generate-template.sh v1.28.0
+
   - name: create-kind-cluster
     image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
     pull: always
@@ -99,12 +105,11 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      KIND_CONFIG: ./katalog/tests/harbor/config/kind-config
       CLUSTER_VERSION: v1.28.0
       KUBECONFIG: kubeconfig-harbor-v1.28.0
       CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.28.0
     commands:
-      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config $${KIND_CONFIG}
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config ./config-$${CLUSTER_NAME}.yaml
       - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
 
   - name: e2e-setup
@@ -222,6 +227,12 @@ trigger:
       - refs/tags/**
 
 steps:
+  - name: generate-kind-config
+    image: alpine:latest
+    pull: always
+    commands:
+      - sh ./katalog/tests/harbor/config/generate-template.sh v1.29.0
+
   - name: create-kind-cluster
     image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
     pull: always
@@ -231,12 +242,11 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      KIND_CONFIG: ./katalog/tests/harbor/config/kind-config
       CLUSTER_VERSION: v1.29.0
       KUBECONFIG: kubeconfig-harbor-v1.29.0
       CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.29.0
     commands:
-      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config $${KIND_CONFIG}
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config ./config-$${CLUSTER_NAME}.yaml
       - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
 
   - name: e2e-setup
@@ -353,6 +363,12 @@ trigger:
       - refs/tags/**
 
 steps:
+  - name: generate-kind-config
+    image: alpine:latest
+    pull: always
+    commands:
+      - sh ./katalog/tests/harbor/config/generate-template.sh v1.30.4
+
   - name: create-kind-cluster
     image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.30.5_3.10.0
     pull: always
@@ -362,12 +378,11 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      KIND_CONFIG: ./katalog/tests/harbor/config/kind-config
       CLUSTER_VERSION: v1.30.4
       KUBECONFIG: kubeconfig-harbor-v1.30.4
       CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.4
     commands:
-      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config $${KIND_CONFIG}
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config ./config-$${CLUSTER_NAME}.yaml
       - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
 
   - name: e2e-setup
@@ -484,6 +499,12 @@ trigger:
       - refs/tags/**
 
 steps:
+  - name: generate-kind-config
+    image: alpine:latest
+    pull: always
+    commands:
+      - sh ./katalog/tests/harbor/config/generate-template.sh v1.31.0
+
   - name: create-kind-cluster
     image: quay.io/sighup/dind-kind-kubectl-kustomize:0.24.0_1.31.1_3.10.0
     pull: always
@@ -493,12 +514,11 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      KIND_CONFIG: ./katalog/tests/harbor/config/kind-config
       CLUSTER_VERSION: v1.31.0
       KUBECONFIG: kubeconfig-harbor-v1.31.0
       CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.31.0
     commands:
-      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config $${KIND_CONFIG}
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config ./config-$${CLUSTER_NAME}.yaml
       - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
 
   - name: e2e-setup
