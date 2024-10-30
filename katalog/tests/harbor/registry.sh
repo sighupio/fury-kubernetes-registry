@@ -19,7 +19,7 @@ load "./../lib/helper"
 @test "[REGISTRY] Deploy busybox image" {
     info
     deploy(){
-        skopeo copy docker://library/busybox:1.31 docker://harbor."${TEST_DOMAIN}"/library/busybox:1.31 --insecure-policy --tls-verify=false
+        skopeo copy docker://library/busybox:1.31 docker://harbor."${TEST_DOMAIN}":"${HTTPS_PORT}"/library/busybox:1.31 --insecure-policy --tls-verify=false
     }
     run deploy
     [ "$status" -eq 0 ]

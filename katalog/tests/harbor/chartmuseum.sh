@@ -17,9 +17,9 @@ load "./../lib/helper"
        echo "Fetching nginx-ingress" >&3
        helm fetch stable/nginx-ingress --version 1.36.2
        echo "Testing Harbor connection" >&3
-       curl -k -v https://harbor."${TEST_DOMAIN}"/api/v2.0/health >&3
+       curl -k -v https://harbor."${TEST_DOMAIN}":"${HTTPS_PORT}"/api/v2.0/health >&3
        echo "Adding Harbor repo" >&3
-       helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor."${TEST_DOMAIN}"/chartrepo/library --insecure-skip-tls-verify
+       helm repo add --username=admin --password=Harbor12345 harbor-test https://harbor."${TEST_DOMAIN}":"${HTTPS_PORT}"/chartrepo/library --insecure-skip-tls-verify
    }
    run setup
    echo "Setup output: $output" >&3

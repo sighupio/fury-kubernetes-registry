@@ -93,7 +93,7 @@ load "./../lib/helper"
 @test "[SETUP] Check Harbor connectivity" {
    info
    test(){
-       curl -k -v https://harbor."${TEST_DOMAIN}"/api/v2.0/health >&3
+       curl -k -v https://harbor."${TEST_DOMAIN}":"${HTTPS_PORT}"/api/v2.0/health >&3
        kubectl get ingress -n registry >&3
        kubectl describe ingress -n registry >&3
    }

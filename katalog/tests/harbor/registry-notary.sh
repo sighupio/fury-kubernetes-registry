@@ -31,7 +31,7 @@ load "./../lib/helper"
 @test "[NOTARY] Try to pull unsigned image" {
     info
     pull(){
-        skopeo copy docker://harbor."${TEST_DOMAIN}"/library/busybox:1.31 dir:"$HOME"/busybox:1.31 --insecure-policy --tls-verify=false
+        skopeo copy docker://harbor."${TEST_DOMAIN}":"${HTTPS_PORT}"/library/busybox:1.31 dir:"$HOME"/busybox:1.31 --insecure-policy --tls-verify=false
     }
     run pull
     [[ "$status" -ne 0 ]]

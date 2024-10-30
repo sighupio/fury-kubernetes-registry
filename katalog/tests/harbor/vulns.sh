@@ -19,7 +19,7 @@ load "./../lib/helper"
 @test "[VULNS] Deploy insecure image" {
     info
     deploy(){
-        skopeo copy docker://vulnerables/web-dvwa:1.9 docker://harbor."${TEST_DOMAIN}"/library/web-dvwa:1.9 --insecure-policy --tls-verify=false
+        skopeo copy docker://vulnerables/web-dvwa:1.9 docker://harbor."${TEST_DOMAIN}":"${HTTPS_PORT}"/library/web-dvwa:1.9 --insecure-policy --tls-verify=false
     }
     run deploy
     [ "$status" -eq 0 ]
