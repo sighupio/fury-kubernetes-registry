@@ -124,6 +124,7 @@ steps:
     depends_on:
       - create-kind-cluster
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
       - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
       - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
@@ -139,6 +140,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/vulns.sh
 
   - name: e2e-chartmuseum
@@ -151,6 +153,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/chartmuseum.sh
 
   - name: e2e-replication
@@ -163,6 +166,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/replication.sh
 
   - name: e2e-registry
@@ -178,6 +182,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
 
@@ -260,6 +265,7 @@ steps:
     depends_on:
       - create-kind-cluster
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
       - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
       - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
@@ -275,6 +281,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/vulns.sh
 
   - name: e2e-chartmuseum
@@ -287,6 +294,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/chartmuseum.sh
 
   - name: e2e-replication
@@ -299,6 +307,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/replication.sh
 
   - name: e2e-registry
@@ -314,6 +323,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
 
@@ -396,6 +406,7 @@ steps:
     depends_on:
       - create-kind-cluster
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
       - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
       - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
@@ -411,6 +422,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/vulns.sh
 
   - name: e2e-chartmuseum
@@ -423,6 +435,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/chartmuseum.sh
 
   - name: e2e-replication
@@ -435,6 +448,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/replication.sh
 
   - name: e2e-registry
@@ -450,6 +464,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
 
@@ -532,6 +547,7 @@ steps:
     depends_on:
       - create-kind-cluster
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
       - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
       - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
@@ -547,6 +563,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/vulns.sh
 
   - name: e2e-chartmuseum
@@ -559,6 +576,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/chartmuseum.sh
 
   - name: e2e-replication
@@ -571,6 +589,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/replication.sh
 
   - name: e2e-registry
@@ -586,6 +605,7 @@ steps:
     depends_on:
       - e2e-setup
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
 
