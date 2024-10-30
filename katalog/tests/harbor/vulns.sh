@@ -10,7 +10,7 @@ load "./../lib/helper"
 @test "[VULNS] Setup" {
     info
     setup(){
-        skopeo login harbor."${TEST_DOMAIN}" -u admin -p Harbor12345 --tls-verify=false
+        skopeo login harbor."${TEST_DOMAIN}":"${HTTPS_PORT}" -u admin -p Harbor12345 --tls-verify=false
     }
     run setup
     [ "$status" -eq 0 ]
