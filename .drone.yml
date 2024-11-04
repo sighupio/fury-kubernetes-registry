@@ -6,6 +6,9 @@ name: license
 kind: pipeline
 type: docker
 
+clone:
+  depth: 1
+
 steps:
   - name: check
     image: docker.io/library/golang:1.20
@@ -13,10 +16,14 @@ steps:
     commands:
       - go install github.com/google/addlicense@v1.1.1
       - addlicense -c "SIGHUP s.r.l" -v -l bsd --check .
+
 ---
 name: policeman
 kind: pipeline
 type: docker
+
+clone:
+  depth: 1
 
 platform:
   os: linux
@@ -43,7 +50,7 @@ steps:
       - clone
 
   - name: render
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.31.1_3.10.0_4.33.3
     pull: always
     depends_on:
       - clone
@@ -56,443 +63,22 @@ steps:
     depends_on:
       - render
     commands:
-      # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
-      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.26.0
-      # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
-      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.27.0
-      # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
+      # Using --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
       - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.28.0
-      # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
       - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.29.0
+      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.30.0
+      - /pluto detect distribution.yml --ignore-deprecations --target-versions=k8s=v1.31.0
 
----
-name: e2e-kubernetes-1.26
-kind: pipeline
-type: docker
-
-depends_on:
-  - policeman
-
-node:
-  runner: internal
-
-platform:
-  os: linux
-  arch: amd64
-
-trigger:
-  ref:
-    include:
-      - refs/tags/**
-
-steps:
-  - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v2.1.0
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [clone]
-    settings:
-      action: custom-cluster-126
-      pipeline_id: cluster-126
-      local_kind_config_path: katalog/tests/harbor/config/kind-config
-      cluster_version: "1.26.6"
-      instance_path: /shared
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-setup
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [init]
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-126
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/setup.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-vulns
-    image: quay.io/sighup/skopeo:v1.0.0
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - apt update
-      - apt install curl jq git bash ca-certificates -y
-      - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
-      - cd /tmp/bats-core
-      - git checkout v1.1.0
-      - ./install.sh /usr/local
-      - cd -
-      - export KUBECONFIG=/shared/kube/kubeconfig-126
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/vulns.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-126
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/chartmuseum.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-replication
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-126
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/replication.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-registry
-    image: quay.io/sighup/skopeo:v1.0.0
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - apt update
-      - apt install curl jq git bash ca-certificates -y
-      - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
-      - cd /tmp/bats-core
-      - git checkout v1.1.0
-      - ./install.sh /usr/local
-      - cd -
-      - export KUBECONFIG=/shared/kube/kubeconfig-126
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/registry.sh
-      - bats -t katalog/tests/harbor/registry-notary.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.26.4
-    pull: always
-    depends_on: [e2e-vulns, e2e-chartmuseum, e2e-replication, e2e-registry]
-    settings:
-      action: destroy
-      pipeline_id: cluster-126
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-    when:
-      status:
-        - success
-        - failure
-
-volumes:
-  - name: shared
-    temp: {}
-  - name: dockersock
-    host:
-      path: /var/run/docker.sock
----
-name: e2e-kubernetes-1.27
-kind: pipeline
-type: docker
-
-node:
-  runner: internal
-
-depends_on:
-  - policeman
-
-platform:
-  os: linux
-  arch: amd64
-
-trigger:
-  ref:
-    include:
-      - refs/tags/**
-
-steps:
-  - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v2.1.0
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [clone]
-    settings:
-      action: custom-cluster-127
-      pipeline_id: cluster-127
-      local_kind_config_path: katalog/tests/harbor/config/kind-config
-      cluster_version: "1.27.3"
-      instance_path: /shared
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-setup
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [init]
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-127
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/setup.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-vulns
-    image: quay.io/sighup/skopeo:v1.0.0
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - apt update
-      - apt install curl jq git bash ca-certificates -y
-      - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
-      - cd /tmp/bats-core
-      - git checkout v1.1.0
-      - ./install.sh /usr/local
-      - cd -
-      - export KUBECONFIG=/shared/kube/kubeconfig-127
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/vulns.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-127
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/chartmuseum.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-replication
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-127
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/replication.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-registry
-    image: quay.io/sighup/skopeo:v1.0.0
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-      - name: dockersock
-        path: /var/run/docker.sock
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - apt update
-      - apt install curl jq git bash ca-certificates -y
-      - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
-      - cd /tmp/bats-core
-      - git checkout v1.1.0
-      - ./install.sh /usr/local
-      - cd -
-      - export KUBECONFIG=/shared/kube/kubeconfig-127
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/registry.sh
-      - bats -t katalog/tests/harbor/registry-notary.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.27.1
-    pull: always
-    depends_on: [e2e-vulns, e2e-chartmuseum, e2e-replication, e2e-registry]
-    settings:
-      action: destroy
-      pipeline_id: cluster-127
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-    when:
-      status:
-        - success
-        - failure
-
-volumes:
-  - name: shared
-    temp: {}
-  - name: dockersock
-    host:
-      path: /var/run/docker.sock
 ---
 name: e2e-kubernetes-1.28
 kind: pipeline
 type: docker
 
-node:
-  runner: internal
-
 depends_on:
   - policeman
+
+clone:
+  depth: 1
 
 platform:
   os: linux
@@ -504,206 +90,142 @@ trigger:
       - refs/tags/**
 
 steps:
-  - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v2.1.0
+  - name: generate-kind-config
+    image: alpine:latest
     pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [clone]
-    settings:
-      action: custom-cluster-128
-      pipeline_id: cluster-128
-      local_kind_config_path: katalog/tests/harbor/config/kind-config
-      cluster_version: "1.28.0"
-      instance_path: /shared
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-setup
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.28.5_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [init]
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
     commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-128
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/setup.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
+      - sh ./katalog/tests/harbor/config/generate-template.sh v1.28.0
 
-  - name: e2e-vulns
-    image: quay.io/sighup/skopeo:v1.0.0
+  - name: create-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
     pull: always
+    depends_on:
+      - clone
     volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - apt update
-      - apt install curl jq git bash ca-certificates -y
-      - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
-      - cd /tmp/bats-core
-      - git checkout v1.1.0
-      - ./install.sh /usr/local
-      - cd -
-      - export KUBECONFIG=/shared/kube/kubeconfig-128
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/vulns.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.28.5_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-128
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/chartmuseum.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-replication
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.28.5_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-128
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/replication.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-registry
-    image: quay.io/sighup/skopeo:v1.0.0
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
+      CLUSTER_VERSION: v1.28.0
+      KUBECONFIG: kubeconfig-harbor-v1.28.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.28.0
     commands:
-      - apt update
-      - apt install curl jq git bash ca-certificates -y
-      - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
-      - cd /tmp/bats-core
-      - git checkout v1.1.0
-      - ./install.sh /usr/local
-      - cd -
-      - export KUBECONFIG=/shared/kube/kubeconfig-128
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config ./config-$${CLUSTER_NAME}.yaml
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e-setup
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.28.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.28.0
+      # Using nip.io DNS wildcard service to resolve <harbor-domain>.127.0.0.1.nip.io to localhost where Kind exposes services.
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+      FURYCTL_VERSION: v0.29.10
+    depends_on:
+      - create-kind-cluster
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
+      - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
+      - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
+      - bats -t katalog/tests/harbor/setup.sh
+
+  - name: e2e-vulns
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.28.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.28.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/vulns.sh
+
+  - name: e2e-chartmuseum
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.28.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.28.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/chartmuseum.sh
+
+  - name: e2e-replication
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.28.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.28.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/replication.sh
+
+  - name: e2e-registry
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.28.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.28.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
 
-  - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v2.1.0
-    pull: always
-    depends_on: [e2e-vulns, e2e-chartmuseum, e2e-replication, e2e-registry]
-    settings:
-      action: destroy
-      pipeline_id: cluster-128
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.28.0
+    commands:
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e-vulns
+      - e2e-chartmuseum
+      - e2e-replication
+      - e2e-registry
     when:
       status:
         - success
         - failure
 
 volumes:
-  - name: shared
-    temp: {}
   - name: dockersock
     host:
       path: /var/run/docker.sock
-      
+
 ---
 name: e2e-kubernetes-1.29
 kind: pipeline
 type: docker
 
-node:
-  runner: internal
-
 depends_on:
   - policeman
+  - e2e-kubernetes-1.28
+
+clone:
+  depth: 1
 
 platform:
   os: linux
@@ -715,205 +237,432 @@ trigger:
       - refs/tags/**
 
 steps:
-  - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v2.1.0
+  - name: generate-kind-config
+    image: alpine:latest
     pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [clone]
-    settings:
-      action: custom-cluster-129
-      pipeline_id: cluster-129
-      local_kind_config_path: katalog/tests/harbor/config/kind-config
-      cluster_version: "1.29.0"
-      instance_path: /shared
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-setup
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.28.5_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [init]
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
     commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-129
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/setup.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
+      - sh ./katalog/tests/harbor/config/generate-template.sh v1.29.0
 
-  - name: e2e-vulns
-    image: quay.io/sighup/skopeo:v1.0.0
+  - name: create-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
     pull: always
+    depends_on:
+      - clone
     volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - apt update
-      - apt install curl jq git bash ca-certificates -y
-      - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
-      - cd /tmp/bats-core
-      - git checkout v1.1.0
-      - ./install.sh /usr/local
-      - cd -
-      - export KUBECONFIG=/shared/kube/kubeconfig-129
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/vulns.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-chartmuseum
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.28.5_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-129
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/chartmuseum.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-replication
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.28.5_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-129
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
-      - bats -t katalog/tests/harbor/replication.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
-
-  - name: e2e-registry
-    image: quay.io/sighup/skopeo:v1.0.0
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      DYNAMIC_DNS_SERVICE:
-        from_secret: dynamic_dns_service
-    depends_on: [e2e-setup]
+      CLUSTER_VERSION: v1.29.0
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.29.0
     commands:
-      - apt update
-      - apt install curl jq git bash ca-certificates -y
-      - git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
-      - cd /tmp/bats-core
-      - git checkout v1.1.0
-      - ./install.sh /usr/local
-      - cd -
-      - export KUBECONFIG=/shared/kube/kubeconfig-129
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export EXTERNAL_DNS="$INSTANCE_IP.$DYNAMIC_DNS_SERVICE"
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config ./config-$${CLUSTER_NAME}.yaml
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e-setup
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.29.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+      FURYCTL_VERSION: v0.29.10
+    depends_on:
+      - create-kind-cluster
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
+      - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
+      - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
+      - bats -t katalog/tests/harbor/setup.sh
+
+  - name: e2e-vulns
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.29.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/vulns.sh
+
+  - name: e2e-chartmuseum
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.29.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/chartmuseum.sh
+
+  - name: e2e-replication
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.29.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/replication.sh
+
+  - name: e2e-registry
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.29.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.29.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.29.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/harbor/registry.sh
       - bats -t katalog/tests/harbor/registry-notary.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
 
-  - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v2.1.0
-    pull: always
-    depends_on: [e2e-vulns, e2e-chartmuseum, e2e-replication, e2e-registry]
-    settings:
-      action: destroy
-      pipeline_id: cluster-129
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.29.0
+    commands:
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e-vulns
+      - e2e-chartmuseum
+      - e2e-replication
+      - e2e-registry
     when:
       status:
         - success
         - failure
 
 volumes:
-  - name: shared
-    temp: {}
   - name: dockersock
     host:
       path: /var/run/docker.sock
+
+---
+name: e2e-kubernetes-1.30
+kind: pipeline
+type: docker
+
+depends_on:
+  - policeman
+  - e2e-kubernetes-1.29
+
+clone:
+  depth: 1
+
+platform:
+  os: linux
+  arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/tags/**
+
+steps:
+  - name: generate-kind-config
+    image: alpine:latest
+    pull: always
+    commands:
+      - sh ./katalog/tests/harbor/config/generate-template.sh v1.30.4
+
+  - name: create-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.30.5_3.10.0
+    pull: always
+    depends_on:
+      - clone
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_VERSION: v1.30.4
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.4
+    commands:
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config ./config-$${CLUSTER_NAME}.yaml
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e-setup
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.30.5_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.4
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+      FURYCTL_VERSION: v0.29.10
+    depends_on:
+      - create-kind-cluster
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
+      - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
+      - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
+      - bats -t katalog/tests/harbor/setup.sh
+
+  - name: e2e-vulns
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.30.5_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.4
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/vulns.sh
+
+  - name: e2e-chartmuseum
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.30.5_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.4
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/chartmuseum.sh
+
+  - name: e2e-replication
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.30.5_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.4
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/replication.sh
+
+  - name: e2e-registry
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.30.5_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.30.4
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.4
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/registry.sh
+      - bats -t katalog/tests/harbor/registry-notary.sh
+
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.30.5_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.30.4
+    commands:
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e-vulns
+      - e2e-chartmuseum
+      - e2e-replication
+      - e2e-registry
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
+
+---
+name: e2e-kubernetes-1.31
+kind: pipeline
+type: docker
+
+depends_on:
+  - policeman
+  - e2e-kubernetes-1.30
+
+clone:
+  depth: 1
+
+platform:
+  os: linux
+  arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/tags/**
+
+steps:
+  - name: generate-kind-config
+    image: alpine:latest
+    pull: always
+    commands:
+      - sh ./katalog/tests/harbor/config/generate-template.sh v1.31.0
+
+  - name: create-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.24.0_1.31.1_3.10.0
+    pull: always
+    depends_on:
+      - clone
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_VERSION: v1.31.0
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.31.0
+    commands:
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config ./config-$${CLUSTER_NAME}.yaml
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e-setup
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.31.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.31.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+      FURYCTL_VERSION: v0.29.10
+    depends_on:
+      - create-kind-cluster
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - curl -L "https://github.com/sighupio/furyctl/releases/download/$${FURYCTL_VERSION}/furyctl-$(uname -s)-amd64.tar.gz" -o /tmp/furyctl.tar.gz && tar xfz /tmp/furyctl.tar.gz -C /tmp
+      - mv /tmp/furyctl /usr/local/bin/furyctl && chmod +x /usr/local/bin/furyctl
+      - until kubectl get serviceaccount default > /dev/null 2>&1; do echo "waiting for control-plane" && sleep 1; done
+      - bats -t katalog/tests/harbor/setup.sh
+
+  - name: e2e-vulns
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.31.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.31.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/vulns.sh
+
+  - name: e2e-chartmuseum
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.31.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.31.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/chartmuseum.sh
+
+  - name: e2e-replication
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.31.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.31.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/replication.sh
+
+  - name: e2e-registry
+    image: quay.io/sighup/e2e-testing:1.1.0_3.12.0_1.31.1_3.10.0_4.33.3
+    pull: always
+    network_mode: host
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      KUBECONFIG: kubeconfig-harbor-v1.31.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.31.0
+      TEST_DOMAIN: "127.0.0.1.nip.io"
+    depends_on:
+      - e2e-setup
+    commands:
+      - . ./env-$${CLUSTER_NAME}.env
+      - bats -t katalog/tests/harbor/registry.sh
+      - bats -t katalog/tests/harbor/registry-notary.sh
+
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.24.0_1.31.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-harbor-v1.31.0
+    commands:
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e-vulns
+      - e2e-chartmuseum
+      - e2e-replication
+      - e2e-registry
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
+
 ---
 name: release
 kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.26
-  - e2e-kubernetes-1.27
   - e2e-kubernetes-1.28
   - e2e-kubernetes-1.29
+  - e2e-kubernetes-1.30
+  - e2e-kubernetes-1.31
 
 platform:
   os: linux

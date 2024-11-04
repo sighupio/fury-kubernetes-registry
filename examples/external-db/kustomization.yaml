@@ -37,7 +37,7 @@ configMapGenerator:
       - POSTGRESQL_USERNAME=%YOUR_DB_USER%
       - POSTGRESQL_DATABASE=registry
       - POSTGRESQL_SSLMODE=disable
-      - EXT_ENDPOINT=https://harbor.%YOUR_DOMAIN%
+      - EXT_ENDPOINT=https://harbor.%YOUR_DOMAIN%:%YOUR_PORT%
       - CLAIR_DB_HOST=%YOUR_DB_HOSTNAME%
       - CLAIR_DB_PORT=%YOUR_DB_PORT%
       - CLAIR_DB_USERNAME=%YOUR_DB_USER%

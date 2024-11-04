@@ -9,7 +9,7 @@ load "./../lib/helper"
 @test "[REGISTRY] Setup" {
     info
     setup(){
-        skopeo login harbor."${EXTERNAL_DNS}" -u admin -p Harbor12345 --tls-verify=false
+        skopeo login harbor."${TEST_DOMAIN}":"${HTTPS_PORT}" -u admin -p Harbor12345 --tls-verify=false
     }
     run setup
     [ "$status" -eq 0 ]
@@ -18,7 +18,7 @@ load "./../lib/helper"
 @test "[NOTARY] Setup" {
     info
     setup(){
-        curl -k -X PUT "https://harbor.${EXTERNAL_DNS}/api/v2.0/projects/library" \
+        curl -k -X PUT "https://harbor.${TEST_DOMAIN}:${HTTPS_PORT}/api/v2.0/projects/library" \
             -H  "accept: application/json" \
             -H "Content-Type: application/json" \
             --data '{"metadata": {"enable_content_trust": "true","enable_content_trust_cosign": "true"}}' \
@@ -31,7 +31,7 @@ load "./../lib/helper"
 @test "[NOTARY] Try to pull unsigned image" {
     info
     pull(){
-        skopeo copy docker://harbor."${EXTERNAL_DNS}"/library/busybox:1.31 dir:"$HOME"/busybox:1.31 --insecure-policy --tls-verify=false
+        skopeo copy docker://harbor."${TEST_DOMAIN}":"${HTTPS_PORT}"/library/busybox:1.31 dir:"$HOME"/busybox:1.31 --insecure-policy --tls-verify=false
     }
     run pull
     [[ "$status" -ne 0 ]]

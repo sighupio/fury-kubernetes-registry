@@ -21,7 +21,7 @@ load "./../lib/helper"
     info
     install_ingress(){
         cd katalog/tests/harbor/config
-        furyctl vendor -H
+        furyctl legacy vendor -H
         cd -
         kustomize build katalog/tests/harbor/config | kubectl apply -f -
     }
@@ -52,7 +52,7 @@ load "./../lib/helper"
     [ "$status" -eq 0 ]
 }
 
-@test "[SETUP] requirements - Prepare Harbor manifests (externalIP)" {
+@test "[SETUP] requirements - Prepare Harbor manifests" {
     info
     files_to_change="""
     examples/full-harbor/kustomization.yaml
@@ -61,7 +61,8 @@ load "./../lib/helper"
     """
     for file in ${files_to_change}
     do
-        sed -i'' -e 's/%YOUR_DOMAIN%/'"${EXTERNAL_DNS}"'/g' "${file}"
+        sed -i'' -e 's/%YOUR_DOMAIN%/'"${TEST_DOMAIN}"'/g; s/%YOUR_PORT%/'"${HTTPS_PORT}"'/g' "${file}"
+
     done
 }
 
@@ -89,3 +90,14 @@ load "./../lib/helper"
     [ "$status" -eq 0 ]
 }
 
+@test "[SETUP] Check Harbor connectivity" {
+   info
+   test(){
+       curl -k -v https://harbor."${TEST_DOMAIN}":"${HTTPS_PORT}"/api/v2.0/health >&3
+       kubectl get ingress -n registry >&3
+       kubectl describe ingress -n registry >&3
+   }
+   loop_it test 30 5
+   status=${loop_it_result}
+   [ "$status" -eq 0 ]
+}

@@ -33,7 +33,7 @@
 
 - op: replace
   path: /spec/tls/0/hosts/1
-  value: notary.%YOUR_DOMAIN%
+  value: notary.%YOUR_DOMAIN%:%YOUR_PORT%
 
 - op: replace
   path: "/metadata/annotations/cert-manager.io~1cluster-issuer"
